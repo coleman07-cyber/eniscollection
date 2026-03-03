@@ -45,7 +45,7 @@
             background: var(--bg); position: relative; display: flex; flex-direction: column;
         }
 
-        /* SPLASH SCREEN - RESTORED WRITINGS & CENTERED */
+        /* SPLASH SCREEN - ORIGINAL WRITINGS */
         #splash-screen {
             position: absolute; inset: 0; z-index: 9999;
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG') center/cover;
@@ -79,7 +79,6 @@
             text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 800; 
         }
 
-        /* NAVIGATION - MODERN RADIUS */
         .catalog-container {
             position: sticky; top: 0; z-index: 90;
             background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(30px);
@@ -90,7 +89,7 @@
         
         .filter-tag {
             padding: 11px 22px; background: rgba(120, 120, 128, 0.1); 
-            border-radius: 12px; /* Nice round radius */
+            border-radius: 12px;
             font-size: 10px; font-weight: 700; color: var(--text-soft); white-space: nowrap; 
             transition: all 0.3s var(--ease-fluid); text-transform: uppercase; letter-spacing: 1px;
         }
@@ -122,7 +121,7 @@
         .p-details { padding: 12px; } 
         .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.3; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
-        /* ABOUT SECTION - RESTORED ORIGINAL LOOK */
+        /* ABOUT SECTION - ORIGINAL LOOK */
         .about-modern {
             margin: 50px 15px 30px;
             padding: 60px 25px;
@@ -143,17 +142,18 @@
             width: 45px; height: 45px; border-radius: 50%;
             background: var(--card-bg); display: flex; align-items: center; justify-content: center;
             color: var(--text-main); border: 1px solid var(--border); transition: all 0.3s ease;
-            text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            text-decoration: none;
         }
         .social-btn:active { transform: scale(0.9); border-color: var(--accent-gold); color: var(--accent-gold); }
         .establishment-note { margin-top: 50px; font-size: 9px; letter-spacing: 5px; text-transform: uppercase; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.8; }
 
-        /* PREVIEW MODAL - INSTANT TRANSITION */
+        /* PREVIEW MODAL - MEDIUM TRANSITION */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
             background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             display: none; align-items: center; justify-content: center; padding: 20px;
-            opacity: 0; transition: opacity 0.2s ease; /* Faster */
+            opacity: 0; 
+            transition: opacity 0.4s var(--ease-fluid); /* Medium transition */
         }
         #item-preview.active { display: flex; opacity: 1; }
         
@@ -163,8 +163,8 @@
             padding: 10px; 
             border-radius: 38px; 
             box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            transform: scale(0.95);
-            transition: transform 0.2s var(--ease-fluid);
+            transform: scale(0.9);
+            transition: transform 0.4s var(--ease-fluid); /* Medium transition */
         }
         #item-preview.active .preview-box { transform: scale(1); }
         
@@ -266,7 +266,6 @@
         renderProducts();
     }
 
-    // INSTANT PREVIEW TRIGGER
     function openPreview(name, price, image, size) {
         const modal = document.getElementById('item-preview');
         const previewImg = document.getElementById('preview-img');
@@ -277,7 +276,6 @@
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=Order: ${name}`;
 
         modal.style.display = 'flex';
-        // Remove delays - trigger immediately
         requestAnimationFrame(() => {
             modal.classList.add('active');
         });
@@ -286,7 +284,7 @@
     function closePreview() { 
         const modal = document.getElementById('item-preview');
         modal.classList.remove('active');
-        setTimeout(() => modal.style.display = 'none', 200);
+        setTimeout(() => modal.style.display = 'none', 400);
     }
 
     function handleScroll() {
