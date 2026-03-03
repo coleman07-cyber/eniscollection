@@ -17,11 +17,10 @@
             --card-bg: #FFFFFF;
             --text-main: #1C1C1E;
             --text-soft: #8E8E93;
-            --glass: rgba(255, 255, 255, 0.8);
+            --glass: rgba(255, 255, 255, 0.85);
             --border: rgba(0, 0, 0, 0.05);
             --shadow: 0 4px 12px rgba(0,0,0,0.05);
             --accent-green: #25D366;
-            --header-height: 160px; /* Approximate height of your header */
         }
 
         @media (prefers-color-scheme: dark) {
@@ -30,7 +29,7 @@
                 --card-bg: #1C1C1E;
                 --text-main: #FFFFFF;
                 --text-soft: #A1A1A6;
-                --glass: rgba(28, 28, 30, 0.9);
+                --glass: rgba(28, 28, 30, 0.95);
                 --border: rgba(255, 255, 255, 0.1);
                 --shadow: 0 8px 24px rgba(0,0,0,0.4);
             }
@@ -45,20 +44,18 @@
             background: var(--bg); position: relative; overflow: hidden;
         }
 
-        /* UPDATED HEADER: Added transition and hide class */
+        /* FIXED HEADER: Synchronized transition */
         header {
             position: absolute; top: 0; width: 100%;
             padding: calc(env(safe-area-inset-top) + 20px) 20px 20px;
             background: var(--glass); 
-            backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%);
+            backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
             z-index: 1000; border-bottom: 0.5px solid var(--border);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
         }
 
-        /* This class is toggled via JavaScript */
-        .header-hidden {
-            transform: translateY(-100%);
-        }
+        .header-hidden { transform: translate3d(0, -100%, 0); }
 
         .logo-box h2 { font-size: 22px; font-weight: 700; text-align: center; color: var(--text-main); letter-spacing: -0.5px; }
         .logo-box span { font-size: 9px; color: var(--text-soft); letter-spacing: 4px; display: block; text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 600; }
@@ -72,87 +69,70 @@
 
         .feed { 
             height: 100%; overflow-y: scroll; 
-            /* Top padding remains to account for header height */
-            padding: calc(env(safe-area-inset-top) + 180px) 16px calc(env(safe-area-inset-bottom) + 60px); 
+            padding: calc(env(safe-area-inset-top) + 180px) 16px calc(env(safe-area-inset-bottom) + 80px); 
             -webkit-overflow-scrolling: touch; 
             scrollbar-width: none;
         }
         .feed::-webkit-scrollbar { display: none; }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        
+        /* CARD ANIMATION */
         .product-card { 
             background: var(--card-bg); border-radius: 20px; overflow: hidden; 
             box-shadow: var(--shadow); border: 0.5px solid var(--border);
-            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.1s ease;
         }
-        .product-card:active { transform: scale(0.96); }
+        .product-card:active { transform: scale(0.97); }
 
-        .p-image { width: 100%; aspect-ratio: 3.5/4.5; overflow: hidden; cursor: pointer; }
+        .p-image { width: 100%; aspect-ratio: 3.5/4.5; overflow: hidden; cursor: pointer; background: #8881; }
         .p-image img { width: 100%; height: 100%; object-fit: cover; }
         
         .p-details { padding: 14px 12px; }
-        .size-tag { font-size: 10px; color: var(--text-soft); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; letter-spacing: 0.5px; }
-        .p-details h3 { font-size: 14px; font-weight: 600; margin: 0; color: var(--text-main); line-height: 1.2; }
+        .size-tag { font-size: 10px; color: var(--text-soft); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; }
+        .p-details h3 { font-size: 14px; font-weight: 600; color: var(--text-main); line-height: 1.2; }
         .price { font-size: 16px; font-weight: 700; color: var(--text-main); margin-top: 6px; }
 
-        .about-section { 
-            margin-top: 40px; padding: 40px 24px; 
-            background: var(--card-bg); border-radius: 30px; 
-            text-align: center; border: 0.5px solid var(--border);
-            box-shadow: var(--shadow);
-        }
-        .about-section h4 { font-size: 10px; letter-spacing: 5px; color: var(--text-soft); margin-bottom: 15px; text-transform: uppercase; }
-        .about-section p { font-size: 15px; color: var(--text-main); line-height: 1.6; margin-bottom: 30px; opacity: 0.9; }
-        
-        .contact-hub { display: flex; justify-content: center; gap: 24px; margin-bottom: 35px; }
-        .icon-circle {
-            width: 54px; height: 54px; border-radius: 50%;
-            background: rgba(120, 120, 128, 0.1); 
-            display: flex; align-items: center; justify-content: center;
-            text-decoration: none; transition: all 0.2s ease;
-            border: 1px solid var(--border);
-        }
-        .icon-circle i { font-size: 20px; color: var(--text-main); }
-        .icon-circle:active { transform: scale(0.9); background: rgba(120, 120, 128, 0.2); }
-
+        /* PREVIEW MODAL FIXES */
         #item-preview {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.85); 
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            z-index: 3000; 
-            display: flex; align-items: center; justify-content: center; 
-            padding: 24px;
-            opacity: 0;
-            visibility: hidden;
+            position: absolute; inset: 0; background: rgba(0,0,0,0.8); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            z-index: 3000; display: flex; align-items: center; justify-content: center; 
+            padding: 24px; opacity: 0; visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s;
         }
         
         #item-preview.active { opacity: 1; visibility: visible; }
         
         .preview-content { 
-            width: 100%; max-width: 270px; background: var(--card-bg);
-            padding: 24px; border-radius: 36px; text-align: center; 
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-            transform: scale(0.85) translateY(20px);
+            width: 100%; max-width: 300px; background: var(--card-bg);
+            padding: 20px; border-radius: 30px; text-align: center; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            transform: translate3d(0, 30px, 0);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
         }
         
-        #item-preview.active .preview-content { transform: scale(1) translateY(0); }
+        #item-preview.active .preview-content { transform: translate3d(0, 0, 0); }
         
-        .preview-image { width: 100%; border-radius: 24px; margin-bottom: 20px; aspect-ratio: 3/4; object-fit: cover; }
-
-        .btn-order-whatsapp {
-            background: var(--accent-green); color: white; padding: 18px; border-radius: 20px;
-            text-decoration: none; font-weight: 700; display: flex; align-items: center; 
-            gap: 12px; font-size: 15px; width: 100%; justify-content: center;
+        .preview-image { 
+            width: 100%; border-radius: 20px; margin-bottom: 15px; 
+            aspect-ratio: 3/4; object-fit: cover; background: #8881;
         }
 
+        .btn-order-whatsapp {
+            background: var(--accent-green); color: white; padding: 16px; border-radius: 15px;
+            text-decoration: none; font-weight: 700; display: flex; align-items: center; 
+            gap: 10px; font-size: 15px; width: 100%; justify-content: center;
+        }
+
+        /* SPLASH SCREEN FIX */
         #splash-screen {
             position: absolute; inset: 0; z-index: 4000;
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG');
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG');
             background-size: cover; background-position: center;
-            display: flex; flex-direction: column; justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: opacity;
         }
     </style>
 </head>
@@ -161,10 +141,10 @@
 <div class="app-shell">
     <div id="splash-screen">
         <div style="text-align:center; color:white; margin-bottom:40px;">
-            <h1 style="font-weight: 550; letter-spacing: 2px; font-size: 28px;">WELCOME TO ENIS COLLECTION</h1>
-            <p style="font-size:11px; letter-spacing:6px; opacity: 0.7; margin-top: 8px;">PAMPER YOUR BODY</p>
+            <h1 style="font-weight: 600; letter-spacing: 2px; font-size: 26px;">ENIS COLLECTION</h1>
+            <p style="font-size:10px; letter-spacing:5px; opacity: 0.8; margin-top: 10px;">PAMPER YOUR BODY</p>
         </div>
-        <button style="background:white; color:black; padding:20px 70px; border-radius:40px; font-weight:800; border:none; cursor:pointer;" onclick="launchApp()">Enter Shop</button>
+        <button style="background:white; color:black; padding:18px 60px; border-radius:40px; font-weight:800; border:none;" onclick="launchApp()">Enter Shop</button>
     </div>
 
     <header id="mainHeader">
@@ -181,26 +161,20 @@
     <div class="feed" id="mainFeed">
         <div class="grid" id="productGrid"></div>
         
-        <div class="about-section">
-            <h4>About Enis</h4>
-            <p>Curated for the modern silhouette. We believe every piece should feel like a second skin.</p>
-            <div class="contact-hub">
-                <a href="tel:+233546527892" class="icon-circle"><i class="fas fa-phone"></i></a>
-                <a href="javascript:void(0)" class="icon-circle" onclick="copyAndEmail()"><i class="fas fa-envelope"></i></a>
-                <a href="https://www.tiktok.com/@eniscollection1" class="icon-circle"><i class="fab fa-tiktok"></i></a>
-            </div>
+        <div class="about-section" style="margin-top:40px; padding:40px 20px; text-align:center;">
+            <p style="color:var(--text-soft); font-size:14px;">Curated for the modern silhouette.</p>
         </div>
     </div>
 
     <div id="item-preview" onclick="closePreview()">
         <div class="preview-content" onclick="event.stopPropagation()">
-            <img id="preview-img" src="" class="preview-image" onclick="closePreview()">
+            <img id="preview-img" src="" class="preview-image">
             <span id="preview-size" class="size-tag"></span>
-            <h2 id="preview-name" style="margin-bottom:20px; font-size: 20px; font-weight: 700; color: var(--text-main);"></h2>
+            <h2 id="preview-name" style="margin-bottom:15px; font-size: 18px; color: var(--text-main);"></h2>
             <a id="whatsapp-order-btn" href="#" class="btn-order-whatsapp">
                 <i class="fab fa-whatsapp"></i> Instant Order
             </a>
-            <p style="margin-top:24px; font-size:11px; font-weight:800; color:var(--text-soft); letter-spacing: 1px; cursor:pointer;" onclick="closePreview()">CLOSE PREVIEW</p>
+            <p style="margin-top:20px; font-size:11px; font-weight:700; color:var(--text-soft); cursor:pointer;" onclick="closePreview()">BACK TO SHOP</p>
         </div>
     </div>
 </div>
@@ -219,29 +193,33 @@
         { name: "Refined Church Wear", price: 50, size: "10", image: "images/item10.jpg" }
     ];
 
-    // --- SCROLL BEHAVIOR LOGIC ---
+    // --- SYNCED SCROLL LOGIC ---
     const header = document.getElementById('mainHeader');
     const feed = document.getElementById('mainFeed');
-    let lastScrollY = feed.scrollTop;
+    let lastScrollY = 0;
+    let ticking = false;
 
     feed.addEventListener('scroll', () => {
-        const currentScrollY = feed.scrollTop;
-
-        if (currentScrollY > lastScrollY && currentScrollY > 100) {
-            // User is scrolling down - Hide Header
-            header.classList.add('header-hidden');
-        } else {
-            // User is scrolling up - Show Header
-            header.classList.remove('header-hidden');
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                const currentScrollY = feed.scrollTop;
+                if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                    header.classList.add('header-hidden');
+                } else {
+                    header.classList.remove('header-hidden');
+                }
+                lastScrollY = currentScrollY;
+                ticking = false;
+            });
+            ticking = true;
         }
-        lastScrollY = currentScrollY;
     });
 
     function renderProducts(products) {
         document.getElementById('productGrid').innerHTML = products.map(item => `
             <div class="product-card" data-title="${item.name.toLowerCase()}">
-                <div class="p-image" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', '${item.price}', '${item.image}', '${item.size}')">
-                    <img src="${item.image}" onerror="this.src='https://via.placeholder.com/400x520?text=Collection'">
+                <div class="p-image" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
+                    <img src="${item.image}" onerror="this.src='https://via.placeholder.com/400x520?text=Enis'">
                 </div>
                 <div class="p-details">
                     <span class="size-tag">UK SIZE ${item.size}</span>
@@ -254,26 +232,35 @@
     renderProducts(myProducts);
 
     function launchApp() {
-        document.getElementById('splash-screen').style.opacity = "0";
-        setTimeout(() => document.getElementById('splash-screen').style.display = "none", 500);
-        
-        // Optional: Trigger Fullscreen to hide system bar (Requires user interaction)
-        // if (document.documentElement.requestFullscreen) {
-        //    document.documentElement.requestFullscreen();
-        // }
+        const splash = document.getElementById('splash-screen');
+        splash.style.opacity = "0";
+        // Wait for transition before hiding
+        setTimeout(() => splash.style.display = "none", 600);
     }
 
+    // --- PREVIEW FIX: Reset source before opening ---
     function openPreview(name, price, image, size) {
         const modal = document.getElementById('item-preview');
-        document.getElementById('preview-img').src = image;
+        const imgElement = document.getElementById('preview-img');
+        
+        // Hide image while loading new one to prevent glitch
+        imgElement.style.opacity = "0";
+        imgElement.src = image;
+        
+        imgElement.onload = () => { imgElement.style.opacity = "1"; };
+
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `SIZE ${size} • GH₵ ${price}`;
+        
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
         document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${msg}`;
+        
         modal.classList.add('active');
     }
 
-    function closePreview() { document.getElementById('item-preview').classList.remove('active'); }
+    function closePreview() { 
+        document.getElementById('item-preview').classList.remove('active'); 
+    }
 
     function filterShop() {
         let input = document.getElementById('shopSearch').value.toLowerCase();
@@ -281,12 +268,6 @@
         Array.from(cards).forEach(card => {
             card.style.display = card.getAttribute('data-title').includes(input) ? "block" : "none";
         });
-    }
-
-    function copyAndEmail() {
-        navigator.clipboard.writeText("sheilaenima@gmail.com");
-        alert("Email copied!");
-        window.location.href = "mailto:sheilaenima@gmail.com";
     }
 </script>
 
