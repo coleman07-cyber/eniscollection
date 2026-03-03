@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ENIS">
     <meta name="theme-color" content="#000000">
     
     <title>ENIS COLLECTION</title>
@@ -24,7 +22,7 @@
             --shadow: 0 4px 12px rgba(0,0,0,0.05);
             --accent-green: #25D366;
             --radius-outer: 28px;
-            --radius-inner: 22px;
+            --radius-inner: 20px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -33,128 +31,110 @@
                 --card-bg: #1C1C1E;
                 --text-main: #FFFFFF;
                 --text-soft: #A1A1A6;
-                --glass: rgba(20, 20, 20, 0.95);
+                --glass: rgba(28, 28, 30, 0.9);
                 --border: rgba(255, 255, 255, 0.1);
-                --shadow: 0 8px 24px rgba(0,0,0,0.4);
             }
         }
 
-        /* Prevent all scrolling and flashing while loading */
-        html, body { 
-            background: #000; 
-            height: 100%; 
-            width: 100%; 
-            margin: 0; 
-            padding: 0; 
-            overflow: hidden; 
-            position: fixed; 
-        }
-
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
-
-        .app-shell {
-            width: 100%; 
-            max-width: 450px; 
-            height: 100vh; 
-            margin: 0 auto;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
             background: var(--bg); 
-            position: relative; 
-            overflow: hidden;
+            min-height: 100vh;
+            color: var(--text-main);
         }
 
-        /* SPLASH SCREEN - Fixed to prevent glitches */
+        /* SPLASH SCREEN - STAYS FIXED */
         #splash-screen {
-            position: absolute; 
-            inset: 0; 
-            z-index: 9999;
+            position: fixed; inset: 0; z-index: 10000;
             background: #000;
-            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.95)), url('images/Splash-Dress.PNG');
-            background-size: cover; 
-            background-position: center;
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center;
-            transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.5s ease;
+            background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.85)), url('images/Splash-Dress.PNG');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
+        #splash-screen.lifted { transform: translateY(-100%); }
 
-        /* SHOP CONTENT - Completely hidden from DOM rendering initially */
-        #shop-content {
-            display: none; 
-            opacity: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            background: var(--bg);
-        }
-
+        /* HEADER - FIXED TOP */
         header {
-            position: absolute; top: 0; width: 100%;
-            /* Uses env() to respect iPhone notch area */
+            position: fixed; top: 0; left: 0; right: 0;
             padding: calc(env(safe-area-inset-top) + 15px) 20px 15px;
             background: var(--glass); 
-            backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%);
+            backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
             z-index: 1000; border-bottom: 0.5px solid var(--border);
             transition: transform 0.4s ease;
         }
-        .header-hidden { transform: translate3d(0, -100%, 0); }
+        .header-hidden { transform: translateY(-100%); }
 
-        .logo-box h2 { font-size: 24px; font-weight: 800; text-align: center; color: var(--text-main); letter-spacing: -0.5px; }
+        .logo-box h2 { font-size: 22px; font-weight: 800; text-align: center; letter-spacing: -0.5px; }
         .logo-box span { font-size: 9px; color: var(--text-soft); letter-spacing: 5px; display: block; text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 700; }
 
-        .feed { 
-            height: 100%; overflow-y: scroll; 
-            /* Extra top padding for the notch-friendly header */
-            padding: calc(env(safe-area-inset-top) + 110px) 12px calc(env(safe-area-inset-bottom) + 100px); 
-            -webkit-overflow-scrolling: touch; 
+        /* CONTENT WRAPPER */
+        .content {
+            max-width: 450px; margin: 0 auto;
+            padding: calc(env(safe-area-inset-top) + 90px) 16px 60px;
         }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 40px; }
         
         .product-card { 
-            background: var(--card-bg); border-radius: 24px; overflow: hidden; 
+            background: var(--card-bg); border-radius: 20px; overflow: hidden; 
             box-shadow: var(--shadow); border: 0.5px solid var(--border);
         }
 
-        .p-image { width: 100%; aspect-ratio: 1 / 1.4; overflow: hidden; cursor: pointer; background: #8881; }
-        .p-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .p-image:active img { transform: scale(1.05); }
+        .p-image { width: 100%; aspect-ratio: 1 / 1.35; overflow: hidden; background: #8881; }
+        .p-image img { width: 100%; height: 100%; object-fit: cover; }
         
         .p-details { padding: 12px; }
         .size-tag { font-size: 9px; color: var(--text-soft); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
-        .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.2; height: 32px; overflow: hidden; }
-        .price { font-size: 15px; font-weight: 700; color: var(--text-main); margin-top: 6px; }
+        .p-name { font-size: 13px; font-weight: 600; line-height: 1.2; height: 32px; overflow: hidden; }
+        .price { font-size: 15px; font-weight: 700; margin-top: 4px; }
 
-        /* PREVIEW MODAL (The Dress Outlet Style) */
+        /* ABOUT SECTION - RESTORED STYLE */
+        .about-section { 
+            background: var(--card-bg); border-radius: 30px; 
+            padding: 40px 24px; text-align: center;
+            border: 0.5px solid var(--border); box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+        .about-section h4 { font-size: 10px; letter-spacing: 5px; color: var(--text-soft); text-transform: uppercase; margin-bottom: 15px; }
+        .about-section p { font-size: 15px; line-height: 1.6; margin-bottom: 30px; }
+        
+        .contact-hub { display: flex; justify-content: center; gap: 20px; }
+        .icon-circle {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: rgba(120, 120, 128, 0.1); 
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; color: var(--text-main); font-size: 18px;
+        }
+
+        /* PREVIEW MODAL */
         #item-preview {
-            position: absolute; inset: 0; 
+            position: fixed; inset: 0; 
             background: rgba(0,0,0,0.85); 
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            z-index: 9000; display: flex; align-items: center; justify-content: center; 
-            opacity: 0; visibility: hidden;
-            transition: all 0.25s ease;
+            z-index: 11000; display: none; align-items: center; justify-content: center; 
+            padding: 20px;
         }
-        #item-preview.active { opacity: 1; visibility: visible; }
+        #item-preview.active { display: flex; }
         
         .preview-content { 
-            width: 75%; max-width: 300px; 
-            background: var(--card-bg); padding: 8px; 
+            width: 80%; max-width: 320px; 
+            background: var(--card-bg); padding: 10px; 
             border-radius: var(--radius-outer); text-align: center; 
-            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-            transform: translateY(20px) scale(0.9);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.2);
         }
-        #item-preview.active .preview-content { transform: translateY(0) scale(1); }
+        #item-preview.active .preview-content { transform: scale(1); }
         
         .preview-image { 
             width: 100%; border-radius: var(--radius-inner); 
-            margin-bottom: 12px; aspect-ratio: 1 / 1.5; 
-            object-fit: cover; display: block;
+            aspect-ratio: 1 / 1.4; object-fit: cover;
+            margin-bottom: 15px; display: block;
         }
 
         #preview-name { 
-            font-size: 16px; font-weight: 800; color: var(--text-main);
-            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;
+            font-size: 16px; font-weight: 800; text-transform: uppercase; 
+            letter-spacing: 2px; margin-bottom: 15px;
         }
 
         .btn-order-whatsapp {
@@ -162,52 +142,45 @@
             text-decoration: none; font-weight: 700; display: flex; align-items: center; 
             gap: 10px; font-size: 14px; width: 100%; justify-content: center;
         }
-
-        .about-section { 
-            margin-top: 40px; padding: 40px 24px; 
-            background: var(--card-bg); border-radius: 32px; 
-            text-align: center; border: 0.5px solid var(--border);
-        }
     </style>
 </head>
 <body>
 
-<div class="app-shell">
     <div id="splash-screen">
-        <div style="text-align:center; color:white; margin-bottom:40px; padding: 0 30px;">
-            <h1 style="font-weight: 550; letter-spacing: 2px; font-size: 32px; line-height: 1.1;">ENIS COLLECTION</h1>
-            <p style="font-size:10px; letter-spacing:7px; opacity: 0.8; margin-top: 12px; font-weight: 600;">PAMPER YOUR BODY</p>
+        <div style="text-align:center; color:white; margin-bottom:40px;">
+            <h2 style="font-weight: 300; letter-spacing: 4px; font-size: 14px; opacity: 0.8;">WELCOME TO</h2>
+            <h1 style="font-weight: 700; letter-spacing: 2px; font-size: 30px; margin-top: 5px;">ENIS COLLECTION</h1>
+            <p style="font-size:9px; letter-spacing:6px; opacity: 0.6; margin-top: 15px;">PAMPER YOUR BODY</p>
         </div>
-        <button id="enter-btn" style="background:white; color:black; padding:22px 80px; border-radius:50px; font-weight:900; border:none; cursor:pointer; font-size:15px; letter-spacing:1px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" onclick="launchApp()">ENTER SHOP</button>
+        <button style="background:white; color:black; padding:20px 60px; border-radius:50px; font-weight:900; border:none; cursor:pointer;" onclick="launchApp()">ENTER SHOP</button>
     </div>
 
-    <div id="shop-content">
-        <header id="mainHeader">
-            <div class="logo-box">
-                <h2>Enis Collection</h2>
-                <span>Pamper Your Body</span>
-            </div>
-        </header>
+    <header id="mainHeader">
+        <div class="logo-box">
+            <h2>Enis Collection</h2>
+            <span>Pamper Your Body</span>
+        </div>
+    </header>
 
-        <div class="feed" id="mainFeed">
-            <div class="grid" id="productGrid"></div>
-            
-            <div class="about-section">
-                <h4 style="font-size:10px; letter-spacing:5px; color:var(--text-soft); text-transform:uppercase; margin-bottom:15px;">About Enis</h4>
-                <p style="font-size:15px; color:var(--text-main); line-height:1.6; margin-bottom:30px;">Curated for the modern silhouette. Every piece is selected to feel like a second skin while maintaining timeless sophistication.</p>
-                <div style="display:flex; justify-content:center; gap:24px; margin-bottom:30px;">
-                    <a href="tel:+233546527892" style="width:50px; height:50px; background:rgba(120,120,128,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text-main); text-decoration:none;"><i class="fas fa-phone"></i></a>
-                    <a href="https://www.tiktok.com/@eniscollection1" style="width:50px; height:50px; background:rgba(120,120,128,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text-main); text-decoration:none;"><i class="fab fa-tiktok"></i></a>
-                </div>
+    <div class="content">
+        <div class="grid" id="productGrid"></div>
+        
+        <div class="about-section">
+            <h4>About Enis</h4>
+            <p>Curated for the modern silhouette. Every piece is selected to feel like a second skin while maintaining timeless sophistication.</p>
+            <div class="contact-hub">
+                <a href="tel:+233546527892" class="icon-circle"><i class="fas fa-phone"></i></a>
+                <a href="https://www.tiktok.com/@eniscollection1" class="icon-circle"><i class="fab fa-tiktok"></i></a>
+                <a href="mailto:sheilaenima@gmail.com" class="icon-circle"><i class="fas fa-envelope"></i></a>
             </div>
         </div>
     </div>
 
     <div id="item-preview" onclick="closePreview()">
         <div class="preview-content" onclick="event.stopPropagation()">
-            <img id="preview-img" src="" class="preview-image" onclick="closePreview()">
-            <div style="padding: 0 10px 10px;">
-                <span id="preview-size" style="font-size: 9px; color: var(--text-soft); font-weight: 800; text-transform: uppercase; margin-bottom: 6px; display: block;"></span>
+            <img id="preview-img" src="" class="preview-image">
+            <div style="padding-bottom: 5px;">
+                <span id="preview-size" style="font-size: 9px; color: var(--text-soft); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block;"></span>
                 <h2 id="preview-name"></h2>
                 <a id="whatsapp-order-btn" href="#" class="btn-order-whatsapp">
                     <i class="fab fa-whatsapp"></i> INSTANT ORDER
@@ -215,7 +188,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <script>
     const myProducts = [
@@ -233,8 +205,8 @@
 
     function renderProducts() {
         document.getElementById('productGrid').innerHTML = myProducts.map(item => `
-            <div class="product-card">
-                <div class="p-image" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
+            <div class="product-card" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
+                <div class="p-image">
                     <img src="${item.image}" onerror="this.src='https://via.placeholder.com/400x520?text=ENIS'">
                 </div>
                 <div class="p-details">
@@ -248,49 +220,30 @@
     renderProducts();
 
     function launchApp() {
-        const splash = document.getElementById('splash-screen');
-        const shop = document.getElementById('shop-content');
-        
-        // 1. Instantly show shop in background (hidden by splash)
-        shop.style.display = "block";
-        
-        // 2. Animate splash screen lifting away (Native App feel)
-        setTimeout(() => {
-            splash.style.transform = "translateY(-100%)";
-            shop.style.opacity = "1";
-        }, 50);
-
-        // 3. Remove splash from DOM once animation finishes
-        setTimeout(() => {
-            splash.style.display = "none";
-            document.body.style.position = "static";
-            document.body.style.overflow = "auto";
-        }, 850);
+        document.getElementById('splash-screen').classList.add('lifted');
     }
 
     function openPreview(name, price, image, size) {
-        const imgElement = document.getElementById('preview-img');
-        imgElement.src = image;
+        document.getElementById('preview-img').src = image;
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size} • GH₵ ${price}`;
-        
-        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
+        const msg = encodeURIComponent(`Hi Enis! I'd like to order: ${name} (Size ${size})`);
         document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${msg}`;
-        
-        document.getElementById('item-preview').classList.add('active');
+        document.getElementById('item-preview').style.display = 'flex';
+        setTimeout(() => document.getElementById('item-preview').classList.add('active'), 10);
     }
 
     function closePreview() { 
         document.getElementById('item-preview').classList.remove('active'); 
+        setTimeout(() => document.getElementById('item-preview').style.display = 'none', 300);
     }
 
-    // Auto-hide header logic
+    // SCROLL LOGIC
     let lastScroll = 0;
-    const feed = document.getElementById('mainFeed');
-    const header = document.getElementById('mainHeader');
-    feed.addEventListener('scroll', () => {
-        const cur = feed.scrollTop;
-        if (cur > lastScroll && cur > 100) header.classList.add('header-hidden');
+    window.addEventListener('scroll', () => {
+        const cur = window.scrollY;
+        const header = document.getElementById('mainHeader');
+        if (cur > lastScroll && cur > 80) header.classList.add('header-hidden');
         else header.classList.remove('header-hidden');
         lastScroll = cur;
     });
