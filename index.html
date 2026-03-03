@@ -13,30 +13,30 @@
     
     <style>
         :root {
-            --bg: #F2F2F7;
+            --bg: #F8F8F8;
             --card-bg: #FFFFFF;
-            --text-main: #1C1C1E;
+            --text-main: #121212;
             --text-soft: #8E8E93;
-            --accent-gold: #D4AF37;
-            --glass: rgba(255, 255, 255, 0.85);
-            --border: rgba(0, 0, 0, 0.05);
-            --shadow: 0 8px 20px rgba(0,0,0,0.04);
+            --accent-gold: #B59410;
+            --glass: rgba(255, 255, 255, 0.8);
+            --border: rgba(0, 0, 0, 0.06);
+            --shadow: 0 10px 30px rgba(0,0,0,0.03);
             --accent-green: #25D366;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg: #000000;
-                --card-bg: #1C1C1E;
+                --card-bg: #111111;
                 --text-main: #FFFFFF;
                 --text-soft: #A1A1A6;
-                --glass: rgba(28, 28, 30, 0.9);
-                --border: rgba(255, 255, 255, 0.1);
-                --shadow: 0 10px 30px rgba(0,0,0,0.5);
+                --glass: rgba(15, 15, 15, 0.85);
+                --border: rgba(255, 255, 255, 0.08);
+                --shadow: 0 10px 40px rgba(0,0,0,0.5);
             }
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { background: #000; height: 100vh; width: 100%; overflow: hidden; position: fixed; }
 
@@ -45,100 +45,106 @@
             background: var(--bg); position: relative; overflow: hidden;
         }
 
-        /* Splash Screen - Added pointer-events fix */
+        /* Splash Screen */
         #splash-screen {
             position: absolute; inset: 0; z-index: 4000;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.8)), url('images/Splash-Dress.PNG') center/cover;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url('images/Splash-Dress.PNG') center/cover;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: all 0.6s ease;
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        #splash-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        #splash-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.1); }
 
-        /* Header & Sticky Filter */
+        /* Modern Catalog Header */
         header {
             position: absolute; top: 0; width: 100%;
-            padding: calc(env(safe-area-inset-top) + 15px) 0 10px;
-            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: calc(env(safe-area-inset-top) + 15px) 0 12px;
+            background: var(--glass); backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%);
             z-index: 1000; border-bottom: 0.5px solid var(--border);
         }
 
-        .logo-box h2 { font-size: 19px; font-weight: 800; text-align: center; color: var(--text-main); text-transform: uppercase; letter-spacing: 1px;}
-        .logo-box span { font-size: 8px; color: var(--accent-gold); letter-spacing: 4px; display: block; text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 700; }
+        .logo-box h2 { font-size: 18px; font-weight: 800; text-align: center; color: var(--text-main); text-transform: uppercase; letter-spacing: 2px;}
+        .logo-box span { font-size: 7px; color: var(--accent-gold); letter-spacing: 5px; display: block; text-transform: uppercase; text-align: center; margin-top: 5px; font-weight: 700; opacity: 0.8; }
 
-        .filter-bar { display: flex; gap: 8px; overflow-x: auto; padding: 12px 16px 5px; scrollbar-width: none; }
+        .catalog-container { padding: 15px 16px 5px; }
+        .filter-bar { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
         .filter-bar::-webkit-scrollbar { display: none; }
+        
         .filter-tag {
-            padding: 6px 14px; background: rgba(120, 120, 128, 0.1); border-radius: 20px;
-            font-size: 11px; font-weight: 600; color: var(--text-soft); white-space: nowrap; transition: 0.3s;
+            padding: 8px 18px; background: var(--bg); border: 1px solid var(--border); border-radius: 40px;
+            font-size: 11px; font-weight: 700; color: var(--text-soft); white-space: nowrap; 
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        .filter-tag.active { background: var(--text-main); color: var(--bg); }
+        .filter-tag.active { 
+            background: var(--text-main); color: var(--bg); border-color: var(--text-main);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px);
+        }
 
-        /* Main Scrollable Area */
+        /* Feed Styling */
         .feed { 
-            height: 100%; overflow-y: auto; overflow-x: hidden;
-            padding: calc(env(safe-area-inset-top) + 135px) 16px 100px;
-            -webkit-overflow-scrolling: touch;
+            height: 100%; overflow-y: auto; 
+            padding: calc(env(safe-area-inset-top) + 145px) 16px 120px;
+            scroll-behavior: smooth; -webkit-overflow-scrolling: touch;
         }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
         
         .product-card { 
-            background: var(--card-bg); border-radius: 18px; overflow: hidden; 
+            background: var(--card-bg); border-radius: 24px; overflow: hidden; 
             box-shadow: var(--shadow); border: 0.5px solid var(--border);
-            opacity: 0; transform: translateY(15px); transition: 0.5s ease;
+            opacity: 0; transform: translateY(20px); transition: all 0.6s ease;
         }
         .product-card.visible { opacity: 1; transform: translateY(0); }
 
-        /* Image + Price Tag */
-        .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.3; background: #8881; }
-        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .p-image-wrap { position: relative; width: 100%; aspect-ratio: 3/4; overflow: hidden; }
+        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .product-card:active .p-image-wrap img { transform: scale(1.05); }
         
         .floating-tag {
-            position: absolute; bottom: 8px; right: 8px;
-            background: rgba(255, 255, 255, 0.9); color: #000;
-            padding: 4px 10px; border-radius: 10px; font-size: 12px;
-            font-weight: 800; backdrop-filter: blur(5px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: absolute; bottom: 10px; right: 10px;
+            background: rgba(255, 255, 255, 0.92); color: #000;
+            padding: 5px 12px; border-radius: 12px; font-size: 13px;
+            font-weight: 800; backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .p-details { padding: 10px; }
-        .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.2; }
+        .p-details { padding: 12px 14px; }
+        .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.3; opacity: 0.9; }
 
-        /* PREVIEW MODAL - THE FIX */
+        /* Modern About Section */
+        .about-modern {
+            margin-top: 50px; padding: 40px 20px;
+            background: var(--card-bg); border-radius: 32px;
+            border: 0.5px solid var(--border); text-align: center;
+        }
+        .about-modern h3 { font-size: 10px; letter-spacing: 5px; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 20px; }
+        .about-modern p { font-size: 15px; color: var(--text-main); line-height: 1.7; margin-bottom: 30px; font-weight: 400; }
+        
+        .social-grid { display: flex; justify-content: center; gap: 15px; }
+        .social-pill {
+            padding: 12px 20px; border-radius: 50px; background: var(--bg);
+            border: 0.5px solid var(--border); color: var(--text-main);
+            text-decoration: none; font-size: 18px; transition: 0.3s;
+        }
+        .social-pill:active { transform: scale(0.9); background: var(--border); }
+
+        /* Preview Modal */
         #item-preview {
-            position: absolute; inset: 0; 
-            background: rgba(0,0,0,0.85); 
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            z-index: 5000; display: none; align-items: center; justify-content: center;
+            position: absolute; inset: 0; z-index: 5000;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: none; align-items: center; justify-content: center; padding: 20px;
         }
-        
         .preview-box { 
-            width: fit-content; max-width: 85%;
-            background: var(--card-bg); padding: 6px; 
-            border-radius: 24px; text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            width: fit-content; max-width: 100%; background: var(--card-bg); 
+            padding: 8px; border-radius: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
-        
-        .preview-img-container {
-            position: relative;
-            max-height: 60vh;
-            border-radius: 20px;
-            overflow: hidden;
-            background: #000;
-        }
-
-        .preview-image { 
-            display: block; width: auto; max-width: 100%;
-            max-height: 60vh; object-fit: contain; cursor: pointer;
-        }
-
-        .preview-details { padding: 15px 10px; }
-
+        .preview-img-container { position: relative; max-height: 60vh; border-radius: 22px; overflow: hidden; background: #000; }
+        .preview-image { display: block; max-width: 100%; max-height: 60vh; object-fit: contain; }
         .btn-order {
-            background: var(--accent-green); color: white; padding: 14px; border-radius: 16px;
+            background: var(--accent-green); color: white; padding: 16px; border-radius: 20px;
             text-decoration: none; font-weight: 700; display: flex; align-items: center; 
-            gap: 8px; font-size: 14px; justify-content: center; transition: 0.2s;
+            gap: 10px; font-size: 15px; justify-content: center;
         }
-        .btn-order:active { transform: scale(0.96); }
     </style>
 </head>
 <body>
@@ -149,25 +155,38 @@
             <h1 style="font-weight: 800; letter-spacing: 1px; font-size: 26px;">WELCOME TO<br>ENIS COLLECTION</h1>
             <p style="font-size:9px; letter-spacing:5px; color: var(--accent-gold); margin-top: 12px; font-weight: 700;">PAMPER YOUR BODY</p>
         </div>
-        <button style="background:#fff; color:#000; padding:18px 50px; border-radius:40px; border:none; font-weight:800;" onclick="launchApp()">Enter Shop</button>
+        <button style="background:#fff; color:#000; padding:20px 60px; border-radius:50px; border:none; font-weight:800; letter-spacing:1px;" onclick="launchApp()">ENTER SHOP</button>
     </div>
 
-    <div id="shop-content" style="opacity: 0; height: 100%;">
+    <div id="shop-content" style="opacity: 0;">
         <header>
             <div class="logo-box">
                 <h2>Enis Collection</h2>
                 <span>Pamper Your Body</span>
             </div>
-            <div class="filter-bar">
-                <div class="filter-tag active" onclick="filterItems('All', this)">All</div>
-                <div class="filter-tag" onclick="filterItems('Dress', this)">Dresses</div>
-                <div class="filter-tag" onclick="filterItems('Set', this)">Sets</div>
-                <div class="filter-tag" onclick="filterItems('Work', this)">Work</div>
+            <div class="catalog-container">
+                <div class="filter-bar">
+                    <div class="filter-tag active" onclick="filterItems('All', this)">All Items</div>
+                    <div class="filter-tag" onclick="filterItems('Dress', this)">Dresses</div>
+                    <div class="filter-tag" onclick="filterItems('Set', this)">Sets & Skirts</div>
+                    <div class="filter-tag" onclick="filterItems('Work', this)">Work Wear</div>
+                </div>
             </div>
         </header>
 
         <div class="feed" id="mainFeed">
             <div class="grid" id="productGrid"></div>
+
+            <div class="about-modern">
+                <h3>Our Story</h3>
+                <p>Curated for the modern silhouette. We believe every piece should feel like a second skin while maintaining an air of timeless sophistication. <b>Pamper your body</b> with Enis.</p>
+                <div class="social-grid">
+                    <a href="tel:+233546527892" class="social-pill"><i class="fas fa-phone"></i></a>
+                    <a href="https://www.tiktok.com/@eniscollection1" class="social-pill"><i class="fab fa-tiktok"></i></a>
+                    <a href="javascript:void(0)" onclick="copyEmail()" class="social-pill"><i class="fas fa-envelope"></i></a>
+                </div>
+                <p style="font-size: 9px; margin-top: 25px; opacity: 0.5; letter-spacing: 2px;">EST. 2024 • ACCRA, GHANA</p>
+            </div>
         </div>
     </div>
 
@@ -177,10 +196,10 @@
                 <img id="preview-img" src="" class="preview-image" onclick="closePreview()">
                 <div id="preview-tag" class="floating-tag"></div>
             </div>
-            <div class="preview-details">
-                <span id="preview-size" style="font-size: 9px; color: var(--text-soft); font-weight: 800; letter-spacing: 1px; display: block; margin-bottom: 5px;"></span>
-                <h2 id="preview-name" style="font-size: 16px; margin-bottom: 15px; color: var(--text-main)"></h2>
-                <a id="wa-btn" href="#" class="btn-order"><i class="fab fa-whatsapp"></i> Order on WhatsApp</a>
+            <div style="padding: 20px 15px;">
+                <span id="preview-size" style="font-size: 10px; color: var(--text-soft); font-weight: 800; letter-spacing: 1px; display: block; margin-bottom: 8px;"></span>
+                <h2 id="preview-name" style="font-size: 18px; margin-bottom: 20px; color: var(--text-main); font-weight: 700;"></h2>
+                <a id="wa-btn" href="#" class="btn-order"><i class="fab fa-whatsapp"></i> INSTANT ORDER</a>
             </div>
         </div>
     </div>
@@ -211,7 +230,7 @@
                     <div class="floating-tag">₵${item.price}</div>
                 </div>
                 <div class="p-details">
-                    <span style="font-size:9px; color:var(--text-soft); font-weight:800;">SIZE ${item.size}</span>
+                    <span style="font-size:9px; color:var(--text-soft); font-weight:800; letter-spacing:0.5px;">UK SIZE ${item.size}</span>
                     <h3 class="p-name">${item.name}</h3>
                 </div>
             </div>
@@ -233,11 +252,9 @@
         const pImg = document.getElementById('preview-img');
         const pBox = document.getElementById('previewBox');
         
-        // Anti-Glitch reset
-        pImg.src = ""; 
         pBox.style.opacity = "0";
-
         pImg.src = image;
+
         pImg.onload = () => {
             document.getElementById('preview-name').innerText = name;
             document.getElementById('preview-size').innerText = `UK SIZE ${size}`;
@@ -252,13 +269,19 @@
 
     function closePreview() { 
         document.getElementById('item-preview').style.display = 'none';
-        document.getElementById('preview-img').src = ""; // Flush image
+        document.getElementById('preview-img').src = "";
     }
 
     function filterItems(cat, el) {
         document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
         renderProducts(cat);
+        document.getElementById('mainFeed').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function copyEmail() {
+        navigator.clipboard.writeText("sheilaenima@gmail.com");
+        alert("Email copied to clipboard!");
     }
 </script>
 
