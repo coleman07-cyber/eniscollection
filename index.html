@@ -34,26 +34,27 @@
             }
         }
 
-        /* 1. HIDE SCROLLBAR CORNER */
+        /* 1. REMOVE SCROLLBAR ARTIFACTS */
         html, body { 
             background: var(--bg); 
             min-height: 100vh; 
             scrollbar-width: none;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
+            -webkit-overflow-scrolling: touch;
         }
         body::-webkit-scrollbar { display: none; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        /* Fixed Background Glitch Lock */
+        /* Strict Body Lock */
         body.modal-open { 
             position: fixed; 
             width: 100%; 
             overflow: hidden; 
+            height: 100%;
         }
 
-        /* SPLASH SCREEN */
+        /* SPLASH SCREEN - LAYER 10,000 */
         #splash-screen {
             position: fixed; inset: 0; z-index: 10000;
             background: #000;
@@ -64,7 +65,7 @@
         }
         #splash-screen.lifted { transform: translateY(-100%); pointer-events: none; }
 
-        /* HEADER */
+        /* HEADER - LAYER 1,000 */
         header {
             position: fixed; top: 0; left: 0; right: 0;
             padding: calc(env(safe-area-inset-top) + 15px) 20px 15px;
@@ -78,10 +79,10 @@
         .logo-box h2 { font-size: 22px; font-weight: 800; text-align: center; color: var(--text-main); }
         .logo-box span { font-size: 9px; color: var(--text-soft); letter-spacing: 5px; display: block; text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 700; }
 
-        /* FEED - Larger Product Cards */
+        /* CONTENT GRID */
         .content { 
             max-width: 450px; margin: 0 auto; 
-            padding: calc(env(safe-area-inset-top) + 90px) 12px 60px; /* Reduced side padding */
+            padding: calc(env(safe-area-inset-top) + 90px) 12px 60px;
         }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 40px; }
         
@@ -97,21 +98,20 @@
         .p-name { font-size: 13px; font-weight: 600; line-height: 1.2; height: 32px; overflow: hidden; color: var(--text-main); }
         .price { font-size: 15px; font-weight: 700; margin-top: 4px; color: var(--text-main); }
 
-        /* ANTI-GLITCH PREVIEW (Reduced Size) */
+        /* PREVIEW MODAL - LAYER 20,000 (Top Most) */
         #item-preview {
             position: fixed; inset: 0; 
-            background: rgba(0,0,0,0.75); 
+            background: rgba(0,0,0,0.8); 
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            z-index: 11000; 
+            z-index: 20000; 
             display: none; align-items: center; justify-content: center; 
             opacity: 0; transition: opacity 0.2s ease;
-            perspective: 1000px;
+            will-change: opacity;
         }
         #item-preview.active { display: flex; opacity: 1; }
         
         .preview-content { 
-            width: 75%; 
-            max-width: 290px; 
+            width: 75%; max-width: 290px; 
             background: var(--card-bg); padding: 8px; 
             border-radius: 28px; text-align: center; 
             transform: scale(0.9) translateZ(0); 
@@ -124,7 +124,7 @@
             width: 100%; border-radius: 20px; 
             max-height: 50vh; object-fit: cover;
             margin-bottom: 12px; display: block;
-            cursor: pointer; /* Feedback that you can click it to close */
+            cursor: pointer;
         }
 
         #preview-name { 
@@ -163,7 +163,7 @@
         </div>
     </header>
 
-    <div class="content" id="scroll-area">
+    <div class="content">
         <div class="grid" id="productGrid"></div>
         <div class="about-section">
             <h4 style="font-size:10px; letter-spacing:5px; color:var(--text-soft); text-transform:uppercase;">About Enis</h4>
@@ -189,8 +189,13 @@
     </div>
 
 <script>
+    // 1. FORCE STATE RESET ON REFRESH
     if (history.scrollRestoration) { history.scrollRestoration = 'manual'; }
-    window.scrollTo(0, 0);
+    window.addEventListener('load', () => {
+        window.scrollTo(0, 0);
+        document.body.classList.remove('modal-open');
+        document.getElementById('item-preview').style.display = 'none';
+    });
 
     const myProducts = [
         { name: "Thick Seamless Dress", price: 50, size: "10", image: "images/item1.jpg" },
@@ -221,40 +226,39 @@
 
     function launchApp() { document.getElementById('splash-screen').classList.add('lifted'); }
 
-    let scrollPos = 0;
+    let savedScrollY = 0;
 
     function openPreview(name, price, image, size) {
-        scrollPos = window.pageYOffset;
+        savedScrollY = window.pageYOffset;
         const modal = document.getElementById('item-preview');
         
         document.getElementById('preview-img').src = image;
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size} • GH₵ ${price}`;
-        document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${encodeURIComponent('Hi Enis! I want: ' + name)}`;
+        document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${encodeURIComponent('Hi Enis! I want to order: ' + name)}`;
         
         modal.style.display = 'flex';
         setTimeout(() => {
             modal.classList.add('active');
-            // Strict Scroll Lock
-            document.body.style.top = `-${scrollPos}px`;
+            document.body.style.top = `-${savedScrollY}px`;
             document.body.classList.add('modal-open');
-        }, 20);
+        }, 10);
     }
 
     function closePreview() { 
         const modal = document.getElementById('item-preview');
         modal.classList.remove('active');
         
-        // Restore Scroll
         document.body.classList.remove('modal-open');
         document.body.style.top = '';
-        window.scrollTo(0, scrollPos);
+        window.scrollTo(0, savedScrollY);
 
         setTimeout(() => { modal.style.display = 'none'; }, 200);
     }
 
     let lastS = 0;
     window.addEventListener('scroll', () => {
+        if (document.body.classList.contains('modal-open')) return;
         const h = document.getElementById('mainHeader');
         const cur = window.scrollY;
         if (cur > lastS && cur > 120) h.classList.add('header-hidden');
