@@ -114,7 +114,7 @@
         .p-details { padding: 12px; } 
         .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.3; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
-        /* MODERNIZED ABOUT SECTION */
+        /* ABOUT SECTION */
         .about-modern {
             margin: 50px 15px 30px;
             padding: 60px 25px;
@@ -140,12 +140,12 @@
         .social-btn:active { transform: scale(0.9); border-color: var(--accent-gold); color: var(--accent-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
         .establishment-note { margin-top: 50px; font-size: 9px; letter-spacing: 5px; text-transform: uppercase; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.8; }
 
-        /* REFINED SLIM PREVIEW (270px) */
+        /* REFINED SLIM PREVIEW */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
             background: rgba(0,0,0,0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             display: none; align-items: center; justify-content: center; padding: 20px;
-            opacity: 0; transition: opacity 0.4s ease;
+            opacity: 0; transition: opacity 0.4s var(--ease-fluid);
         }
         #item-preview.active { display: flex; opacity: 1; }
         
@@ -177,6 +177,8 @@
             object-fit: cover; 
             display: block;
             border-radius: 34px; 
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
         }
         
         .preview-content { padding: 12px 10px 8px; text-align: center; flex: 1 1 auto; }
@@ -265,7 +267,7 @@
         { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
     ];
 
-    // PRE-LOADER: Starts downloading images immediately while splash screen is active
+    // Pre-load images for smoother experience
     myProducts.forEach(item => {
         const img = new Image();
         img.src = item.image;
@@ -296,7 +298,6 @@
         cards.forEach(card => {
             const cardTop = card.getBoundingClientRect().top;
             if(cardTop < window.innerHeight * 0.95) {
-                // Check if image is already loaded for instant display
                 const img = card.querySelector('img');
                 if (img.complete) card.classList.add('visible');
             }
@@ -311,20 +312,42 @@
 
     function openPreview(name, price, image, size) {
         const modal = document.getElementById('item-preview');
-        document.getElementById('preview-img').src = image;
+        const previewImg = document.getElementById('preview-img');
+        
+        // Hide image before swapping to prevent old image "flash"
+        previewImg.style.opacity = '0';
+        previewImg.src = image;
+        
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size}`;
         document.getElementById('preview-tag').innerText = `₵${price}`;
+        
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
+        
         modal.style.display = 'flex';
-        setTimeout(() => modal.classList.add('active'), 10);
+        
+        // Fade image in only after it is loaded
+        previewImg.onload = () => {
+            previewImg.style.opacity = '1';
+        };
+
+        // Small delay to ensure display:flex is rendered before animating opacity/scale
+        requestAnimationFrame(() => {
+            setTimeout(() => modal.classList.add('active'), 10);
+        });
     }
 
     function closePreview() { 
         const modal = document.getElementById('item-preview');
+        const previewImg = document.getElementById('preview-img');
+        
         modal.classList.remove('active');
-        setTimeout(() => modal.style.display = 'none', 400);
+        previewImg.style.opacity = '0'; // Clean fade out
+        
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 400);
     }
 
     function filterItems(cat, el) {
