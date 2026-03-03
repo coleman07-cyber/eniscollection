@@ -41,9 +41,18 @@
         
         body { background: #000; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
 
+        /* Prevent content flash */
         .app-shell {
             width: 100%; max-width: 420px; height: 100vh; margin: 0 auto;
             background: var(--bg); position: relative; overflow: hidden;
+        }
+
+        /* The Shop Content - hidden until Enter is clicked */
+        #shop-content {
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            height: 100%;
+            width: 100%;
         }
 
         header {
@@ -82,7 +91,6 @@
         .p-name { font-size: 14px; font-weight: 600; color: var(--text-main); line-height: 1.2; }
         .price { font-size: 16px; font-weight: 700; color: var(--text-main); margin-top: 6px; }
 
-        /* ABOUT SECTION */
         .about-section { 
             margin-top: 40px; padding: 40px 24px; 
             background: var(--card-bg); border-radius: 30px; 
@@ -101,7 +109,7 @@
         }
         .icon-circle i { font-size: 20px; color: var(--text-main); }
 
-        /* REFINED PREVIEW MODAL */
+        /* PREVIEW MODAL */
         #item-preview {
             position: absolute; inset: 0; 
             background: rgba(0,0,0,0.8); 
@@ -113,12 +121,9 @@
         #item-preview.active { opacity: 1; visibility: visible; }
         
         .preview-content { 
-            width: 75%; 
-            max-width: 300px; 
-            background: var(--card-bg);
-            padding: 10px; 
-            border-radius: var(--radius-outer);
-            text-align: center; 
+            width: 75%; max-width: 300px; 
+            background: var(--card-bg); padding: 10px; 
+            border-radius: var(--radius-outer); text-align: center; 
             box-shadow: 0 30px 60px rgba(0,0,0,0.5);
             transform: scale(0.9);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15);
@@ -126,23 +131,14 @@
         #item-preview.active .preview-content { transform: scale(1); }
         
         .preview-image { 
-            width: 100%; 
-            border-radius: var(--radius-inner); 
-            margin-bottom: 12px; 
-            aspect-ratio: 3 / 4.5; 
-            object-fit: cover; /* Ensures the dress looks full and centered */
-            display: block;
+            width: 100%; border-radius: var(--radius-inner); 
+            margin-bottom: 12px; aspect-ratio: 3 / 4.5; 
+            object-fit: cover; display: block;
         }
 
-        .preview-info-box { padding: 0 10px 10px; }
-        
         #preview-name { 
-            font-size: 16px; 
-            font-weight: 800; 
-            color: var(--text-main);
-            text-transform: uppercase; 
-            letter-spacing: 2px; /* Boutique Style */
-            margin-bottom: 12px;
+            font-size: 16px; font-weight: 800; color: var(--text-main);
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;
         }
 
         .btn-order-whatsapp {
@@ -151,12 +147,14 @@
             gap: 10px; font-size: 14px; width: 100%; justify-content: center;
         }
 
+        /* FIXED SPLASH SCREEN */
         #splash-screen {
             position: absolute; inset: 0; z-index: 4000;
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG');
+            background-color: #000; /* Solid background prevents flickering */
+            background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG');
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
     </style>
 </head>
@@ -171,25 +169,27 @@
         <button style="background:white; color:black; padding:20px 70px; border-radius:40px; font-weight:800; border:none; cursor:pointer;" onclick="launchApp()">Enter Shop</button>
     </div>
 
-    <header id="mainHeader">
-        <div class="logo-box">
-            <h2>Enis Collection</h2>
-            <span>Pamper Your Body</span>
-        </div>
-    </header>
-
-    <div class="feed" id="mainFeed">
-        <div class="grid" id="productGrid"></div>
-        
-        <div class="about-section">
-            <h4>About Enis</h4>
-            <p>Curated for the modern silhouette. We believe every piece should feel like a second skin while maintaining an air of timeless sophistication.</p>
-            <div class="contact-hub">
-                <a href="tel:+233546527892" class="icon-circle"><i class="fas fa-phone"></i></a>
-                <a href="javascript:void(0)" class="icon-circle" onclick="copyAndEmail()"><i class="fas fa-envelope"></i></a>
-                <a href="https://www.tiktok.com/@eniscollection1" class="icon-circle"><i class="fab fa-tiktok"></i></a>
+    <div id="shop-content">
+        <header id="mainHeader">
+            <div class="logo-box">
+                <h2>Enis Collection</h2>
+                <span>Pamper Your Body</span>
             </div>
-            <a href="https://www.tiktok.com/@eniscollection1" style="font-size:11px; font-weight:700; color:var(--text-soft); text-decoration:none; letter-spacing:2px;">@ENISCOLLECTION1</a>
+        </header>
+
+        <div class="feed" id="mainFeed">
+            <div class="grid" id="productGrid"></div>
+            
+            <div class="about-section">
+                <h4>About Enis</h4>
+                <p>Curated for the modern silhouette. We believe every piece should feel like a second skin while maintaining an air of timeless sophistication.</p>
+                <div class="contact-hub">
+                    <a href="tel:+233546527892" class="icon-circle"><i class="fas fa-phone"></i></a>
+                    <a href="javascript:void(0)" class="icon-circle" onclick="copyAndEmail()"><i class="fas fa-envelope"></i></a>
+                    <a href="https://www.tiktok.com/@eniscollection1" class="icon-circle"><i class="fab fa-tiktok"></i></a>
+                </div>
+                <a href="https://www.tiktok.com/@eniscollection1" style="font-size:11px; font-weight:700; color:var(--text-soft); text-decoration:none; letter-spacing:2px;">@ENISCOLLECTION1</a>
+            </div>
         </div>
     </div>
 
@@ -252,8 +252,15 @@
     renderProducts(myProducts);
 
     function launchApp() {
-        document.getElementById('splash-screen').style.opacity = "0";
-        setTimeout(() => document.getElementById('splash-screen').style.display = "none", 500);
+        const splash = document.getElementById('splash-screen');
+        const content = document.getElementById('shop-content');
+        
+        splash.style.opacity = "0";
+        content.style.opacity = "1"; // Fade the shop in
+        
+        setTimeout(() => {
+            splash.style.display = "none";
+        }, 600);
     }
 
     function openPreview(name, price, image, size) {
