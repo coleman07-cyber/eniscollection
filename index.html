@@ -9,237 +9,175 @@
     
     <style>
         :root {
-            --bg: #FDFDFD;
+            --bg: #FFFFFF;
             --card-bg: #FFFFFF;
             --text-main: #121212;
-            --text-soft: #8E8E93;
-            --accent-gold: #D4AF37; 
-            --gold-gradient: linear-gradient(135deg, #D4AF37 0%, #F4D03F 100%);
-            --gold-glow: 0 4px 15px rgba(212, 175, 55, 0.4);
-            --glass: rgba(255, 255, 255, 0.9);
-            --border: rgba(0, 0, 0, 0.05);
-            --shadow: 0 8px 30px rgba(0,0,0,0.04);
+            --text-soft: #636366;
+            --accent-gold: #C5A028; 
+            --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            --gold-glow: 0 4px 20px rgba(197, 160, 40, 0.15);
+            --glass: rgba(255, 255, 255, 0.85);
+            --border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 10px 40px rgba(0,0,0,0.06);
             --accent-green: #25D366;
-            --ease-fluid: cubic-bezier(0.23, 1, 0.32, 1);
+            --ease-luxury: cubic-bezier(0.32, 0.72, 0, 1); /* Apple-style smooth curve */
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg: #000;
-                --card-bg: #0A0A0A;
-                --text-main: #FFF;
+                --bg: #000000;
+                --card-bg: #121212;
+                --text-main: #FFFFFF;
                 --text-soft: #A1A1A6;
-                --glass: rgba(10, 10, 10, 0.9);
-                --border: rgba(255, 255, 255, 0.12);
+                --glass: rgba(0, 0, 0, 0.8);
+                --border: rgba(255, 255, 255, 0.1);
+                --shadow: 0 10px 40px rgba(0,0,0,0.4);
             }
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: #000; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
+        body { background: var(--bg); height: 100vh; overflow: hidden; position: fixed; width: 100%; }
 
         .app-shell {
             width: 100%; max-width: 420px; height: 100vh; margin: 0 auto;
             background: var(--bg); position: relative; display: flex; flex-direction: column;
         }
 
-        /* --- LUXURY SPLASH SCREEN --- */
+        /* --- SPLASH SCREEN --- */
         #splash-screen {
             position: absolute; inset: 0; z-index: 9999;
             background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.85)), url('images/Splash-Dress.PNG') center/cover;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: all 0.8s var(--ease-fluid);
-            animation: slowZoom 20s infinite alternate;
+            transition: opacity 0.8s var(--ease-luxury), transform 0.8s var(--ease-luxury), visibility 0.8s;
+            animation: slowZoom 25s infinite alternate;
         }
         
-        @keyframes slowZoom {
-            from { transform: scale(1); }
-            to { transform: scale(1.15); }
-        }
-
-        #splash-screen.hidden { opacity: 0; visibility: hidden; filter: blur(20px); transform: scale(1.1); }
+        @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.1); } }
+        #splash-screen.hidden { opacity: 0; visibility: hidden; transform: scale(1.05); }
         
-        .splash-brand { text-align: center; color: white; margin-bottom: 60px; animation: fadeInDown 1.2s ease; }
-        /* Cursive Style */
         .splash-brand h1 { 
             font-family: 'Great Vibes', cursive; 
-            font-size: 52px; 
+            font-size: 58px; 
             font-weight: 400; 
-            letter-spacing: 1px;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: -10px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            margin-bottom: 5px;
         }
-
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
         .btn-launch {
-            background: var(--gold-gradient); color: #000; padding: 20px 60px;
-            border-radius: 50px; border: none; font-weight: 800; font-size: 13px;
-            box-shadow: var(--gold-glow); cursor: pointer; letter-spacing: 2px;
-            animation: fadeInUp 1s ease both 0.5s;
-            transition: transform 0.3s ease;
+            background: #fff; color: #000; padding: 18px 50px;
+            border-radius: 50px; border: none; font-weight: 700; font-size: 13px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); cursor: pointer; letter-spacing: 2px;
+            text-transform: uppercase; margin-top: 40px;
         }
-        .btn-launch:active { transform: scale(0.95); }
-
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- SHOP CONTENT --- */
-        #shop-content { display: none; flex-direction: column; height: 100%; }
-        #shop-content.active { display: flex; animation: fadeIn 0.8s var(--ease-fluid); }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        header { padding: calc(env(safe-area-inset-top) + 15px) 0 8px; background: var(--bg); }
-        .logo-box h2 { font-size: 20px; font-weight: 900; text-align: center; color: var(--text-main); text-transform: uppercase; letter-spacing: 4px;}
-        .logo-box span { 
-            font-size: 8px; background: var(--gold-gradient); -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent; letter-spacing: 5px; display: block; 
-            text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 800; 
-        }
-
-        /* --- NAVIGATION --- */
-        .catalog-container {
-            position: sticky; top: 0; z-index: 90;
-            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border-bottom: 0.5px solid var(--border);
-        }
-        .catalog-bar { display: flex; gap: 8px; overflow-x: auto; padding: 12px; scrollbar-width: none; }
-        .catalog-bar::-webkit-scrollbar { display: none; }
+        header { padding: calc(env(safe-area-inset-top) + 20px) 0 15px; background: var(--bg); border-bottom: 0.5px solid var(--border); }
+        .logo-box h2 { font-family: 'Playfair Display', serif; font-size: 22px; text-align: center; color: var(--text-main); letter-spacing: 1px;}
         
-        .filter-tag {
-            padding: 10px 20px; background: rgba(120, 120, 128, 0.1); border-radius: 50px;
-            font-size: 10px; font-weight: 700; color: var(--text-soft); white-space: nowrap; 
-            transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .filter-tag.active { background: var(--text-main); color: var(--bg); }
-
-        /* --- PRODUCT FEED & SKELETON --- */
-        .feed { flex: 1; overflow-y: auto; padding-bottom: 50px; scroll-behavior: smooth; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
+        /* --- PRODUCT GRID --- */
+        .feed { flex: 1; overflow-y: auto; background: var(--bg); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px; }
         
         .product-card { 
-            background: var(--card-bg); border-radius: 24px; 
+            background: var(--card-bg); border-radius: 20px; 
             overflow: hidden; box-shadow: var(--shadow); border: 0.5px solid var(--border);
-            opacity: 0; transform: translateY(20px); 
-            transition: all 0.7s var(--ease-fluid);
+            opacity: 0; transform: translateY(30px); 
+            transition: all 0.9s var(--ease-luxury);
         }
         .product-card.visible { opacity: 1; transform: translateY(0); }
 
         .p-image-wrap { 
-            position: relative; width: 100%; aspect-ratio: 1/1.35; overflow: hidden; 
-            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite linear;
+            position: relative; width: 100%; aspect-ratio: 1/1.3; overflow: hidden; 
+            background: #f2f2f7;
         }
-        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        @media (prefers-color-scheme: dark) { .p-image-wrap { background: #1c1c1e; } }
 
-        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease; }
+        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.6s ease; }
         .p-image-wrap img.loaded { opacity: 1; }
         
-        .floating-tag {
-            position: absolute; bottom: 10px; right: 10px; background: var(--gold-gradient); 
-            color: #000; padding: 6px 14px; border-radius: 12px; font-size: 11px;
-            font-weight: 900; box-shadow: var(--gold-glow);
-        }
-
-        .p-details { padding: 12px; } 
-        .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.3; margin-top: 4px; }
-
-        /* --- MODERNIZED ABOUT SECTION --- */
+        /* --- MODERNIZED ABOUT AREA --- */
         .about-modern {
-            margin: 40px 15px 30px; padding: 45px 20px;
-            background: var(--card-bg);
-            border-radius: 35px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
+            margin: 40px 20px 60px; padding: 50px 25px;
+            background: var(--card-bg); border-radius: 30px;
+            border: 0.5px solid var(--border); box-shadow: var(--shadow);
             text-align: center;
-            position: relative;
-            overflow: hidden;
         }
-        .about-modern::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-            background: var(--gold-gradient);
-        }
-        .headline { font-size: 24px; font-family: 'Playfair Display', serif; font-style: italic; color: var(--text-main); margin: 15px 0; line-height: 1.1; }
-        .subtext { font-size: 13px; color: var(--text-soft); line-height: 1.7; margin-bottom: 30px; font-weight: 400; }
-        .social-row { display: flex; justify-content: center; gap: 15px; }
+        .about-modern .headline { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text-main); margin-bottom: 15px; }
         .social-btn {
-            width: 48px; height: 48px; border-radius: 16px;
-            background: #f8f8f8; display: flex; align-items: center; justify-content: center;
-            color: var(--text-main); border: 1px solid var(--border); text-decoration: none;
-            transition: 0.3s var(--ease-fluid);
+            width: 50px; height: 50px; border-radius: 50%;
+            background: var(--bg); color: var(--text-main);
+            border: 0.5px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            display: inline-flex; align-items: center; justify-content: center; margin: 0 8px;
+            transition: 0.3s;
         }
-        @media (prefers-color-scheme: dark) { .social-btn { background: #151515; } }
-        .social-btn:active { transform: scale(0.9) translateY(-2px); border-color: var(--accent-gold); }
 
-        /* --- ITEM PREVIEW (Refined Transitions) --- */
+        /* --- PERFECTED PREVIEW TRANSITION --- */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
-            background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            background: rgba(0,0,0,0.4); /* Light mode overlay */
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             display: none; align-items: center; justify-content: center; padding: 20px;
-            opacity: 0; transition: opacity 0.5s var(--ease-fluid), visibility 0.5s;
+            opacity: 0; 
+            transition: opacity 0.6s var(--ease-luxury);
         }
+        @media (prefers-color-scheme: dark) { #item-preview { background: rgba(0,0,0,0.85); } }
+
         #item-preview.active { display: flex; opacity: 1; }
         
         .preview-box { 
-            width: 280px; background: var(--card-bg); padding: 8px; border-radius: 38px; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            transform: translateY(40px) scale(0.9); transition: transform 0.6s var(--ease-fluid);
+            width: 100%; max-width: 320px; background: var(--card-bg); 
+            padding: 10px; border-radius: 40px; 
+            box-shadow: 0 40px 100px rgba(0,0,0,0.2);
+            /* Perfect Medium Transition: Scale + Fade + Slide */
+            transform: scale(0.85) translateY(60px); 
+            transition: transform 0.6s var(--ease-luxury);
         }
-        #item-preview.active .preview-box { transform: translateY(0) scale(1); }
+        #item-preview.active .preview-box { transform: scale(1) translateY(0); }
         
-        .preview-img-container { border-radius: 30px; overflow: hidden; height: 380px; position: relative; }
-        .preview-image { width: 100%; height: 100%; object-fit: cover; }
-        
+        /* Exit Animation Hook */
+        #item-preview.closing { opacity: 0; }
+        #item-preview.closing .preview-box { transform: scale(0.85) translateY(60px); }
+
+        .preview-img-container { border-radius: 32px; overflow: hidden; height: 400px; }
         .btn-order {
-            background: var(--accent-green); color: white; padding: 16px; border-radius: 20px;
-            text-decoration: none; font-weight: 800; display: flex; align-items: center; 
-            gap: 10px; font-size: 13px; justify-content: center; margin-top: 15px;
+            background: #121212; color: white; padding: 18px; border-radius: 20px;
+            text-decoration: none; font-weight: 700; display: flex; align-items: center; 
+            gap: 10px; font-size: 14px; justify-content: center; margin-top: 15px;
+            transition: 0.3s;
         }
+        @media (prefers-color-scheme: dark) { .btn-order { background: var(--accent-green); } }
     </style>
 </head>
 <body>
 
 <div class="app-shell">
     <div id="splash-screen">
-        <div class="splash-brand">
+        <div class="splash-brand" style="text-align: center;">
             <h1>Enis Collection</h1>
-            <p style="font-size:10px; letter-spacing:8px; color: var(--accent-gold); margin-top: 5px; font-weight: 800; text-transform: uppercase;">Pamper Your Body</p>
+            <p style="color: #fff; font-size: 10px; letter-spacing: 6px; text-transform: uppercase; font-weight: 600; opacity: 0.9;">Luxury & Elegance</p>
         </div>
-        <button class="btn-launch" onclick="launchApp()">EXPLORE CATALOGUE</button>
+        <button class="btn-launch" onclick="launchApp()">Discover</button>
     </div>
 
-    <div id="shop-content">
+    <div id="shop-content" style="display: none; flex-direction: column; height: 100%;">
         <header>
             <div class="logo-box">
                 <h2>Enis Collection</h2>
-                <span>Pamper Your Body</span>
             </div>
         </header>
-
-        <div class="catalog-container">
-            <div class="catalog-bar">
-                <div class="filter-tag active" onclick="filterItems('All', this)">All</div>
-                <div class="filter-tag" onclick="filterItems('Dress', this)">Dresses</div>
-                <div class="filter-tag" onclick="filterItems('Set', this)">Sets</div>
-                <div class="filter-tag" onclick="filterItems('Work', this)">Work Wear</div>
-            </div>
-        </div>
 
         <div class="feed" id="mainFeed" onscroll="handleScroll()">
             <div class="grid" id="productGrid"></div>
             
             <div class="about-modern">
-                <div style="width: 40px; height: 1px; background: var(--accent-gold); margin: 0 auto 15px;"></div>
-                <span style="font-size:10px; letter-spacing:5px; color:var(--accent-gold); font-weight:800; display:block; text-transform: uppercase;">Our Story</span>
-                <h3 class="headline">Elegance in Every <br>Stitch.</h3>
-                <p class="subtext">Based in Cape Coast, we curate premium pieces for the woman who values sophistication and comfort.</p>
+                <h3 class="headline">Our Heritage</h3>
+                <p style="color: var(--text-soft); font-size: 14px; line-height: 1.6; margin-bottom: 25px;">Curated luxury wear from Cape Coast, designed to pamper your body with timeless sophistication.</p>
                 <div class="social-row">
                     <a href="https://wa.me/233546527892" class="social-btn"><i class="fab fa-whatsapp"></i></a>
                     <a href="https://www.tiktok.com/@eniscollection1" class="social-btn"><i class="fab fa-tiktok"></i></a>
                     <a href="tel:+233546527892" class="social-btn"><i class="fas fa-phone"></i></a>
                 </div>
-                <p style="margin-top:35px; font-size:8px; letter-spacing:4px; opacity:0.5; font-weight: 700;">EST. 2022 • CAPE COAST</p>
             </div>
         </div>
     </div>
@@ -247,13 +185,12 @@
     <div id="item-preview" onclick="closePreview()">
         <div class="preview-box" onclick="event.stopPropagation()">
             <div class="preview-img-container">
-                <img id="preview-img" src="" class="preview-image">
-                <div id="preview-tag" class="floating-tag"></div>
+                <img id="preview-img" src="" class="preview-image" style="width:100%; height:100%; object-fit:cover;">
             </div>
-            <div class="preview-content" style="padding: 15px 10px; text-align:center;">
-                <span id="preview-size" style="font-size: 10px; color: var(--accent-gold); font-weight: 800; display: block; margin-bottom: 5px;"></span>
-                <h2 id="preview-name" style="font-size: 18px; color: var(--text-main); font-weight: 700;"></h2>
-                <a id="wa-btn" href="#" class="btn-order"><i class="fab fa-whatsapp"></i> ORDER ON WHATSAPP</a>
+            <div style="padding: 20px 10px; text-align:center;">
+                <h2 id="preview-name" style="font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text-main);"></h2>
+                <p id="preview-size" style="color: var(--accent-gold); font-size: 12px; font-weight: 700; margin-top: 5px;"></p>
+                <a id="wa-btn" href="#" class="btn-order">Order via WhatsApp</a>
             </div>
         </div>
     </div>
@@ -274,32 +211,24 @@
     ];
 
     function preloadAllImages() {
-        myProducts.forEach(product => {
-            const img = new Image();
-            img.src = product.image;
-        });
+        myProducts.forEach(product => { const img = new Image(); img.src = product.image; });
     }
     preloadAllImages();
 
-    function renderProducts(filter = 'All') {
+    function renderProducts() {
         const grid = document.getElementById('productGrid');
-        const filtered = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
-        
-        grid.innerHTML = filtered.map((item) => `
+        grid.innerHTML = myProducts.map((item) => `
             <div class="product-card">
                 <div class="p-image-wrap" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
-                    <img src="${item.image}" 
-                         onload="this.classList.add('loaded'); this.parentElement.style.animation='none'; this.parentElement.style.background='none';"
-                         onerror="this.src='https://via.placeholder.com/400x520?text=ENIS'">
-                    <div class="floating-tag">₵${item.price}</div>
+                    <img src="${item.image}" onload="this.classList.add('loaded')">
+                    <div style="position:absolute; bottom:10px; right:10px; background:#fff; color:#000; padding:5px 10px; border-radius:10px; font-size:11px; font-weight:800; box-shadow:0 4px 10px rgba(0,0,0,0.1);">₵${item.price}</div>
                 </div>
-                <div class="p-details">
-                    <span style="font-size:9px; color:var(--accent-gold); font-weight:800;">UK SIZE ${item.size}</span>
-                    <h3 class="p-name">${item.name}</h3>
+                <div style="padding:15px;">
+                    <span style="font-size:10px; color:var(--accent-gold); font-weight:800; text-transform:uppercase;">UK ${item.size}</span>
+                    <h3 style="font-size:13px; color:var(--text-main); margin-top:4px;">${item.name}</h3>
                 </div>
             </div>
         `).join('');
-        
         setTimeout(handleScroll, 50);
     }
 
@@ -314,9 +243,8 @@
     function launchApp() {
         const splash = document.getElementById('splash-screen');
         splash.classList.add('hidden');
-        
         setTimeout(() => {
-            document.getElementById('shop-content').classList.add('active');
+            document.getElementById('shop-content').style.display = 'flex';
             renderProducts();
         }, 400);
     }
@@ -325,8 +253,7 @@
         const modal = document.getElementById('item-preview');
         document.getElementById('preview-img').src = image;
         document.getElementById('preview-name').innerText = name;
-        document.getElementById('preview-size').innerText = `UK SIZE ${size}`;
-        document.getElementById('preview-tag').innerText = `₵${price}`;
+        document.getElementById('preview-size').innerText = `UK SIZE ${size} • ₵${price}`;
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
         modal.style.display = 'flex';
@@ -335,20 +262,11 @@
 
     function closePreview() { 
         const modal = document.getElementById('item-preview');
-        modal.classList.remove('active');
-        // Fade out matches the 0.5s transition in CSS
+        modal.classList.add('closing'); // Trigger exit animation
         setTimeout(() => {
-            if (!modal.classList.contains('active')) {
-                modal.style.display = 'none';
-            }
-        }, 500);
-    }
-
-    function filterItems(cat, el) {
-        document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-        renderProducts(cat);
-        document.getElementById('mainFeed').scrollTo({ top: 0, behavior: 'smooth' });
+            modal.classList.remove('active', 'closing');
+            modal.style.display = 'none';
+        }, 600); // Wait for transition to finish
     }
 </script>
 
