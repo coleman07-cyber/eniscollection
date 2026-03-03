@@ -1,317 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    
+    <title>ENIS COLLECTION</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #F2F2F7;
+            --card-bg: #FFFFFF;
+            --text-main: #1C1C1E;
+            --text-soft: #8E8E93;
+            --glass: rgba(255, 255, 255, 0.9);
+            --border: rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --accent-green: #25D366;
+        }
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#000000">
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #000000;
+                --card-bg: #1C1C1E;
+                --text-main: #FFFFFF;
+                --text-soft: #A1A1A6;
+                --glass: rgba(20, 20, 20, 0.9);
+                --border: rgba(255, 255, 255, 0.1);
+            }
+        }
 
-<title>ENIS COLLECTION</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        /* 1. HIDE SCROLLBAR CORNER */
+        html, body { 
+            background: var(--bg); 
+            min-height: 100vh; 
+            scrollbar-width: none;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        body::-webkit-scrollbar { display: none; }
 
-<style>
-:root{
-    --bg:#F2F2F7;
-    --card-bg:#FFFFFF;
-    --text-main:#1C1C1E;
-    --text-soft:#8E8E93;
-    --glass:rgba(255,255,255,0.9);
-    --border:rgba(0,0,0,0.05);
-    --shadow:0 4px 12px rgba(0,0,0,0.05);
-    --accent-green:#25D366;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        /* Fixed Background Glitch Lock */
+        body.modal-open { 
+            position: fixed; 
+            width: 100%; 
+            overflow: hidden; 
+        }
 
-@media (prefers-color-scheme: dark){
-:root{
-    --bg:#000;
-    --card-bg:#1C1C1E;
-    --text-main:#FFF;
-    --text-soft:#A1A1A6;
-    --glass:rgba(20,20,20,0.9);
-    --border:rgba(255,255,255,0.1);
-}
-}
+        /* SPLASH SCREEN */
+        #splash-screen {
+            position: fixed; inset: 0; z-index: 10000;
+            background: #000;
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #splash-screen.lifted { transform: translateY(-100%); pointer-events: none; }
 
-html,body{
-    background:var(--bg);
-    min-height:100vh;
-    overflow-x:hidden;
-    scrollbar-width:none;
-}
-body::-webkit-scrollbar{display:none;}
+        /* HEADER */
+        header {
+            position: fixed; top: 0; left: 0; right: 0;
+            padding: calc(env(safe-area-inset-top) + 15px) 20px 15px;
+            background: var(--glass); 
+            backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%);
+            z-index: 1000; border-bottom: 0.5px solid var(--border);
+            transition: transform 0.4s ease;
+        }
+        .header-hidden { transform: translateY(-100%); }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;
-    -webkit-tap-highlight-color:transparent;
-}
+        .logo-box h2 { font-size: 22px; font-weight: 800; text-align: center; color: var(--text-main); }
+        .logo-box span { font-size: 9px; color: var(--text-soft); letter-spacing: 5px; display: block; text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 700; }
 
-body.modal-open{
-    overflow:hidden;
-    height:100vh;
-    position:fixed;
-    width:100%;
-}
+        /* FEED - Larger Product Cards */
+        .content { 
+            max-width: 450px; margin: 0 auto; 
+            padding: calc(env(safe-area-inset-top) + 90px) 12px 60px; /* Reduced side padding */
+        }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 40px; }
+        
+        .product-card { 
+            background: var(--card-bg); border-radius: 18px; overflow: hidden; 
+            box-shadow: var(--shadow); border: 0.5px solid var(--border);
+            cursor: pointer;
+        }
+        .p-image { width: 100%; aspect-ratio: 1 / 1.4; overflow: hidden; background: #8881; }
+        .p-image img { width: 100%; height: 100%; object-fit: cover; }
+        .p-details { padding: 12px 10px; }
+        .size-tag { font-size: 8px; color: var(--text-soft); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        .p-name { font-size: 13px; font-weight: 600; line-height: 1.2; height: 32px; overflow: hidden; color: var(--text-main); }
+        .price { font-size: 15px; font-weight: 700; margin-top: 4px; color: var(--text-main); }
 
-/* SPLASH */
-#splash-screen{
-    position:fixed;
-    inset:0;
-    z-index:10000;
-    background:#000;
-    background-image:linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.9)),url('images/Splash-Dress.PNG');
-    background-size:cover;
-    background-position:center;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    transition:transform 0.6s ease;
-}
-#splash-screen.lifted{
-    transform:translateY(-100%);
-    pointer-events:none;
-}
+        /* ANTI-GLITCH PREVIEW (Reduced Size) */
+        #item-preview {
+            position: fixed; inset: 0; 
+            background: rgba(0,0,0,0.75); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            z-index: 11000; 
+            display: none; align-items: center; justify-content: center; 
+            opacity: 0; transition: opacity 0.2s ease;
+            perspective: 1000px;
+        }
+        #item-preview.active { display: flex; opacity: 1; }
+        
+        .preview-content { 
+            width: 75%; 
+            max-width: 290px; 
+            background: var(--card-bg); padding: 8px; 
+            border-radius: 28px; text-align: center; 
+            transform: scale(0.9) translateZ(0); 
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
+        #item-preview.active .preview-content { transform: scale(1) translateZ(0); }
+        
+        .preview-image { 
+            width: 100%; border-radius: 20px; 
+            max-height: 50vh; object-fit: cover;
+            margin-bottom: 12px; display: block;
+            cursor: pointer; /* Feedback that you can click it to close */
+        }
 
-/* HEADER */
-header{
-    position:fixed;
-    top:0;left:0;right:0;
-    padding:calc(env(safe-area-inset-top)+15px) 20px 15px;
-    background:var(--glass);
-    backdrop-filter:blur(25px);
-    -webkit-backdrop-filter:blur(25px);
-    z-index:1000;
-    border-bottom:0.5px solid var(--border);
-    transition:transform 0.4s ease;
-}
-.header-hidden{transform:translateY(-100%);}
+        #preview-name { 
+            font-size: 15px; font-weight: 800; text-transform: uppercase; 
+            letter-spacing: 1px; margin-bottom: 12px; color: var(--text-main);
+        }
 
-.logo-box h2{
-    font-size:22px;
-    font-weight:800;
-    text-align:center;
-}
-.logo-box span{
-    font-size:9px;
-    color:var(--text-soft);
-    letter-spacing:5px;
-    display:block;
-    text-transform:uppercase;
-    text-align:center;
-    margin-top:4px;
-    font-weight:700;
-}
+        .btn-order-whatsapp {
+            background: var(--accent-green); color: white; padding: 15px; border-radius: 16px;
+            text-decoration: none; font-weight: 800; display: flex; align-items: center; 
+            gap: 8px; font-size: 13px; width: 100%; justify-content: center;
+        }
 
-/* CONTENT */
-.content{
-    max-width:450px;
-    margin:0 auto;
-    padding:calc(env(safe-area-inset-top)+90px) 16px 60px;
-}
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
-    margin-bottom:40px;
-}
-
-.product-card{
-    background:var(--card-bg);
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:var(--shadow);
-    border:0.5px solid var(--border);
-    cursor:pointer;
-}
-.p-image{
-    width:100%;
-    aspect-ratio:1/1.35;
-    overflow:hidden;
-}
-.p-image img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-.p-details{padding:12px;}
-.size-tag{
-    font-size:9px;
-    color:var(--text-soft);
-    font-weight:800;
-    text-transform:uppercase;
-    margin-bottom:4px;
-    display:block;
-}
-.p-name{
-    font-size:13px;
-    font-weight:600;
-    line-height:1.2;
-    height:32px;
-    overflow:hidden;
-}
-.price{
-    font-size:15px;
-    font-weight:700;
-    margin-top:4px;
-}
-
-/* FIXED PREVIEW */
-#item-preview{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.75);
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-    z-index:11000;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    opacity:0;
-    visibility:hidden;
-    pointer-events:none;
-    transition:opacity 0.25s ease;
-}
-
-#item-preview.active{
-    opacity:1;
-    visibility:visible;
-    pointer-events:auto;
-}
-
-.preview-content{
-    width:72%;
-    max-width:290px;
-    background:var(--card-bg);
-    padding:10px;
-    border-radius:26px;
-    text-align:center;
-
-    transform:scale(0.92);
-    transition:transform 0.25s ease;
-}
-
-#item-preview.active .preview-content{
-    transform:scale(1);
-}
-
-.preview-image{
-    width:100%;
-    border-radius:20px;
-    max-height:52vh;
-    object-fit:cover;
-    margin-bottom:12px;
-}
-
-#preview-name{
-    font-size:15px;
-    font-weight:800;
-    text-transform:uppercase;
-    letter-spacing:1.5px;
-    margin-bottom:12px;
-}
-
-.btn-order-whatsapp{
-    background:var(--accent-green);
-    color:white;
-    padding:15px;
-    border-radius:16px;
-    text-decoration:none;
-    font-weight:800;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    font-size:13px;
-}
-</style>
+        .about-section { 
+            background: var(--card-bg); border-radius: 30px; 
+            padding: 40px 24px; text-align: center;
+            border: 0.5px solid var(--border); box-shadow: var(--shadow);
+        }
+    </style>
 </head>
 <body>
 
-<div id="splash-screen">
-    <div style="text-align:center;color:white;margin-bottom:40px;">
-        <h2 style="font-weight:300;letter-spacing:4px;font-size:14px;opacity:0.8;">WELCOME TO</h2>
-        <h1 style="font-weight:700;letter-spacing:2px;font-size:30px;margin-top:5px;">ENIS COLLECTION</h1>
-        <p style="font-size:9px;letter-spacing:6px;opacity:0.6;margin-top:15px;">PAMPER YOUR BODY</p>
+    <div id="splash-screen">
+        <div style="text-align:center; color:white; margin-bottom:40px;">
+            <h2 style="font-weight: 300; letter-spacing: 4px; font-size: 14px; opacity: 0.8;">WELCOME TO</h2>
+            <h1 style="font-weight: 700; letter-spacing: 2px; font-size: 30px; margin-top: 5px;">ENIS COLLECTION</h1>
+            <p style="font-size: 9px; letter-spacing: 6px; opacity: 0.6; margin-top: 15px;">PAMPER YOUR BODY</p>
+        </div>
+        <button style="background:white; color:black; padding:20px 60px; border-radius:50px; font-weight:900; border:none; cursor:pointer;" onclick="launchApp()">ENTER SHOP</button>
     </div>
-    <button style="background:white;color:black;padding:20px 60px;border-radius:50px;font-weight:900;border:none;cursor:pointer;" onclick="launchApp()">ENTER SHOP</button>
-</div>
 
-<header id="mainHeader">
-    <div class="logo-box">
-        <h2>Enis Collection</h2>
-        <span>Pamper Your Body</span>
+    <header id="mainHeader">
+        <div class="logo-box">
+            <h2>Enis Collection</h2>
+            <span>Pamper Your Body</span>
+        </div>
+    </header>
+
+    <div class="content" id="scroll-area">
+        <div class="grid" id="productGrid"></div>
+        <div class="about-section">
+            <h4 style="font-size:10px; letter-spacing:5px; color:var(--text-soft); text-transform:uppercase;">About Enis</h4>
+            <p style="font-size:14px; line-height:1.6; margin-top:15px; color:var(--text-main);">Curated for the modern silhouette. Every piece is selected to feel like a second skin.</p>
+            <div style="display:flex; justify-content:center; gap:20px; margin-top:25px;">
+                <a href="tel:+233546527892" style="color:var(--text-main); font-size:18px;"><i class="fas fa-phone"></i></a>
+                <a href="https://www.tiktok.com/@eniscollection1" style="color:var(--text-main); font-size:18px;"><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div>
     </div>
-</header>
 
-<div class="content">
-    <div class="grid" id="productGrid"></div>
-</div>
-
-<div id="item-preview" onclick="closePreview()">
-    <div class="preview-content" onclick="event.stopPropagation()">
-        <img id="preview-img" class="preview-image">
-        <span id="preview-size" style="font-size:9px;color:var(--text-soft);font-weight:800;display:block;margin-bottom:4px;"></span>
-        <h2 id="preview-name"></h2>
-        <a id="whatsapp-order-btn" href="#" class="btn-order-whatsapp">
-            <i class="fab fa-whatsapp"></i> ORDER ON WHATSAPP
-        </a>
+    <div id="item-preview" onclick="closePreview()">
+        <div class="preview-content" onclick="event.stopPropagation()">
+            <img id="preview-img" src="" class="preview-image" onclick="closePreview()">
+            <div>
+                <span id="preview-size" style="font-size: 9px; color: var(--text-soft); font-weight: 800; display: block; margin-bottom: 4px;"></span>
+                <h2 id="preview-name"></h2>
+                <a id="whatsapp-order-btn" href="#" class="btn-order-whatsapp">
+                    <i class="fab fa-whatsapp"></i> ORDER ON WHATSAPP
+                </a>
+            </div>
+        </div>
     </div>
-</div>
 
 <script>
-const myProducts=[
-{ name:"Thick Seamless Dress",price:50,size:"10",image:"images/item1.jpg"},
-{ name:"Plaited Skirts & Top",price:50,size:"8/10",image:"images/item2.jpg"},
-{ name:"Short Length Essential",price:45,size:"8",image:"images/item3.jpg"},
-{ name:"Church & Work Midi",price:50,size:"8",image:"images/item4.jpg"},
-{ name:"Dinner & Party Elegance",price:45,size:"8/10",image:"images/item5.jpg"},
-{ name:"Lecture & Beach Set",price:45,size:"6/8/10",image:"images/item6.jpg"},
-{ name:"Ruched SHEIN Special",price:50,size:"8/10",image:"images/item7.jpg"},
-{ name:"Ultimate Work Gown",price:50,size:"12/14",image:"images/item8.jpg"},
-{ name:"Skirt & Basic Top Duo",price:50,size:"10/12",image:"images/item9.jpg"},
-{ name:"Refined Church Wear",price:50,size:"10",image:"images/item10.jpg"}
-];
+    if (history.scrollRestoration) { history.scrollRestoration = 'manual'; }
+    window.scrollTo(0, 0);
 
-function renderProducts(){
-document.getElementById('productGrid').innerHTML=myProducts.map(item=>`
-<div class="product-card" onclick="openPreview('${item.name.replace(/'/g,"\\'")}',${item.price},'${item.image}','${item.size}')">
-<div class="p-image"><img src="${item.image}"></div>
-<div class="p-details">
-<span class="size-tag">UK SIZE ${item.size}</span>
-<h3 class="p-name">${item.name}</h3>
-<p class="price">GH₵ ${item.price.toFixed(2)}</p>
-</div>
-</div>`).join('');
-}
-renderProducts();
+    const myProducts = [
+        { name: "Thick Seamless Dress", price: 50, size: "10", image: "images/item1.jpg" },
+        { name: "Plaited Skirts & Top", price: 50, size: "8/10", image: "images/item2.jpg" },
+        { name: "Short Length Essential", price: 45, size: "8", image: "images/item3.jpg" },
+        { name: "Church & Work Midi", price: 50, size: "8", image: "images/item4.jpg" },
+        { name: "Dinner & Party Elegance", price: 45, size: "8/10", image: "images/item5.jpg" },
+        { name: "Lecture & Beach Set", price: 45, size: "6/8/10", image: "images/item6.jpg" },
+        { name: "Ruched SHEIN Special", price: 50, size: "8/10", image: "images/item7.jpg" },
+        { name: "Ultimate Work Gown", price: 50, size: "12/14", image: "images/item8.jpg" },
+        { name: "Skirt & Basic Top Duo", price: 50, size: "10/12", image: "images/item9.jpg" },
+        { name: "Refined Church Wear", price: 50, size: "10", image: "images/item10.jpg" }
+    ];
 
-function launchApp(){
-document.getElementById('splash-screen').classList.add('lifted');
-}
+    function renderProducts() {
+        document.getElementById('productGrid').innerHTML = myProducts.map(item => `
+            <div class="product-card" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
+                <div class="p-image"><img src="${item.image}"></div>
+                <div class="p-details">
+                    <span class="size-tag">UK SIZE ${item.size}</span>
+                    <h3 class="p-name">${item.name}</h3>
+                    <p class="price">GH₵ ${item.price.toFixed(2)}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+    renderProducts();
 
-function openPreview(name,price,image,size){
-document.getElementById('preview-img').src=image;
-document.getElementById('preview-name').innerText=name;
-document.getElementById('preview-size').innerText=`UK SIZE ${size} • GH₵ ${price}`;
-document.getElementById('whatsapp-order-btn').href=
-`https://wa.me/233546527892?text=${encodeURIComponent('Hi Enis! I want to order: '+name)}`;
+    function launchApp() { document.getElementById('splash-screen').classList.add('lifted'); }
 
-document.body.classList.add('modal-open');
-document.getElementById('item-preview').classList.add('active');
-}
+    let scrollPos = 0;
 
-function closePreview(){
-document.body.classList.remove('modal-open');
-document.getElementById('item-preview').classList.remove('active');
-}
+    function openPreview(name, price, image, size) {
+        scrollPos = window.pageYOffset;
+        const modal = document.getElementById('item-preview');
+        
+        document.getElementById('preview-img').src = image;
+        document.getElementById('preview-name').innerText = name;
+        document.getElementById('preview-size').innerText = `UK SIZE ${size} • GH₵ ${price}`;
+        document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${encodeURIComponent('Hi Enis! I want: ' + name)}`;
+        
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.classList.add('active');
+            // Strict Scroll Lock
+            document.body.style.top = `-${scrollPos}px`;
+            document.body.classList.add('modal-open');
+        }, 20);
+    }
+
+    function closePreview() { 
+        const modal = document.getElementById('item-preview');
+        modal.classList.remove('active');
+        
+        // Restore Scroll
+        document.body.classList.remove('modal-open');
+        document.body.style.top = '';
+        window.scrollTo(0, scrollPos);
+
+        setTimeout(() => { modal.style.display = 'none'; }, 200);
+    }
+
+    let lastS = 0;
+    window.addEventListener('scroll', () => {
+        const h = document.getElementById('mainHeader');
+        const cur = window.scrollY;
+        if (cur > lastS && cur > 120) h.classList.add('header-hidden');
+        else h.classList.remove('header-hidden');
+        lastS = cur;
+    }, { passive: true });
 </script>
-
 </body>
 </html>
