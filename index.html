@@ -114,7 +114,7 @@
         .p-details { padding: 12px; } 
         .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.3; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
-        /* MODERNIZED ABOUT SECTION */
+        /* ABOUT SECTION */
         .about-modern {
             margin: 50px 15px 30px;
             padding: 60px 25px;
@@ -140,53 +140,40 @@
         .social-btn:active { transform: scale(0.9); border-color: var(--accent-gold); color: var(--accent-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
         .establishment-note { margin-top: 50px; font-size: 9px; letter-spacing: 5px; text-transform: uppercase; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.8; }
 
-        /* REFINED SLIM PREVIEW (270px) */
+        /* PREVIEW MODAL */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
-            background: rgba(0,0,0,0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             display: none; align-items: center; justify-content: center; padding: 20px;
-            opacity: 0; transition: opacity 0.3s var(--ease-fluid);
+            opacity: 0; transition: opacity 0.3s ease;
         }
         #item-preview.active { display: flex; opacity: 1; }
         
         .preview-box { 
-            width: 270px; 
+            width: 280px; 
             background: var(--card-bg); 
-            padding: 8px; 
-            border-radius: 42px; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            transform: translateY(30px) scale(0.95); transition: 0.4s var(--ease-fluid);
-            display: flex; flex-direction: column;
-            max-height: 90vh; margin: auto;
+            padding: 10px; 
+            border-radius: 38px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            transform: scale(0.9); opacity: 0;
+            transition: all 0.4s var(--ease-fluid);
         }
-        #item-preview.active .preview-box { transform: translateY(0) scale(1); }
+        #item-preview.active .preview-box { transform: scale(1); opacity: 1; }
         
         .preview-img-container { 
-            border-radius: 34px; 
+            border-radius: 30px; 
             overflow: hidden; 
-            background: #1a1a1a; /* Dark background so no white screen */
-            position: relative; 
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; 
-            height: 400px; 
+            background: transparent;
+            height: 380px; 
         }
         
-        .preview-image { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            display: block;
-            border-radius: 34px; 
-            opacity: 0; /* Hidden until loaded */
-            transition: opacity 0.2s ease;
-        }
-        
-        .preview-content { padding: 12px 10px 8px; text-align: center; flex: 1 1 auto; }
+        .preview-image { width: 100%; height: 100%; object-fit: cover; border-radius: 30px; }
+        .preview-content { padding: 15px 10px 10px; text-align: center; }
 
         .btn-order {
-            background: var(--accent-green); color: white; padding: 14px; border-radius: 22px;
+            background: var(--accent-green); color: white; padding: 14px; border-radius: 20px;
             text-decoration: none; font-weight: 800; display: flex; align-items: center; 
-            gap: 10px; font-size: 13px; justify-content: center; margin-top: 10px;
+            gap: 10px; font-size: 13px; justify-content: center; margin-top: 15px;
         }
     </style>
 </head>
@@ -194,21 +181,13 @@
 
 <div class="app-shell">
     <div id="splash-screen">
-        <div style="text-align:center; color:white; margin-bottom:50px;">
-            <h1 style="font-weight: 700; font-size: 30px; letter-spacing: 3px;">WELCOME TO ENIS COLLECTION</h1>
-            <p style="font-size:10px; letter-spacing:8px; color: var(--accent-gold); margin-top: 15px; font-weight: 800;">PAMPER YOUR BODY</p>
-        </div>
         <button class="btn-launch" onclick="launchApp()">DISCOVER COLLECTION</button>
     </div>
 
     <div id="shop-content">
         <header>
-            <div class="logo-box">
-                <h2>Enis Collection</h2>
-                <span>Pamper Your Body</span>
-            </div>
+            <div class="logo-box"><h2>Enis Collection</h2><span>Pamper Your Body</span></div>
         </header>
-
         <div class="catalog-container">
             <div class="catalog-bar">
                 <div class="filter-tag active" onclick="filterItems('All', this)">All</div>
@@ -217,23 +196,13 @@
                 <div class="filter-tag" onclick="filterItems('Work', this)">Work Wear</div>
             </div>
         </div>
-
         <div class="feed" id="mainFeed" onscroll="handleScroll()">
             <div class="grid" id="productGrid"></div>
-            
             <div class="about-modern">
-                <span style="font-size:10px; letter-spacing:6px; color:var(--accent-gold); text-transform:uppercase; font-weight:800; display:block; margin-bottom:10px;">Our Heritage</span>
                 <h3 class="headline">Designed for the <br>Extraordinary Woman.</h3>
-                <p class="subtext">Hand-selected luxury silhouettes curated in Ghana. We blend timeless sophistication with the comfort of modern tailoring.</p>
-                
                 <div class="social-row">
-                    <a href="tel:+233546527892" class="social-btn"><i class="fas fa-phone"></i></a>
                     <a href="https://wa.me/233546527892" class="social-btn"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://www.tiktok.com/@eniscollection1" class="social-btn"><i class="fab fa-tiktok"></i></a>
-                    <a href="mailto:sheilaenima@gmail.com" class="social-btn"><i class="fas fa-envelope"></i></a>
                 </div>
-                
-                <p class="establishment-note">CAPECOAST, GHANA • EST. 2022</p>
             </div>
         </div>
     </div>
@@ -242,11 +211,10 @@
         <div class="preview-box" onclick="event.stopPropagation()">
             <div class="preview-img-container">
                 <img id="preview-img" src="" class="preview-image">
-                <div id="preview-tag" class="floating-tag"></div>
             </div>
             <div class="preview-content">
-                <span id="preview-size" style="font-size: 10px; color: var(--accent-gold); font-weight: 800; display: block; margin-bottom: 5px; letter-spacing: 1px;"></span>
-                <h2 id="preview-name" style="font-size: 17px; color: var(--text-main); font-weight: 700; line-height: 1.2;"></h2>
+                <span id="preview-size" style="font-size: 10px; color: var(--accent-gold); font-weight: 800;"></span>
+                <h2 id="preview-name" style="font-size: 16px; color: var(--text-main); font-weight: 700;"></h2>
                 <a id="wa-btn" href="#" class="btn-order"><i class="fab fa-whatsapp"></i> ORDER NOW</a>
             </div>
         </div>
@@ -270,32 +238,17 @@
     function renderProducts(filter = 'All') {
         const grid = document.getElementById('productGrid');
         const filtered = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
-        
         grid.innerHTML = filtered.map((item) => `
             <div class="product-card">
                 <div class="p-image-wrap" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
-                    <img src="${item.image}" 
-                         onload="this.classList.add('loaded'); this.closest('.product-card').classList.add('visible');"
-                         onerror="this.src='https://via.placeholder.com/400x520?text=ENIS'; this.closest('.product-card').classList.add('visible');">
+                    <img src="${item.image}" onload="this.classList.add('loaded'); this.closest('.product-card').classList.add('visible');">
                     <div class="floating-tag">₵${item.price}</div>
                 </div>
                 <div class="p-details">
                     <span style="font-size:9px; color:var(--accent-gold); font-weight:800;">UK SIZE ${item.size}</span>
                     <h3 class="p-name">${item.name}</h3>
                 </div>
-            </div>
-        `).join('');
-    }
-
-    function handleScroll() {
-        const cards = document.querySelectorAll('.product-card:not(.visible)');
-        cards.forEach(card => {
-            const cardTop = card.getBoundingClientRect().top;
-            if(cardTop < window.innerHeight * 0.95) {
-                const img = card.querySelector('img');
-                if (img.complete) card.classList.add('visible');
-            }
-        });
+            </div>`).join('');
     }
 
     function launchApp() {
@@ -308,47 +261,49 @@
         const modal = document.getElementById('item-preview');
         const previewImg = document.getElementById('preview-img');
         
-        // Hide the image tag immediately so no white screen or old image shows
-        previewImg.style.opacity = '0';
-        
-        // Set content
+        // 1. Assign the new image source immediately
         previewImg.src = image;
+
+        // 2. Set the text content
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size}`;
-        document.getElementById('preview-tag').innerText = `₵${price}`;
-        
-        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
-        document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
-        
-        modal.style.display = 'flex';
+        document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=Order: ${name}`;
 
-        // Check if image is already cached
+        // 3. THE MAGIC FIX: Only show the modal once the browser says the image is ready
         if (previewImg.complete) {
-            previewImg.style.opacity = '1';
+            showModal();
         } else {
-            previewImg.onload = () => { previewImg.style.opacity = '1'; };
+            previewImg.onload = showModal;
         }
-        
-        requestAnimationFrame(() => {
-            setTimeout(() => modal.classList.add('active'), 10);
-        });
+
+        function showModal() {
+            modal.style.display = 'flex';
+            requestAnimationFrame(() => {
+                modal.classList.add('active');
+            });
+            // Clear the onload so it doesn't trigger again
+            previewImg.onload = null;
+        }
     }
 
     function closePreview() { 
         const modal = document.getElementById('item-preview');
         modal.classList.remove('active');
-        setTimeout(() => {
-            modal.style.display = 'none';
-        }, 300);
+        setTimeout(() => modal.style.display = 'none', 300);
+    }
+
+    function handleScroll() {
+        const cards = document.querySelectorAll('.product-card:not(.visible)');
+        cards.forEach(card => {
+            if(card.getBoundingClientRect().top < window.innerHeight) card.classList.add('visible');
+        });
     }
 
     function filterItems(cat, el) {
         document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
         renderProducts(cat);
-        document.getElementById('mainFeed').scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>
-
 </body>
 </html>
