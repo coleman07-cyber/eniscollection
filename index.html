@@ -145,7 +145,7 @@
             position: fixed; inset: 0; z-index: 10000;
             background: rgba(0,0,0,0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             display: none; align-items: center; justify-content: center; padding: 20px;
-            opacity: 0; transition: opacity 0.4s var(--ease-fluid);
+            opacity: 0; transition: opacity 0.3s var(--ease-fluid);
         }
         #item-preview.active { display: flex; opacity: 1; }
         
@@ -155,7 +155,7 @@
             padding: 8px; 
             border-radius: 42px; 
             box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            transform: translateY(30px) scale(0.95); transition: 0.5s var(--ease-fluid);
+            transform: translateY(30px) scale(0.95); transition: 0.4s var(--ease-fluid);
             display: flex; flex-direction: column;
             max-height: 90vh; margin: auto;
         }
@@ -177,8 +177,7 @@
             object-fit: cover; 
             display: block;
             border-radius: 34px; 
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
+            opacity: 1; /* Instant appearance */
         }
         
         .preview-content { padding: 12px 10px 8px; text-align: center; flex: 1 1 auto; }
@@ -267,7 +266,7 @@
         { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
     ];
 
-    // Pre-load images for smoother experience
+    // Pre-load all images instantly for cache
     myProducts.forEach(item => {
         const img = new Image();
         img.src = item.image;
@@ -314,10 +313,8 @@
         const modal = document.getElementById('item-preview');
         const previewImg = document.getElementById('preview-img');
         
-        // Hide image before swapping to prevent old image "flash"
-        previewImg.style.opacity = '0';
+        // Instant data swap
         previewImg.src = image;
-        
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size}`;
         document.getElementById('preview-tag').innerText = `₵${price}`;
@@ -325,29 +322,23 @@
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
         
+        // Show modal instantly
         modal.style.display = 'flex';
         
-        // Fade image in only after it is loaded
-        previewImg.onload = () => {
-            previewImg.style.opacity = '1';
-        };
-
-        // Small delay to ensure display:flex is rendered before animating opacity/scale
+        // Use double frame to ensure UI is ready for the "pop" animation
         requestAnimationFrame(() => {
-            setTimeout(() => modal.classList.add('active'), 10);
+            requestAnimationFrame(() => {
+                modal.classList.add('active');
+            });
         });
     }
 
     function closePreview() { 
         const modal = document.getElementById('item-preview');
-        const previewImg = document.getElementById('preview-img');
-        
         modal.classList.remove('active');
-        previewImg.style.opacity = '0'; // Clean fade out
-        
         setTimeout(() => {
             modal.style.display = 'none';
-        }, 400);
+        }, 300); // Shorter exit for snappier feel
     }
 
     function filterItems(cat, el) {
