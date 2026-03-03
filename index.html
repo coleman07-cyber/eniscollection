@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <title>ENIS COLLECTION</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #FDFDFD;
+            --card-bg: #FFFFFF;
+            --text-main: #121212;
+            --text-soft: #8E8E93;
+            --accent-gold: #D4AF37; 
+            --gold-gradient: linear-gradient(135deg, #D4AF37 0%, #F4D03F 100%);
+            --gold-glow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            --glass: rgba(255, 255, 255, 0.9);
+            --border: rgba(0, 0, 0, 0.05);
+            --shadow: 0 8px 30px rgba(0,0,0,0.04);
+            --accent-green: #25D366;
+            --ease-fluid: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #000;
+                --card-bg: #0A0A0A;
+                --text-main: #FFF;
+                --text-soft: #A1A1A6;
+                --glass: rgba(10, 10, 10, 0.9);
+                --border: rgba(255, 255, 255, 0.12);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { background: #000; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
+
+        .app-shell {
+            width: 100%; max-width: 420px; height: 100vh; margin: 0 auto;
+            background: var(--bg); position: relative; display: flex; flex-direction: column;
+        }
+
+        /* SPLASH SCREEN */
+        #splash-screen {
+            position: absolute; inset: 0; z-index: 9999;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG') center/cover;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: all 1s var(--ease-fluid);
+        }
+        #splash-screen.hidden { opacity: 0; visibility: hidden; transform: translateY(-20px); }
+        
+        .btn-launch {
+            background: var(--gold-gradient); color: #000; padding: 18px 55px;
+            border-radius: 50px; border: none; font-weight: 800; font-size: 13px;
+            box-shadow: var(--gold-glow); cursor: pointer; letter-spacing: 2px;
+        }
+
+        /* SHOP CONTENT */
+        #shop-content { display: none; flex-direction: column; height: 100%; }
+        #shop-content.active { display: flex; animation: fadeIn 0.8s var(--ease-fluid); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        header { padding: calc(env(safe-area-inset-top) + 15px) 0 8px; background: var(--bg); }
+        .logo-box h2 { font-size: 20px; font-weight: 800; text-align: center; color: var(--text-main); text-transform: uppercase; letter-spacing: 5px;}
+        .logo-box span { 
+            font-size: 8px; background: var(--gold-gradient); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; letter-spacing: 6px; display: block; 
+            text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 800; 
+        }
+
+        /* NAVIGATION */
+        .catalog-container {
+            position: sticky; top: 0; z-index: 90;
+            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-bottom: 0.5px solid var(--border);
+        }
+        .catalog-bar { display: flex; gap: 8px; overflow-x: auto; padding: 12px; scrollbar-width: none; }
+        .catalog-bar::-webkit-scrollbar { display: none; }
+        
+        .filter-tag {
+            padding: 11px 22px; background: rgba(120, 120, 128, 0.1); border-radius: 50px;
+            font-size: 10px; font-weight: 700; color: var(--text-soft); white-space: nowrap; 
+            transition: all 0.3s var(--ease-fluid); text-transform: uppercase; letter-spacing: 1px;
+        }
+        .filter-tag.active { background: var(--text-main); color: var(--bg); }
+
+        /* PRODUCT FEED */
+        .feed { flex: 1; overflow-y: auto; padding-bottom: 50px; scroll-behavior: smooth; }
+        .feed::-webkit-scrollbar { display: none; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px 12px; }
+        
+        .product-card { 
+            background: var(--card-bg); border-radius: 28px; 
+            overflow: hidden; box-shadow: var(--shadow); border: 0.5px solid var(--border);
+            opacity: 0; transform: translateY(15px); 
+            transition: all 0.6s var(--ease-fluid);
+        }
+        .product-card.visible { opacity: 1; transform: translateY(0); }
+
+        .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.35; overflow: hidden; background: #eee; }
+        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .floating-tag {
+            position: absolute; bottom: 10px; right: 10px; background: var(--gold-gradient); 
+            color: #000; padding: 5px 12px; border-radius: 14px; font-size: 11px;
+            font-weight: 900; box-shadow: var(--gold-glow);
+        }
+
+        .p-details { padding: 12px; } 
+        .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.3; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+        /* MODERNIZED ABOUT SECTION */
+        .about-modern {
+            margin: 50px 15px 30px;
+            padding: 60px 25px;
+            background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.05) 100%);
+            border-top: 1px solid var(--border);
+            text-align: center;
+            position: relative;
+        }
+        .about-modern::before {
+            content: ''; position: absolute; top: -1px; left: 50%;
+            transform: translateX(-50%); width: 40px; height: 1px;
+            background: var(--gold-gradient);
+        }
+        .headline { font-size: 22px; font-weight: 800; color: var(--text-main); margin: 15px 0; letter-spacing: -0.5px; line-height: 1.2; }
+        .subtext { font-size: 14px; color: var(--text-soft); line-height: 1.8; margin-bottom: 40px; padding: 0 10px; }
+        .social-row { display: flex; justify-content: center; gap: 18px; }
+        .social-btn {
+            width: 45px; height: 45px; border-radius: 50%;
+            background: var(--card-bg); display: flex; align-items: center; justify-content: center;
+            color: var(--text-main); border: 1px solid var(--border); transition: all 0.3s ease;
+            text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .social-btn:active { transform: scale(0.9); border-color: var(--accent-gold); color: var(--accent-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+        .establishment-note { margin-top: 50px; font-size: 9px; letter-spacing: 5px; text-transform: uppercase; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.8; }
+
+        /* REFINED SLIM PREVIEW (270px) */
+        #item-preview {
+            position: fixed; inset: 0; z-index: 10000;
+            background: rgba(0,0,0,0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: none; align-items: center; justify-content: center; padding: 20px;
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        #item-preview.active { display: flex; opacity: 1; }
+        
+        .preview-box { 
+            width: 270px; 
+            background: var(--card-bg); 
+            padding: 8px; 
+            border-radius: 42px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            transform: translateY(30px) scale(0.95); transition: 0.5s var(--ease-fluid);
+            display: flex; flex-direction: column;
+            max-height: 90vh; margin: auto;
+        }
+        #item-preview.active .preview-box { transform: translateY(0) scale(1); }
+        
+        .preview-img-container { 
+            border-radius: 34px; 
+            overflow: hidden; 
+            background: #f0f0f0; 
+            position: relative; 
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; 
+            height: 400px; /* Slim tall shape */
+        }
+        
+        .preview-image { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block;
+            border-radius: 34px; /* Image matches container curve */
+        }
+        
+        .preview-content { padding: 12px 10px 8px; text-align: center; flex: 1 1 auto; }
+
+        .btn-order {
+            background: var(--accent-green); color: white; padding: 14px; border-radius: 22px;
+            text-decoration: none; font-weight: 800; display: flex; align-items: center; 
+            gap: 10px; font-size: 13px; justify-content: center; margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+    <div id="splash-screen">
+        <div style="text-align:center; color:white; margin-bottom:50px;">
+            <h1 style="font-weight: 900; font-size: 28px; letter-spacing: 4px;">ENIS COLLECTION</h1>
+            <p style="font-size:10px; letter-spacing:8px; color: var(--accent-gold); margin-top: 15px; font-weight: 800;">PAMPER YOUR BODY</p>
+        </div>
+        <button class="btn-launch" onclick="launchApp()">DISCOVER COLLECTION</button>
+    </div>
+
+    <div id="shop-content">
+        <header>
+            <div class="logo-box">
+                <h2>Enis Collection</h2>
+                <span>Pamper Your Body</span>
+            </div>
+        </header>
+
+        <div class="catalog-container">
+            <div class="catalog-bar">
+                <div class="filter-tag active" onclick="filterItems('All', this)">All</div>
+                <div class="filter-tag" onclick="filterItems('Dress', this)">Dresses</div>
+                <div class="filter-tag" onclick="filterItems('Set', this)">Sets</div>
+                <div class="filter-tag" onclick="filterItems('Work', this)">Work Wear</div>
+            </div>
+        </div>
+
+        <div class="feed" id="mainFeed" onscroll="handleScroll()">
+            <div class="grid" id="productGrid"></div>
+            
+            <div class="about-modern">
+                <span style="font-size:10px; letter-spacing:6px; color:var(--accent-gold); text-transform:uppercase; font-weight:800; display:block; margin-bottom:10px;">Our Heritage</span>
+                <h3 class="headline">Designed for the <br>Extraordinary Woman.</h3>
+                <p class="subtext">Hand-selected luxury silhouettes curated in Ghana. We blend timeless sophistication with the comfort of modern tailoring.</p>
+                
+                <div class="social-row">
+                    <a href="tel:+233546527892" class="social-btn"><i class="fas fa-phone"></i></a>
+                    <a href="https://wa.me/233546527892" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.tiktok.com/@eniscollection1" class="social-btn"><i class="fab fa-tiktok"></i></a>
+                    <a href="mailto:sheilaenima@gmail.com" class="social-btn"><i class="fas fa-envelope"></i></a>
+                </div>
+                
+                <p class="establishment-note">CAPECOAST, GHANA • EST. 2022</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="item-preview" onclick="closePreview()">
+        <div class="preview-box" onclick="event.stopPropagation()">
+            <div class="preview-img-container">
+                <img id="preview-img" src="" class="preview-image">
+                <div id="preview-tag" class="floating-tag"></div>
+            </div>
+            <div class="preview-content">
+                <span id="preview-size" style="font-size: 10px; color: var(--accent-gold); font-weight: 800; display: block; margin-bottom: 5px; letter-spacing: 1px;"></span>
+                <h2 id="preview-name" style="font-size: 17px; color: var(--text-main); font-weight: 700; line-height: 1.2;"></h2>
+                <a id="wa-btn" href="#" class="btn-order"><i class="fab fa-whatsapp"></i> ORDER NOW</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const myProducts = [
+        { name: "Thick Seamless Dress", price: 50, size: "10", category: "Dress", image: "images/item1.jpg" },
+        { name: "Plaited Skirts & Top", price: 50, size: "8/10", category: "Set", image: "images/item2.jpg" },
+        { name: "Short Length Essential", price: 45, size: "8", category: "Dress", image: "images/item3.jpg" },
+        { name: "Church & Work Midi", price: 50, size: "8", category: "Work", image: "images/item4.jpg" },
+        { name: "Dinner & Party Elegance", price: 45, size: "8/10", category: "Dress", image: "images/item5.jpg" },
+        { name: "Lecture & Beach Set", price: 45, size: "6/8/10", category: "Set", image: "images/item6.jpg" },
+        { name: "Ruched SHEIN Special", price: 50, size: "8/10", category: "Dress", image: "images/item7.jpg" },
+        { name: "Ultimate Work Gown", price: 50, size: "12/14", category: "Work", image: "images/item8.jpg" },
+        { name: "Skirt & Basic Top Duo", price: 50, size: "10/12", category: "Set", image: "images/item9.jpg" },
+        { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
+    ];
+
+    function renderProducts(filter = 'All') {
+        const grid = document.getElementById('productGrid');
+        const filtered = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
+        grid.innerHTML = filtered.map((item) => `
+            <div class="product-card">
+                <div class="p-image-wrap" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
+                    <img src="${item.image}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x520?text=ENIS'">
+                    <div class="floating-tag">₵${item.price}</div>
+                </div>
+                <div class="p-details">
+                    <span style="font-size:9px; color:var(--accent-gold); font-weight:800;">UK SIZE ${item.size}</span>
+                    <h3 class="p-name">${item.name}</h3>
+                </div>
+            </div>
+        `).join('');
+        setTimeout(handleScroll, 50);
+    }
+
+    function handleScroll() {
+        const cards = document.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const cardTop = card.getBoundingClientRect().top;
+            if(cardTop < window.innerHeight * 0.9) card.classList.add('visible');
+        });
+    }
+
+    function launchApp() {
+        document.getElementById('splash-screen').classList.add('hidden');
+        document.getElementById('shop-content').classList.add('active');
+        renderProducts();
+    }
+
+    function openPreview(name, price, image, size) {
+        const modal = document.getElementById('item-preview');
+        document.getElementById('preview-img').src = image;
+        document.getElementById('preview-name').innerText = name;
+        document.getElementById('preview-size').innerText = `UK SIZE ${size}`;
+        document.getElementById('preview-tag').innerText = `₵${price}`;
+        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
+        document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('active'), 10);
+    }
+
+    function closePreview() { 
+        const modal = document.getElementById('item-preview');
+        modal.classList.remove('active');
+        setTimeout(() => modal.style.display = 'none', 400);
+    }
+
+    function filterItems(cat, el) {
+        document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        renderProducts(cat);
+        document.getElementById('mainFeed').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
