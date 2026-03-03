@@ -51,7 +51,6 @@
             backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
             z-index: 1000; border-bottom: 0.5px solid var(--border);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: transform;
         }
 
         .header-hidden { transform: translate3d(0, -100%, 0); }
@@ -79,15 +78,13 @@
         .product-card { 
             background: var(--card-bg); border-radius: 20px; overflow: hidden; 
             box-shadow: var(--shadow); border: 0.5px solid var(--border);
-            transition: transform 0.1s ease;
         }
-        .product-card:active { transform: scale(0.97); }
 
         .p-image { width: 100%; aspect-ratio: 3.5/4.5; overflow: hidden; cursor: pointer; background: #8881; }
         .p-image img { width: 100%; height: 100%; object-fit: cover; }
         
         .p-details { padding: 14px 12px; }
-        .size-tag { font-size: 10px; color: var(--text-soft); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; letter-spacing: 0.5px; }
+        .size-tag { font-size: 10px; color: var(--text-soft); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; }
         .p-details h3 { font-size: 14px; font-weight: 600; color: var(--text-main); line-height: 1.2; }
         .price { font-size: 16px; font-weight: 700; color: var(--text-main); margin-top: 6px; }
 
@@ -95,60 +92,46 @@
             margin-top: 40px; padding: 40px 24px; 
             background: var(--card-bg); border-radius: 30px; 
             text-align: center; border: 0.5px solid var(--border);
-            box-shadow: var(--shadow);
         }
-        .about-section h4 { font-size: 10px; letter-spacing: 5px; color: var(--text-soft); margin-bottom: 15px; text-transform: uppercase; }
-        .about-section p { font-size: 15px; color: var(--text-main); line-height: 1.6; margin-bottom: 30px; opacity: 0.9; }
-        
-        .contact-hub { display: flex; justify-content: center; gap: 24px; margin-bottom: 35px; }
-        .icon-circle {
-            width: 54px; height: 54px; border-radius: 50%;
-            background: rgba(120, 120, 128, 0.1); 
-            display: flex; align-items: center; justify-content: center;
-            text-decoration: none; transition: all 0.2s ease;
-            border: 1px solid var(--border);
-        }
-        .icon-circle i { font-size: 20px; color: var(--text-main); }
 
-        /* REFINED PREVIEW STYLE */
+        /* COMPACT PREVIEW STYLE */
         #item-preview {
             position: absolute; inset: 0; 
-            background: rgba(0,0,0,0.6); 
+            background: rgba(0,0,0,0.7); 
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             z-index: 3000; display: flex; align-items: center; justify-content: center; 
-            padding: 20px; opacity: 0; visibility: hidden;
-            transition: all 0.25s ease;
+            opacity: 0; visibility: hidden;
+            transition: all 0.2s ease-in-out;
         }
         
         #item-preview.active { opacity: 1; visibility: visible; }
         
         .preview-content { 
-            width: 85%; /* Reduced size */
-            max-width: 320px; 
+            width: 75%; /* Tighter size */
+            max-width: 300px; 
             background: var(--card-bg);
-            padding: 10px; 
-            border-radius: 28px; text-align: center; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-            transform: scale(0.8);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: 8px; 
+            border-radius: 24px; text-align: center; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            transform: scale(0.85);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         
         #item-preview.active .preview-content { transform: scale(1); }
         
         .preview-image { 
-            width: 100%; border-radius: 20px; margin-bottom: 12px; 
-            aspect-ratio: 3/4.5; 
-            object-fit: contain; /* Full image without cropping */
-            background: #f0f0f0;
-            cursor: pointer;
+            width: 100%; border-radius: 18px; margin-bottom: 10px; 
+            aspect-ratio: 1/1.3; 
+            object-fit: contain; /* Full image visible */
+            background: #f8f8f8;
         }
 
-        .preview-info-box { padding: 0 8px 10px; }
+        .preview-info-box { padding: 0 10px 10px; }
 
         .btn-order-whatsapp {
-            background: var(--accent-green); color: white; padding: 14px; border-radius: 16px;
+            background: var(--accent-green); color: white; padding: 12px; border-radius: 14px;
             text-decoration: none; font-weight: 700; display: flex; align-items: center; 
-            gap: 10px; font-size: 14px; width: 100%; justify-content: center;
+            gap: 8px; font-size: 13px; width: 100%; justify-content: center;
         }
 
         #splash-screen {
@@ -187,13 +170,11 @@
         
         <div class="about-section">
             <h4>About Enis</h4>
-            <p>Curated for the modern silhouette. We believe every piece should feel like a second skin while maintaining an air of timeless sophistication.</p>
-            <div class="contact-hub">
-                <a href="tel:+233546527892" class="icon-circle"><i class="fas fa-phone"></i></a>
-                <a href="javascript:void(0)" class="icon-circle" onclick="copyAndEmail()"><i class="fas fa-envelope"></i></a>
-                <a href="https://www.tiktok.com/@eniscollection1" class="icon-circle"><i class="fab fa-tiktok"></i></a>
+            <p>Curated for the modern silhouette. We believe every piece should feel like a second skin.</p>
+            <div class="contact-hub" style="display:flex; justify-content:center; gap:20px; margin-top:20px;">
+                <a href="tel:+233546527892" style="color:var(--text-main)"><i class="fas fa-phone"></i></a>
+                <a href="https://www.tiktok.com/@eniscollection1" style="color:var(--text-main)"><i class="fab fa-tiktok"></i></a>
             </div>
-            <a href="https://www.tiktok.com/@eniscollection1" style="font-size:11px; font-weight:700; color:var(--text-soft); text-decoration:none; letter-spacing:2px;">@ENISCOLLECTION1</a>
         </div>
     </div>
 
@@ -202,11 +183,10 @@
             <img id="preview-img" src="" class="preview-image" onclick="closePreview()">
             <div class="preview-info-box">
                 <span id="preview-size" class="size-tag"></span>
-                <h2 id="preview-name" style="margin-bottom:15px; font-size: 18px; font-weight: 700; color: var(--text-main);"></h2>
+                <h2 id="preview-name" style="margin-bottom:12px; font-size: 16px; font-weight: 700; color: var(--text-main);"></h2>
                 <a id="whatsapp-order-btn" href="#" class="btn-order-whatsapp">
                     <i class="fab fa-whatsapp"></i> Instant Order
                 </a>
-                <p style="margin-top:15px; font-size:10px; color:var(--text-soft); cursor:pointer;" onclick="closePreview()">TAP ANYWHERE TO CLOSE</p>
             </div>
         </div>
     </div>
@@ -229,28 +209,23 @@
     const header = document.getElementById('mainHeader');
     const feed = document.getElementById('mainFeed');
     let lastScrollY = 0;
-    let ticking = false;
 
     feed.addEventListener('scroll', () => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                const currentScrollY = feed.scrollTop;
-                if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                    header.classList.add('header-hidden');
-                } else if (currentScrollY < lastScrollY) {
-                    header.classList.remove('header-hidden');
-                }
-                lastScrollY = currentScrollY;
-                ticking = false;
-            });
-            ticking = true;
+        const currentScrollY = feed.scrollTop;
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            header.classList.add('header-hidden');
+        } else if (currentScrollY < lastScrollY) {
+            header.classList.remove('header-hidden');
         }
+        lastScrollY = currentScrollY;
     });
 
     function renderProducts(products) {
         document.getElementById('productGrid').innerHTML = products.map(item => `
             <div class="product-card" data-title="${item.name.toLowerCase()}">
-                <div class="p-image" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
+                <div class="p-image" 
+                     onpointerdown="preloadImage('${item.image}')" 
+                     onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
                     <img src="${item.image}" onerror="this.src='https://via.placeholder.com/400x520?text=Enis'">
                 </div>
                 <div class="p-details">
@@ -263,16 +238,21 @@
     }
     renderProducts(myProducts);
 
+    function preloadImage(url) {
+        const img = new Image();
+        img.src = url;
+    }
+
     function launchApp() {
-        const splash = document.getElementById('splash-screen');
-        splash.style.opacity = "0";
-        setTimeout(() => splash.style.display = "none", 500);
+        document.getElementById('splash-screen').style.opacity = "0";
+        setTimeout(() => document.getElementById('splash-screen').style.display = "none", 500);
     }
 
     function openPreview(name, price, image, size) {
         const modal = document.getElementById('item-preview');
         const imgElement = document.getElementById('preview-img');
         
+        // Instant set
         imgElement.src = image;
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size} • GH₵ ${price}`;
@@ -284,10 +264,7 @@
     }
 
     function closePreview() { 
-        const modal = document.getElementById('item-preview');
-        modal.classList.remove('active');
-        // Clear image after modal closes to prevent "glitching" on next click
-        setTimeout(() => { document.getElementById('preview-img').src = ""; }, 300);
+        document.getElementById('item-preview').classList.remove('active'); 
     }
 
     function filterShop() {
@@ -296,12 +273,6 @@
         Array.from(cards).forEach(card => {
             card.style.display = card.getAttribute('data-title').includes(input) ? "block" : "none";
         });
-    }
-
-    function copyAndEmail() {
-        navigator.clipboard.writeText("sheilaenima@gmail.com");
-        alert("Email copied!");
-        window.location.href = "mailto:sheilaenima@gmail.com";
     }
 </script>
 
