@@ -15,12 +15,12 @@
             --text-soft: #636366;
             --accent-gold: #C5A028; 
             --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-            --gold-glow: 0 4px 20px rgba(197, 160, 40, 0.15);
-            --glass: rgba(255, 255, 255, 0.85);
             --border: rgba(0, 0, 0, 0.08);
             --shadow: 0 10px 40px rgba(0,0,0,0.06);
             --accent-green: #25D366;
-            --ease-luxury: cubic-bezier(0.32, 0.72, 0, 1); /* Apple-style smooth curve */
+            /* Premium Spring Easing */
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -29,7 +29,6 @@
                 --card-bg: #121212;
                 --text-main: #FFFFFF;
                 --text-soft: #A1A1A6;
-                --glass: rgba(0, 0, 0, 0.8);
                 --border: rgba(255, 255, 255, 0.1);
                 --shadow: 0 10px 40px rgba(0,0,0,0.4);
             }
@@ -38,112 +37,78 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); height: 100vh; overflow: hidden; position: fixed; width: 100%; }
 
-        .app-shell {
-            width: 100%; max-width: 420px; height: 100vh; margin: 0 auto;
-            background: var(--bg); position: relative; display: flex; flex-direction: column;
-        }
+        .app-shell { width: 100%; max-width: 420px; height: 100vh; margin: 0 auto; background: var(--bg); position: relative; display: flex; flex-direction: column; }
 
         /* --- SPLASH SCREEN --- */
         #splash-screen {
             position: absolute; inset: 0; z-index: 9999;
             background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.85)), url('images/Splash-Dress.PNG') center/cover;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.8s var(--ease-luxury), transform 0.8s var(--ease-luxury), visibility 0.8s;
-            animation: slowZoom 25s infinite alternate;
+            transition: all 0.8s var(--ease-out-expo);
         }
-        
-        @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.1); } }
-        #splash-screen.hidden { opacity: 0; visibility: hidden; transform: scale(1.05); }
-        
-        .splash-brand h1 { 
-            font-family: 'Great Vibes', cursive; 
-            font-size: 58px; 
-            font-weight: 400; 
-            color: #fff;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            margin-bottom: 5px;
-        }
-
-        .btn-launch {
-            background: #fff; color: #000; padding: 18px 50px;
-            border-radius: 50px; border: none; font-weight: 700; font-size: 13px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); cursor: pointer; letter-spacing: 2px;
-            text-transform: uppercase; margin-top: 40px;
-        }
+        #splash-screen.hidden { opacity: 0; visibility: hidden; transform: scale(1.1); }
+        .splash-brand h1 { font-family: 'Great Vibes', cursive; font-size: 58px; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .btn-launch { background: #fff; color: #000; padding: 18px 50px; border-radius: 50px; border: none; font-weight: 700; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; margin-top: 40px; }
 
         /* --- SHOP CONTENT --- */
         header { padding: calc(env(safe-area-inset-top) + 20px) 0 15px; background: var(--bg); border-bottom: 0.5px solid var(--border); }
         .logo-box h2 { font-family: 'Playfair Display', serif; font-size: 22px; text-align: center; color: var(--text-main); letter-spacing: 1px;}
-        
-        /* --- PRODUCT GRID --- */
         .feed { flex: 1; overflow-y: auto; background: var(--bg); }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px; }
-        
-        .product-card { 
-            background: var(--card-bg); border-radius: 20px; 
-            overflow: hidden; box-shadow: var(--shadow); border: 0.5px solid var(--border);
-            opacity: 0; transform: translateY(30px); 
-            transition: all 0.9s var(--ease-luxury);
-        }
+        .product-card { background: var(--card-bg); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); border: 0.5px solid var(--border); opacity: 0; transform: translateY(30px); transition: all 0.8s var(--ease-out-expo); }
         .product-card.visible { opacity: 1; transform: translateY(0); }
-
-        .p-image-wrap { 
-            position: relative; width: 100%; aspect-ratio: 1/1.3; overflow: hidden; 
-            background: #f2f2f7;
-        }
-        @media (prefers-color-scheme: dark) { .p-image-wrap { background: #1c1c1e; } }
-
+        .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.3; overflow: hidden; background: #f2f2f7; }
         .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.6s ease; }
         .p-image-wrap img.loaded { opacity: 1; }
-        
-        /* --- MODERNIZED ABOUT AREA --- */
-        .about-modern {
-            margin: 40px 20px 60px; padding: 50px 25px;
-            background: var(--card-bg); border-radius: 30px;
-            border: 0.5px solid var(--border); box-shadow: var(--shadow);
-            text-align: center;
-        }
-        .about-modern .headline { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text-main); margin-bottom: 15px; }
-        .social-btn {
-            width: 50px; height: 50px; border-radius: 50%;
-            background: var(--bg); color: var(--text-main);
-            border: 0.5px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            display: inline-flex; align-items: center; justify-content: center; margin: 0 8px;
-            transition: 0.3s;
-        }
 
-        /* --- PERFECTED PREVIEW TRANSITION --- */
+        /* --- MODERNIZED ABOUT AREA --- */
+        .about-modern { margin: 40px 20px 60px; padding: 50px 25px; background: var(--card-bg); border-radius: 30px; border: 0.5px solid var(--border); box-shadow: var(--shadow); text-align: center; }
+        .about-modern .headline { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text-main); margin-bottom: 15px; }
+        .social-btn { width: 50px; height: 50px; border-radius: 50%; background: var(--bg); color: var(--text-main); border: 0.5px solid var(--border); display: inline-flex; align-items: center; justify-content: center; margin: 0 8px; transition: 0.3s; }
+
+        /* --- SLIM & TALL PREVIEW (270px) --- */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
-            background: rgba(0,0,0,0.4); /* Light mode overlay */
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             display: none; align-items: center; justify-content: center; padding: 20px;
-            opacity: 0; 
-            transition: opacity 0.6s var(--ease-luxury);
+            opacity: 0; transition: opacity 0.5s var(--ease-out-expo);
         }
-        @media (prefers-color-scheme: dark) { #item-preview { background: rgba(0,0,0,0.85); } }
-
+        @media (prefers-color-scheme: dark) { #item-preview { background: rgba(0,0,0,0.8); } }
         #item-preview.active { display: flex; opacity: 1; }
-        
+
         .preview-box { 
-            width: 100%; max-width: 320px; background: var(--card-bg); 
-            padding: 10px; border-radius: 40px; 
-            box-shadow: 0 40px 100px rgba(0,0,0,0.2);
-            /* Perfect Medium Transition: Scale + Fade + Slide */
-            transform: scale(0.85) translateY(60px); 
-            transition: transform 0.6s var(--ease-luxury);
+            width: 270px; /* Precise size request */
+            background: var(--card-bg); 
+            padding: 8px; /* Inner padding for the "frame" look */
+            border-radius: 40px; 
+            box-shadow: 0 30px 70px rgba(0,0,0,0.25);
+            /* Spring entrance animation */
+            transform: scale(0.7) translateY(100px); 
+            transition: transform 0.6s var(--ease-spring);
+            display: flex; flex-direction: column;
         }
         #item-preview.active .preview-box { transform: scale(1) translateY(0); }
         
-        /* Exit Animation Hook */
-        #item-preview.closing { opacity: 0; }
-        #item-preview.closing .preview-box { transform: scale(0.85) translateY(60px); }
+        /* Smooth exit */
+        #item-preview.closing { opacity: 0; pointer-events: none; }
+        #item-preview.closing .preview-box { transform: scale(0.8) translateY(40px); transition: transform 0.4s var(--ease-out-expo); }
 
-        .preview-img-container { border-radius: 32px; overflow: hidden; height: 400px; }
+        .preview-img-container { 
+            border-radius: 32px; /* Radius matches the box neatly */
+            overflow: hidden; 
+            height: 380px; /* Slim tall aspect */
+            width: 100%;
+        }
+        .preview-img-container img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        .preview-content { padding: 18px 10px 12px; text-align: center; }
+        .preview-name { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text-main); line-height: 1.2; }
+        .preview-info { color: var(--accent-gold); font-size: 11px; font-weight: 800; text-transform: uppercase; margin-top: 6px; letter-spacing: 1px; }
+
         .btn-order {
-            background: #121212; color: white; padding: 18px; border-radius: 20px;
+            background: #121212; color: white; padding: 16px; border-radius: 22px;
             text-decoration: none; font-weight: 700; display: flex; align-items: center; 
-            gap: 10px; font-size: 14px; justify-content: center; margin-top: 15px;
+            gap: 10px; font-size: 13px; justify-content: center; margin-top: 15px;
             transition: 0.3s;
         }
         @media (prefers-color-scheme: dark) { .btn-order { background: var(--accent-green); } }
@@ -155,16 +120,14 @@
     <div id="splash-screen">
         <div class="splash-brand" style="text-align: center;">
             <h1>Enis Collection</h1>
-            <p style="color: #fff; font-size: 10px; letter-spacing: 6px; text-transform: uppercase; font-weight: 600; opacity: 0.9;">Luxury & Elegance</p>
+            <p style="color: #fff; font-size: 10px; letter-spacing: 6px; text-transform: uppercase; font-weight: 600; opacity: 0.9; margin-top: -10px;">Luxury & Elegance</p>
         </div>
         <button class="btn-launch" onclick="launchApp()">Discover</button>
     </div>
 
     <div id="shop-content" style="display: none; flex-direction: column; height: 100%;">
         <header>
-            <div class="logo-box">
-                <h2>Enis Collection</h2>
-            </div>
+            <div class="logo-box"><h2>Enis Collection</h2></div>
         </header>
 
         <div class="feed" id="mainFeed" onscroll="handleScroll()">
@@ -185,12 +148,12 @@
     <div id="item-preview" onclick="closePreview()">
         <div class="preview-box" onclick="event.stopPropagation()">
             <div class="preview-img-container">
-                <img id="preview-img" src="" class="preview-image" style="width:100%; height:100%; object-fit:cover;">
+                <img id="preview-img" src="">
             </div>
-            <div style="padding: 20px 10px; text-align:center;">
-                <h2 id="preview-name" style="font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text-main);"></h2>
-                <p id="preview-size" style="color: var(--accent-gold); font-size: 12px; font-weight: 700; margin-top: 5px;"></p>
-                <a id="wa-btn" href="#" class="btn-order">Order via WhatsApp</a>
+            <div class="preview-content">
+                <h2 id="preview-name" class="preview-name"></h2>
+                <p id="preview-info" class="preview-info"></p>
+                <a id="wa-btn" href="#" class="btn-order"><i class="fab fa-whatsapp"></i> Order Now</a>
             </div>
         </div>
     </div>
@@ -198,30 +161,25 @@
 
 <script>
     const myProducts = [
-        { name: "Thick Seamless Dress", price: 50, size: "10", category: "Dress", image: "images/item1.jpg" },
-        { name: "Plaited Skirts & Top", price: 50, size: "8/10", category: "Set", image: "images/item2.jpg" },
-        { name: "Short Length Essential", price: 45, size: "8", category: "Dress", image: "images/item3.jpg" },
-        { name: "Church & Work Midi", price: 50, size: "8", category: "Work", image: "images/item4.jpg" },
-        { name: "Dinner & Party Elegance", price: 45, size: "8/10", category: "Dress", image: "images/item5.jpg" },
-        { name: "Lecture & Beach Set", price: 45, size: "6/8/10", category: "Set", image: "images/item6.jpg" },
-        { name: "Ruched SHEIN Special", price: 50, size: "8/10", category: "Dress", image: "images/item7.jpg" },
-        { name: "Ultimate Work Gown", price: 50, size: "12/14", category: "Work", image: "images/item8.jpg" },
-        { name: "Skirt & Basic Top Duo", price: 50, size: "10/12", category: "Set", image: "images/item9.jpg" },
-        { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
+        { name: "Thick Seamless Dress", price: 50, size: "10", image: "images/item1.jpg" },
+        { name: "Plaited Skirts & Top", price: 50, size: "8/10", image: "images/item2.jpg" },
+        { name: "Short Length Essential", price: 45, size: "8", image: "images/item3.jpg" },
+        { name: "Church & Work Midi", price: 50, size: "8", image: "images/item4.jpg" },
+        { name: "Dinner & Party Elegance", price: 45, size: "8/10", image: "images/item5.jpg" },
+        { name: "Lecture & Beach Set", price: 45, size: "6/8/10", image: "images/item6.jpg" },
+        { name: "Ruched SHEIN Special", price: 50, size: "8/10", image: "images/item7.jpg" },
+        { name: "Ultimate Work Gown", price: 50, size: "12/14", image: "images/item8.jpg" },
+        { name: "Skirt & Basic Top Duo", price: 50, size: "10/12", image: "images/item9.jpg" },
+        { name: "Refined Church Wear", price: 50, size: "10", image: "images/item10.jpg" }
     ];
-
-    function preloadAllImages() {
-        myProducts.forEach(product => { const img = new Image(); img.src = product.image; });
-    }
-    preloadAllImages();
 
     function renderProducts() {
         const grid = document.getElementById('productGrid');
         grid.innerHTML = myProducts.map((item) => `
             <div class="product-card">
                 <div class="p-image-wrap" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
-                    <img src="${item.image}" onload="this.classList.add('loaded')">
-                    <div style="position:absolute; bottom:10px; right:10px; background:#fff; color:#000; padding:5px 10px; border-radius:10px; font-size:11px; font-weight:800; box-shadow:0 4px 10px rgba(0,0,0,0.1);">₵${item.price}</div>
+                    <img src="${item.image}" onload="this.classList.add('loaded')" onerror="this.src='https://via.placeholder.com/400x520?text=ENIS'">
+                    <div style="position:absolute; bottom:10px; right:10px; background:var(--card-bg); color:var(--text-main); padding:5px 10px; border-radius:10px; font-size:11px; font-weight:800; border:1px solid var(--border);">₵${item.price}</div>
                 </div>
                 <div style="padding:15px;">
                     <span style="font-size:10px; color:var(--accent-gold); font-weight:800; text-transform:uppercase;">UK ${item.size}</span>
@@ -233,27 +191,24 @@
     }
 
     function handleScroll() {
-        const cards = document.querySelectorAll('.product-card');
-        cards.forEach(card => {
-            const cardTop = card.getBoundingClientRect().top;
-            if(cardTop < window.innerHeight * 0.95) card.classList.add('visible');
+        document.querySelectorAll('.product-card').forEach(card => {
+            if(card.getBoundingClientRect().top < window.innerHeight * 0.95) card.classList.add('visible');
         });
     }
 
     function launchApp() {
-        const splash = document.getElementById('splash-screen');
-        splash.classList.add('hidden');
+        document.getElementById('splash-screen').classList.add('hidden');
         setTimeout(() => {
             document.getElementById('shop-content').style.display = 'flex';
             renderProducts();
-        }, 400);
+        }, 500);
     }
 
     function openPreview(name, price, image, size) {
         const modal = document.getElementById('item-preview');
         document.getElementById('preview-img').src = image;
         document.getElementById('preview-name').innerText = name;
-        document.getElementById('preview-size').innerText = `UK SIZE ${size} • ₵${price}`;
+        document.getElementById('preview-info').innerText = `UK Size ${size} • ₵${price}`;
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
         modal.style.display = 'flex';
@@ -262,11 +217,11 @@
 
     function closePreview() { 
         const modal = document.getElementById('item-preview');
-        modal.classList.add('closing'); // Trigger exit animation
+        modal.classList.add('closing');
         setTimeout(() => {
             modal.classList.remove('active', 'closing');
             modal.style.display = 'none';
-        }, 600); // Wait for transition to finish
+        }, 500);
     }
 </script>
 
