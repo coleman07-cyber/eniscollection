@@ -53,80 +53,88 @@
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Category Filter Bar */
-        .filter-bar {
-            display: flex; gap: 10px; overflow-x: auto; padding: 10px 20px;
-            scrollbar-width: none; margin-top: 10px;
-        }
-        .filter-bar::-webkit-scrollbar { display: none; }
-        .filter-tag {
-            padding: 8px 16px; background: var(--card-bg); border-radius: 20px;
-            font-size: 11px; font-weight: 700; color: var(--text-soft);
-            white-space: nowrap; border: 0.5px solid var(--border); transition: 0.2s;
-        }
-        .filter-tag.active { background: var(--text-main); color: var(--bg); }
-
-        /* Shop Content */
-        #shop-content { opacity: 0; transition: opacity 0.6s ease; height: 100%; }
-
+        /* Header & Filters */
         header {
             position: absolute; top: 0; width: 100%;
             padding: calc(env(safe-area-inset-top) + 15px) 0 15px;
             background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             z-index: 1000; border-bottom: 0.5px solid var(--border);
-            transition: transform 0.4s ease;
         }
 
-        .logo-box h2 { font-size: 19px; font-weight: 800; text-align: center; color: var(--text-main); text-transform: uppercase; }
+        .logo-box h2 { font-size: 19px; font-weight: 800; text-align: center; color: var(--text-main); text-transform: uppercase; letter-spacing: 1px;}
         .logo-box span { font-size: 8px; color: var(--accent-gold); letter-spacing: 4px; display: block; text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 700; }
 
-        .feed { 
-            height: 100%; overflow-y: scroll; 
-            padding: calc(env(safe-area-inset-top) + 140px) 16px 120px; 
+        .filter-bar { display: flex; gap: 8px; overflow-x: auto; padding: 12px 16px 0; scrollbar-width: none; }
+        .filter-tag {
+            padding: 6px 14px; background: rgba(120, 120, 128, 0.1); border-radius: 20px;
+            font-size: 11px; font-weight: 600; color: var(--text-soft); white-space: nowrap;
         }
+        .filter-tag.active { background: var(--text-main); color: var(--bg); }
 
+        /* Product Grid */
+        .feed { height: 100%; overflow-y: scroll; padding: calc(env(safe-area-inset-top) + 140px) 16px 100px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         
         .product-card { 
-            background: var(--card-bg); border-radius: 20px; overflow: hidden; 
+            background: var(--card-bg); border-radius: 18px; overflow: hidden; 
             box-shadow: var(--shadow); border: 0.5px solid var(--border);
             opacity: 0; transform: translateY(15px); transition: 0.5s ease;
         }
         .product-card.visible { opacity: 1; transform: translateY(0); }
 
-        .p-image { width: 100%; aspect-ratio: 1/1.3; overflow: hidden; background: #8881; }
-        .p-image img { width: 100%; height: 100%; object-fit: cover; }
+        /* Image Container & Floating Price Tag */
+        .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.3; background: #8881; }
+        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
         
+        .floating-price {
+            position: absolute; bottom: 8px; right: 8px;
+            background: rgba(255, 255, 255, 0.85); color: #000;
+            padding: 4px 10px; border-radius: 10px; font-size: 12px;
+            font-weight: 800; backdrop-filter: blur(8px);
+            border: 0.5px solid rgba(255,255,255,0.3);
+        }
+
         .p-details { padding: 10px; }
         .size-tag { font-size: 9px; color: var(--text-soft); font-weight: 800; margin-bottom: 4px; display: block; }
-        .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.2; height: 32px; overflow: hidden; }
-        .price { font-size: 14px; font-weight: 800; color: var(--text-main); margin-top: 5px; }
+        .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.2; }
 
-        /* PREVIEW MODAL - FULL IMAGE VIEW */
+        /* PREVIEW MODAL - SHRINKS TO FIT */
         #item-preview {
             position: absolute; inset: 0; 
-            background: rgba(0,0,0,0.9); 
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            z-index: 3000; display: none; align-items: center; justify-content: center; 
+            background: rgba(0,0,0,0.85); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            z-index: 5000; display: none; align-items: center; justify-content: center;
         }
         
-        .preview-content { 
-            width: 90%; max-height: 85vh; 
+        .preview-box { 
+            width: fit-content; max-width: 85%;
             background: var(--card-bg); padding: 8px; 
-            border-radius: 24px; text-align: center; 
-            display: flex; flex-direction: column;
+            border-radius: 24px; text-align: center;
+            transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.1, 0.7, 0.1, 1);
         }
         
-        .preview-image { 
-            width: 100%; max-height: 60vh; border-radius: 18px; 
-            object-fit: contain; /* Shows full image without cropping */
-            background: #000; margin-bottom: 12px; cursor: pointer;
+        .preview-img-wrap {
+            position: relative;
+            max-height: 65vh;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #000;
         }
 
-        .btn-order-whatsapp {
-            background: var(--accent-green); color: white; padding: 15px; border-radius: 15px;
+        .preview-image { 
+            display: block;
+            width: auto; max-width: 100%;
+            max-height: 65vh;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        .preview-details { padding: 12px 10px; }
+
+        .btn-order {
+            background: var(--accent-green); color: white; padding: 14px; border-radius: 14px;
             text-decoration: none; font-weight: 700; display: flex; align-items: center; 
-            gap: 10px; font-size: 14px; width: 100%; justify-content: center;
+            gap: 8px; font-size: 14px; justify-content: center;
         }
     </style>
 </head>
@@ -141,7 +149,7 @@
         <button style="background:#fff; color:#000; padding:18px 50px; border-radius:40px; border:none; font-weight:800;" onclick="launchApp()">Enter Shop</button>
     </div>
 
-    <div id="shop-content">
+    <div id="shop-content" style="opacity: 0;">
         <header id="mainHeader">
             <div class="logo-box">
                 <h2>Enis Collection</h2>
@@ -157,26 +165,19 @@
 
         <div class="feed" id="mainFeed">
             <div class="grid" id="productGrid"></div>
-            
-            <div style="margin-top: 40px; padding: 30px 20px; background: var(--card-bg); border-radius: 24px; text-align: center;">
-                <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 20px;">Curated for the modern silhouette.</p>
-                <div style="display: flex; justify-content: center; gap: 15px;">
-                    <a href="tel:+233546527892" style="color:var(--text-main);"><i class="fas fa-phone"></i></a>
-                    <a href="https://www.tiktok.com/@eniscollection1" style="color:var(--text-main);"><i class="fab fa-tiktok"></i></a>
-                </div>
-            </div>
         </div>
     </div>
 
     <div id="item-preview" onclick="closePreview()">
-        <div class="preview-content" onclick="event.stopPropagation()">
-            <img id="preview-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="preview-image" onclick="closePreview()">
-            <div style="padding: 5px 10px 10px;">
-                <span id="preview-size" style="font-size: 9px; color: var(--text-soft); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block;"></span>
+        <div class="preview-box" id="previewBox" onclick="event.stopPropagation()">
+            <div class="preview-img-wrap">
+                <img id="preview-img" src="" class="preview-image" onclick="closePreview()">
+                <div id="preview-tag" class="floating-price"></div>
+            </div>
+            <div class="preview-details">
+                <span id="preview-size" style="font-size: 10px; color: var(--text-soft); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block;"></span>
                 <h2 id="preview-name" style="font-size: 16px; margin-bottom: 15px; color: var(--text-main)"></h2>
-                <a id="whatsapp-order-btn" href="#" class="btn-order-whatsapp">
-                    <i class="fab fa-whatsapp"></i> Order on WhatsApp
-                </a>
+                <a id="wa-btn" href="#" class="btn-order"><i class="fab fa-whatsapp"></i> Order Now</a>
             </div>
         </div>
     </div>
@@ -202,13 +203,13 @@
         
         grid.innerHTML = filtered.map((item, idx) => `
             <div class="product-card" style="transition-delay: ${idx * 0.05}s">
-                <div class="p-image" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
+                <div class="p-image-wrap" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
                     <img src="${item.image}" onerror="this.src='https://via.placeholder.com/400x520?text=ENIS'">
+                    <div class="floating-price">₵${item.price}</div>
                 </div>
                 <div class="p-details">
                     <span class="size-tag">UK SIZE ${item.size}</span>
                     <h3 class="p-name">${item.name}</h3>
-                    <p class="price">GH₵ ${item.price.toFixed(2)}</p>
                 </div>
             </div>
         `).join('');
@@ -218,38 +219,47 @@
         }, 50);
     }
 
+    function launchApp() {
+        document.getElementById('splash-screen').style.opacity = "0";
+        document.getElementById('shop-content').style.opacity = "1";
+        renderProducts();
+        setTimeout(() => { document.getElementById('splash-screen').style.display = "none"; }, 600);
+    }
+
+    function openPreview(name, price, image, size) {
+        const modal = document.getElementById('item-preview');
+        const pImg = document.getElementById('preview-img');
+        const pBox = document.getElementById('previewBox');
+        
+        // Anti-Glitch: Hide the box while the new image loads
+        pBox.style.opacity = "0";
+        pImg.src = image;
+
+        pImg.onload = () => {
+            document.getElementById('preview-name').innerText = name;
+            document.getElementById('preview-size').innerText = `UK SIZE ${size}`;
+            document.getElementById('preview-tag').innerText = `₵${price}`;
+            const msg = encodeURIComponent(`Hi Enis! ✨ I want to order: ${name} (Size ${size})`);
+            document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
+            
+            modal.style.display = 'flex';
+            setTimeout(() => { 
+                pBox.style.opacity = "1";
+                pBox.style.transform = "scale(1)";
+            }, 50);
+        };
+    }
+
+    function closePreview() { 
+        const pBox = document.getElementById('previewBox');
+        pBox.style.transform = "scale(0.9)";
+        setTimeout(() => { document.getElementById('item-preview').style.display = 'none'; }, 200);
+    }
+
     function filterItems(cat, el) {
         document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
         renderProducts(cat);
-    }
-
-    function launchApp() {
-        const splash = document.getElementById('splash-screen');
-        splash.style.opacity = "0";
-        document.getElementById('shop-content').style.opacity = "1";
-        renderProducts();
-        setTimeout(() => { splash.style.display = "none"; }, 600);
-    }
-
-    function openPreview(name, price, image, size) {
-        const previewImg = document.getElementById('preview-img');
-        
-        // Fix glitch: reset to blank pixel first so user doesn't see previous image
-        previewImg.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-        
-        setTimeout(() => {
-            previewImg.src = image;
-            document.getElementById('preview-name').innerText = name;
-            document.getElementById('preview-size').innerText = `UK SIZE ${size} • GH₵ ${price}`;
-            const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
-            document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${msg}`;
-            document.getElementById('item-preview').style.display = 'flex';
-        }, 10);
-    }
-
-    function closePreview() { 
-        document.getElementById('item-preview').style.display = 'none';
     }
 </script>
 
