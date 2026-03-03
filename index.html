@@ -17,7 +17,7 @@
             --card-bg: #FFFFFF;
             --text-main: #1C1C1E;
             --text-soft: #8E8E93;
-            --glass: rgba(255, 255, 255, 0.92);
+            --glass: rgba(255, 255, 255, 0.9);
             --border: rgba(0, 0, 0, 0.05);
             --shadow: 0 4px 12px rgba(0,0,0,0.05);
             --accent-green: #25D366;
@@ -29,50 +29,48 @@
                 --card-bg: #1C1C1E;
                 --text-main: #FFFFFF;
                 --text-soft: #A1A1A6;
-                --glass: rgba(20, 20, 20, 0.96);
+                --glass: rgba(20, 20, 20, 0.95);
                 --border: rgba(255, 255, 255, 0.1);
             }
         }
 
-        /* Prevent Refresh/Scroll Glitches */
-        html { background: #000; overscroll-behavior: none; }
+        /* 1. Prevent Refresh Glitch: Hide body until JS resets scroll */
+        html { background: #000; }
         body { 
             background: var(--bg); 
             min-height: 100vh; 
-            visibility: hidden; /* Locked until JS resets scroll */
+            visibility: hidden; /* Becomes visible via JS */
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none;
         }
 
-        /* Hide All Scrollbars */
+        /* 2. Hide Scrollbars entirely */
         ::-webkit-scrollbar { display: none; }
         * { scrollbar-width: none; -ms-overflow-style: none; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
         
-        body.modal-open { overflow: hidden !important; position: fixed; width: 100%; }
+        body.modal-open { overflow: hidden !important; }
 
         /* SPLASH SCREEN */
         #splash-screen {
             position: fixed; inset: 0; z-index: 10000;
             background: #000;
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.95)), url('images/Splash-Dress.PNG');
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG');
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: transform 0.7s cubic-bezier(0.7, 0, 0.3, 1);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         #splash-screen.lifted { transform: translateY(-100%); pointer-events: none; }
 
-        /* HEADER */
+        /* HEADER - Fixed Safe Area for Safari Status Bar */
         header {
             position: fixed; top: 0; left: 0; right: 0;
-            padding-top: env(safe-area-inset-top);
+            padding-top: env(safe-area-inset-top); /* This pushes logo below clock */
             background: var(--glass); 
             backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%);
             z-index: 1000; border-bottom: 0.5px solid var(--border);
             transition: transform 0.4s ease;
-            will-change: transform;
         }
         .header-content { padding: 15px 20px; text-align: center; }
         .header-hidden { transform: translateY(-100%); }
@@ -80,65 +78,54 @@
         .logo-box h2 { font-size: 20px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
         .logo-box span { font-size: 8px; color: var(--text-soft); letter-spacing: 4px; display: block; text-transform: uppercase; margin-top: 2px; font-weight: 700; }
 
-        /* PRODUCT GRID */
+        /* FEED - Larger Boutique Style */
         .content { 
             max-width: 450px; margin: 0 auto; 
-            padding: calc(env(safe-area-inset-top) + 85px) 10px 60px;
+            padding: calc(env(safe-area-inset-top) + 80px) 10px 60px;
         }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 40px; }
         
         .product-card { 
             background: var(--card-bg); border-radius: 20px; overflow: hidden; 
             box-shadow: var(--shadow); border: 0.5px solid var(--border);
-            transition: transform 0.2s ease;
         }
-        .product-card:active { transform: scale(0.96); }
-
         .p-image { width: 100%; aspect-ratio: 1 / 1.45; overflow: hidden; background: #8881; }
         .p-image img { width: 100%; height: 100%; object-fit: cover; }
         .p-details { padding: 12px 10px; }
-        .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); height: 32px; overflow: hidden; line-height: 1.25; }
+        .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); height: 32px; overflow: hidden; }
         .price { font-size: 15px; font-weight: 700; color: var(--text-main); margin-top: 4px; }
 
-        /* PREVIEW MODAL */
+        /* PREVIEW MODAL - ANTI-GLITCH */
         #item-preview {
             position: fixed; inset: 0; 
             background: rgba(0,0,0,0.85); 
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             z-index: 20000; display: none; align-items: center; justify-content: center; 
-            opacity: 0; transition: opacity 0.3s ease;
+            opacity: 0; transition: opacity 0.25s ease;
         }
         #item-preview.active { display: flex; opacity: 1; }
         
         .preview-content { 
-            width: 78%; max-width: 300px; 
-            background: var(--card-bg); padding: 10px; 
-            border-radius: 32px; text-align: center; 
-            transform: scale(0.85); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            width: 75%; max-width: 290px; 
+            background: var(--card-bg); padding: 8px; 
+            border-radius: 30px; text-align: center; 
+            transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
         #item-preview.active .preview-content { transform: scale(1); }
         
         .preview-image { 
             width: 100%; border-radius: 24px; 
-            max-height: 52vh; object-fit: cover;
+            max-height: 50vh; object-fit: cover;
             margin-bottom: 15px; display: block;
         }
 
         .btn-order-whatsapp {
-            background: var(--accent-green); color: white; padding: 18px; border-radius: 20px;
+            background: var(--accent-green); color: white; padding: 16px; border-radius: 18px;
             text-decoration: none; font-weight: 800; display: flex; align-items: center; 
-            gap: 10px; font-size: 14px; width: 100%; justify-content: center;
-            transition: transform 0.1s ease;
+            gap: 8px; font-size: 13px; width: 100%; justify-content: center;
         }
-        .btn-order-whatsapp:active { transform: scale(0.95); opacity: 0.9; }
 
-        /* ABOUT */
-        .about-section { 
-            background: var(--card-bg); border-radius: 30px; 
-            padding: 45px 24px; text-align: center;
-            margin-bottom: 20px; border: 0.5px solid var(--border);
-        }
+        .about-section { background: var(--card-bg); border-radius: 30px; padding: 40px 24px; text-align: center; }
     </style>
 </head>
 <body>
@@ -149,7 +136,7 @@
             <h1 style="font-weight: 700; letter-spacing: 2px; font-size: 30px; margin-top: 5px;">ENIS COLLECTION</h1>
             <p style="font-size: 9px; letter-spacing: 6px; opacity: 0.6; margin-top: 15px;">PAMPER YOUR BODY</p>
         </div>
-        <button style="background:white; color:black; padding:22px 70px; border-radius:50px; font-weight:900; border:none; font-size:14px; cursor:pointer;" onclick="launchApp()">ENTER SHOP</button>
+        <button style="background:white; color:black; padding:20px 60px; border-radius:50px; font-weight:900; border:none;" onclick="launchApp()">ENTER SHOP</button>
     </div>
 
     <header id="mainHeader">
@@ -165,7 +152,7 @@
         <div class="grid" id="productGrid"></div>
         <div class="about-section">
             <h4 style="font-size:10px; letter-spacing:5px; color:var(--text-soft); text-transform:uppercase;">About Enis</h4>
-            <p style="font-size:14px; line-height:1.7; margin-top:18px; color:var(--text-main);">Curated for the modern silhouette. Every piece is selected to feel like a second skin.</p>
+            <p style="font-size:14px; line-height:1.6; margin-top:15px; color:var(--text-main);">Curated for the modern silhouette. Every piece is selected to feel like a second skin.</p>
         </div>
     </div>
 
@@ -173,7 +160,7 @@
         <div class="preview-content" onclick="event.stopPropagation()">
             <img id="preview-img" src="" class="preview-image" onclick="closePreview()">
             <div>
-                <h2 id="preview-name" style="font-size:16px; text-transform:uppercase; margin-bottom:15px; color:var(--text-main); letter-spacing: 1px;"></h2>
+                <h2 id="preview-name" style="font-size:15px; text-transform:uppercase; margin-bottom:12px;"></h2>
                 <a id="whatsapp-order-btn" href="#" class="btn-order-whatsapp">
                     <i class="fab fa-whatsapp"></i> ORDER ON WHATSAPP
                 </a>
@@ -182,13 +169,14 @@
     </div>
 
 <script>
-    // HARD RESET FOR REFRESH
+    // FIX REFRESH GLITCH: Force reset before showing content
     if (history.scrollRestoration) { history.scrollRestoration = 'manual'; }
     window.scrollTo(0, 0);
     
-    window.onload = () => {
+    // Make body visible only after scroll is forced to 0
+    document.addEventListener("DOMContentLoaded", () => {
         document.body.style.visibility = "visible";
-    };
+    });
 
     const myProducts = [
         { name: "Thick Seamless Dress", price: 50, size: "10", image: "images/item1.jpg" },
@@ -205,7 +193,7 @@
 
     function renderProducts() {
         document.getElementById('productGrid').innerHTML = myProducts.map(item => `
-            <div class="product-card" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}')">
+            <div class="product-card" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
                 <div class="p-image"><img src="${item.image}"></div>
                 <div class="p-details">
                     <h3 class="p-name">${item.name}</h3>
@@ -218,32 +206,32 @@
 
     function launchApp() { document.getElementById('splash-screen').classList.add('lifted'); }
 
-    function openPreview(name, price, image) {
+    function openPreview(name, price, image, size) {
         const modal = document.getElementById('item-preview');
         document.getElementById('preview-img').src = image;
         document.getElementById('preview-name').innerText = name;
-        document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${encodeURIComponent('Hi Enis Collection! I want to order the ' + name)}`;
+        document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${encodeURIComponent('Hi Enis! Order: ' + name)}`;
         
         modal.style.display = 'flex';
         setTimeout(() => {
             modal.classList.add('active');
             document.body.classList.add('modal-open');
-        }, 15);
+        }, 10);
     }
 
     function closePreview() { 
         const modal = document.getElementById('item-preview');
         modal.classList.remove('active');
         document.body.classList.remove('modal-open');
-        setTimeout(() => { modal.style.display = 'none'; }, 250);
+        setTimeout(() => { modal.style.display = 'none'; }, 200);
     }
 
+    // Scroll Header Logic
     let lastS = 0;
     window.addEventListener('scroll', () => {
-        if (document.body.classList.contains('modal-open')) return;
         const h = document.getElementById('mainHeader');
         const cur = window.scrollY;
-        if (cur > lastS && cur > 120) h.classList.add('header-hidden');
+        if (cur > lastS && cur > 100) h.classList.add('header-hidden');
         else h.classList.remove('header-hidden');
         lastS = cur;
     }, { passive: true });
