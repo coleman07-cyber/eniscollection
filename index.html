@@ -13,8 +13,6 @@
             --card-bg: #FFFFFF;
             --text-main: #000000;
             --text-soft: #636366;
-            /* Champagne Gold Palette */
-            --champagne: #F7E7CE;
             --champagne-bright: #F9E076;
             --accent-gold: #D4AF37;
             --wa-green: #25D366;
@@ -36,97 +34,59 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); height: 100vh; overflow: hidden; position: fixed; width: 100%; }
 
+        .app-shell { width: 100%; max-width: 420px; height: 100vh; margin: 0 auto; background: var(--bg); position: relative; display: flex; flex-direction: column; }
+
         /* --- HEADER --- */
-        header { padding: calc(env(safe-area-inset-top) + 15px) 0 15px; background: var(--bg); text-align: center; border-bottom: 0.5px solid var(--border); }
-        .header-title { font-family: 'Great Vibes', cursive; font-size: 38px; color: #000; line-height: 1; margin-bottom: 2px; }
-        @media (prefers-color-scheme: dark) { .header-title { color: #fff; } }
+        header { padding: calc(env(safe-area-inset-top) + 15px) 0 10px; background: var(--bg); text-align: center; }
+        .header-title { font-family: 'Great Vibes', cursive; font-size: 38px; color: var(--text-main); line-height: 1; margin-bottom: 2px; }
         .header-slogan { font-size: 10px; text-transform: uppercase; letter-spacing: 4px; font-weight: 700; color: var(--accent-gold); }
 
+        /* --- CATALOGUE TABS --- */
+        .catalogue-container {
+            padding: 15px 0;
+            background: var(--bg);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .catalogue-scroll {
+            display: flex; gap: 12px; overflow-x: auto; padding: 0 15px; scrollbar-width: none;
+        }
+        .catalogue-scroll::-webkit-scrollbar { display: none; }
+        .cat-item {
+            padding: 8px 20px; border-radius: 50px; border: 1px solid var(--border);
+            font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            white-space: nowrap; color: var(--text-soft); transition: 0.3s;
+        }
+        .cat-item.active { background: var(--text-main); color: var(--bg); border-color: var(--text-main); }
+
         /* --- PRODUCT FEED --- */
-        .app-shell { width: 100%; max-width: 420px; height: 100vh; margin: 0 auto; background: var(--bg); position: relative; display: flex; flex-direction: column; }
         .feed { flex: 1; overflow-y: auto; background: var(--bg); scroll-behavior: smooth; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        
-        .product-card { 
-            background: var(--card-bg); border-radius: 20px; 
-            overflow: hidden; border: 0.5px solid var(--border);
-            opacity: 0; transform: translateY(20px); 
-            transition: all 0.8s var(--ease-luxury);
-        }
+        .product-card { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 0.5px solid var(--border); opacity: 0; transform: translateY(20px); transition: all 0.8s var(--ease-luxury); }
         .product-card.visible { opacity: 1; transform: translateY(0); }
-
         .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.35; overflow: hidden; }
         .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* Champagne Price Tag */
-        .price-tag {
-            position: absolute; bottom: 10px; right: 10px; 
-            background: var(--champagne-bright); color: #000;
-            padding: 6px 12px; border-radius: 12px; font-size: 11px;
-            font-weight: 800; box-shadow: 0 4px 12px rgba(249, 224, 118, 0.3);
-        }
+        .price-tag { position: absolute; bottom: 10px; right: 10px; background: var(--champagne-bright); color: #000; padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: 800; box-shadow: 0 4px 12px rgba(249, 224, 118, 0.3); }
 
-        /* --- MODERN LUXURY ABOUT --- */
-        .about-modern {
-            margin: 40px 15px 60px; padding: 50px 20px;
-            background: linear-gradient(145deg, var(--card-bg), var(--bg));
-            border-radius: 40px; border: 1px solid var(--border);
-            text-align: center; position: relative;
-        }
+        /* --- ABOUT AREA --- */
+        .about-modern { margin: 40px 15px 60px; padding: 50px 20px; background: linear-gradient(145deg, var(--card-bg), var(--bg)); border-radius: 40px; border: 1px solid var(--border); text-align: center; }
         .about-modern h3 { font-family: 'Playfair Display', serif; font-size: 28px; font-style: italic; margin-bottom: 15px; color: var(--text-main); }
-        .about-modern p { font-size: 14px; color: var(--text-soft); line-height: 1.8; max-width: 280px; margin: 0 auto 30px; }
-        
-        .social-btn {
-            width: 45px; height: 45px; border-radius: 14px;
-            background: var(--bg); color: var(--text-main);
-            border: 0.5px solid var(--border); display: inline-flex;
-            align-items: center; justify-content: center; margin: 0 6px;
-            transition: 0.3s; box-shadow: var(--shadow);
-        }
+        .social-btn { width: 45px; height: 45px; border-radius: 14px; background: var(--bg); color: var(--text-main); border: 0.5px solid var(--border); display: inline-flex; align-items: center; justify-content: center; margin: 0 6px; transition: 0.3s; }
 
-        /* --- SLIM PREVIEW & TRANSITIONS --- */
-        #item-preview {
-            position: fixed; inset: 0; z-index: 10000;
-            background: rgba(0,0,0,0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            display: none; align-items: center; justify-content: center;
-            opacity: 0; transition: opacity 0.5s var(--ease-luxury);
-        }
-        @media (prefers-color-scheme: dark) { #item-preview { background: rgba(0,0,0,0.7); } }
+        /* --- PREVIEW --- */
+        #item-preview { position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.5s var(--ease-luxury); }
         #item-preview.active { display: flex; opacity: 1; }
-
-        .preview-box { 
-            width: 270px; background: var(--card-bg); padding: 8px; border-radius: 42px; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-            transform: scale(0.9) translateY(30px); 
-            transition: transform 0.5s var(--ease-luxury), opacity 0.5s var(--ease-luxury);
-        }
+        .preview-box { width: 270px; background: var(--card-bg); padding: 8px; border-radius: 42px; transform: scale(0.9) translateY(30px); transition: transform 0.5s var(--ease-luxury), opacity 0.5s var(--ease-luxury); }
         #item-preview.active .preview-box { transform: scale(1) translateY(0); }
-        
-        /* Smooth Fade Out Class */
         #item-preview.fade-out { opacity: 0; }
         #item-preview.fade-out .preview-box { transform: scale(0.95) translateY(10px); opacity: 0; }
-
         .preview-img-container { border-radius: 34px; overflow: hidden; height: 380px; }
         .preview-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .btn-wa { background: var(--wa-green); color: white; padding: 18px; border-radius: 24px; text-decoration: none; font-weight: 800; display: flex; align-items: center; gap: 12px; font-size: 14px; justify-content: center; margin-top: 15px; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4); }
 
-        /* Glowing WhatsApp Button */
-        .btn-wa {
-            background: var(--wa-green); color: white; padding: 18px; border-radius: 24px;
-            text-decoration: none; font-weight: 800; display: flex; align-items: center; 
-            gap: 12px; font-size: 14px; justify-content: center; margin-top: 15px;
-            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
-            transition: 0.3s;
-        }
-        .btn-wa:active { transform: scale(0.96); box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2); }
-
-        /* Splash Styles */
-        #splash-screen {
-            position: absolute; inset: 0; z-index: 9999;
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url('images/Splash-Dress.PNG') center/cover;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: 0.8s var(--ease-luxury);
-        }
+        /* --- SPLASH (Discover Black) --- */
+        #splash-screen { position: absolute; inset: 0; z-index: 9999; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url('images/Splash-Dress.PNG') center/cover; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s var(--ease-luxury); }
         #splash-screen.hidden { opacity: 0; visibility: hidden; transform: scale(1.05); }
+        .btn-discover { margin-top: 50px; padding: 18px 55px; border-radius: 50px; border: none; font-weight: 800; background: #000; color: #fff; letter-spacing: 2px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -135,7 +95,7 @@
     <div id="splash-screen">
         <h1 class="header-title" style="color: white; font-size: 64px;">Enis Collection</h1>
         <p class="header-slogan" style="color: var(--champagne-bright);">Pamper Your Body</p>
-        <button onclick="launchApp()" style="margin-top: 50px; padding: 18px 45px; border-radius: 50px; border: none; font-weight: 800; background: #fff; letter-spacing: 2px;">DISCOVER</button>
+        <button class="btn-discover" onclick="launchApp()">DISCOVER</button>
     </div>
 
     <div id="shop-content" style="display: none; flex-direction: column; height: 100%;">
@@ -144,34 +104,38 @@
             <p class="header-slogan">Pamper Your Body</p>
         </header>
 
+        <div class="catalogue-container">
+            <div class="catalogue-scroll" id="catScroll">
+                <div class="cat-item active" onclick="filterCat('All', this)">All</div>
+                <div class="cat-item" onclick="filterCat('Dress', this)">Dresses</div>
+                <div class="cat-item" onclick="filterCat('Set', this)">Sets</div>
+                <div class="cat-item" onclick="filterCat('Work', this)">Work Wear</div>
+            </div>
+        </div>
+
         <div class="feed" id="mainFeed" onscroll="handleScroll()">
             <div class="grid" id="productGrid"></div>
             
             <div class="about-modern">
                 <div style="width: 30px; height: 2px; background: var(--accent-gold); margin: 0 auto 20px;"></div>
                 <h3>Elegance Redefined</h3>
-                <p>Curating luxury silhouettes in Cape Coast, Ghana. Designed to celebrate the extraordinary woman.</p>
+                <p style="font-size: 14px; color: var(--text-soft); line-height: 1.8; max-width: 280px; margin: 0 auto 30px;">Curating luxury silhouettes in Cape Coast, Ghana. Designed to celebrate the extraordinary woman.</p>
                 <div class="social-row">
                     <a href="https://wa.me/233546527892" class="social-btn"><i class="fab fa-whatsapp"></i></a>
                     <a href="https://www.tiktok.com/@eniscollection1" class="social-btn"><i class="fab fa-tiktok"></i></a>
                     <a href="tel:+233546527892" class="social-btn"><i class="fas fa-phone"></i></a>
                 </div>
-                <p style="margin-top: 40px; font-size: 8px; letter-spacing: 5px; opacity: 0.5;">EST. 2022 • GHANA</p>
             </div>
         </div>
     </div>
 
     <div id="item-preview" onclick="closePreview()">
         <div class="preview-box" onclick="event.stopPropagation()">
-            <div class="preview-img-container">
-                <img id="preview-img" src="">
-            </div>
+            <div class="preview-img-container"><img id="preview-img" src=""></div>
             <div style="padding: 20px 10px; text-align: center;">
                 <h2 id="preview-name" style="font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text-main);"></h2>
                 <p id="preview-price" style="color: var(--accent-gold); font-size: 13px; font-weight: 800; margin-top: 5px;"></p>
-                <a id="wa-btn" href="#" class="btn-wa">
-                    <i class="fab fa-whatsapp" style="font-size: 20px;"></i> ORDER VIA WHATSAPP
-                </a>
+                <a id="wa-btn" href="#" class="btn-wa"><i class="fab fa-whatsapp"></i> ORDER VIA WHATSAPP</a>
             </div>
         </div>
     </div>
@@ -179,33 +143,42 @@
 
 <script>
     const myProducts = [
-        { name: "Thick Seamless Dress", price: 50, size: "10", image: "images/item1.jpg" },
-        { name: "Plaited Skirts & Top", price: 50, size: "8/10", image: "images/item2.jpg" },
-        { name: "Short Length Essential", price: 45, size: "8", image: "images/item3.jpg" },
-        { name: "Church & Work Midi", price: 50, size: "8", image: "images/item4.jpg" },
-        { name: "Dinner & Party Elegance", price: 45, size: "8/10", image: "images/item5.jpg" },
-        { name: "Lecture & Beach Set", price: 45, size: "6/8/10", image: "images/item6.jpg" },
-        { name: "Ruched SHEIN Special", price: 50, size: "8/10", image: "images/item7.jpg" },
-        { name: "Ultimate Work Gown", price: 50, size: "12/14", image: "images/item8.jpg" },
-        { name: "Skirt & Basic Top Duo", price: 50, size: "10/12", image: "images/item9.jpg" },
-        { name: "Refined Church Wear", price: 50, size: "10", image: "images/item10.jpg" }
+        { name: "Thick Seamless Dress", price: 50, size: "10", category: "Dress", image: "images/item1.jpg" },
+        { name: "Plaited Skirts & Top", price: 50, size: "8/10", category: "Set", image: "images/item2.jpg" },
+        { name: "Short Length Essential", price: 45, size: "8", category: "Dress", image: "images/item3.jpg" },
+        { name: "Church & Work Midi", price: 50, size: "8", category: "Work", image: "images/item4.jpg" },
+        { name: "Dinner & Party Elegance", price: 45, size: "8/10", category: "Dress", image: "images/item5.jpg" },
+        { name: "Lecture & Beach Set", price: 45, size: "6/8/10", category: "Set", image: "images/item6.jpg" },
+        { name: "Ruched SHEIN Special", price: 50, size: "8/10", category: "Dress", image: "images/item7.jpg" },
+        { name: "Ultimate Work Gown", price: 50, size: "12/14", category: "Work", image: "images/item8.jpg" },
+        { name: "Skirt & Basic Top Duo", price: 50, size: "10/12", category: "Set", image: "images/item9.jpg" },
+        { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
     ];
 
-    function renderProducts() {
+    function renderProducts(filter = 'All') {
         const grid = document.getElementById('productGrid');
-        grid.innerHTML = myProducts.map((item) => `
+        const items = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
+        
+        grid.innerHTML = items.map((item) => `
             <div class="product-card">
                 <div class="p-image-wrap" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
-                    <img src="${item.image}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x520?text=ENIS'">
+                    <img src="${item.image}" loading="lazy">
                     <div class="price-tag">₵${item.price}</div>
                 </div>
                 <div style="padding:15px;">
-                    <span style="font-size:9px; color:var(--accent-gold); font-weight:800; letter-spacing:1px;">SIZE UK ${item.size}</span>
+                    <span style="font-size:9px; color:var(--accent-gold); font-weight:800;">SIZE UK ${item.size}</span>
                     <h3 style="font-size:13px; color:var(--text-main); margin-top:4px; font-weight:600;">${item.name}</h3>
                 </div>
             </div>
         `).join('');
         setTimeout(handleScroll, 50);
+    }
+
+    function filterCat(cat, el) {
+        document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        renderProducts(cat);
+        document.getElementById('mainFeed').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function handleScroll() {
