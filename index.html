@@ -49,15 +49,21 @@
         }
         #splash-screen.hidden { opacity: 0; visibility: hidden; transform: scale(1.1); }
 
-        #shop-content { display: none; flex-direction: column; height: 100%; }
+        #shop-content { display: none; flex-direction: column; height: 100%; position: relative; }
         #shop-content.active { display: flex; animation: fadeIn 0.8s var(--ease-fluid); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* UPDATED HEADER: Now Sticky with Transition */
         header {
+            position: sticky;
+            top: 0;
             padding: calc(env(safe-area-inset-top) + 15px) 20px 15px;
             background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 0.5px solid var(--border); z-index: 100;
+            border-bottom: 0.5px solid var(--border); 
+            z-index: 100;
+            transition: transform 0.5s var(--ease-fluid);
+            will-change: transform;
         }
 
         .logo-box h2 { font-size: 18px; font-weight: 800; text-align: center; color: var(--text-main); text-transform: uppercase; letter-spacing: 3px;}
@@ -82,6 +88,7 @@
             padding: 20px 16px 60px; 
             -webkit-overflow-scrolling: touch; 
             scroll-behavior: smooth;
+            margin-top: 0; /* Header is sticky, no extra margin needed */
         }
         .feed::-webkit-scrollbar { display: none; }
 
@@ -99,7 +106,6 @@
 
         .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.3; overflow: hidden; }
         .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s var(--ease-fluid); }
-        .product-card:hover img { transform: scale(1.08); }
         
         .floating-tag {
             position: absolute; bottom: 10px; right: 10px;
@@ -127,9 +133,7 @@
             color: var(--text-main); text-decoration: none; border: 0.5px solid var(--border);
             transition: 0.4s var(--ease-fluid); font-size: 18px;
         }
-        .social-btn:active { transform: scale(0.85); background: var(--accent-gold); color: #000; }
 
-        /* PREVIEW */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
             background: rgba(0,0,0,0.8); backdrop-filter: blur(15px);
@@ -152,9 +156,7 @@
             background: var(--accent-green); color: white; padding: 14px; border-radius: 18px;
             text-decoration: none; font-weight: 700; display: flex; align-items: center; 
             gap: 10px; font-size: 14px; justify-content: center; margin-top: 15px;
-            transition: transform 0.2s;
         }
-        .btn-order:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
@@ -169,7 +171,7 @@
     </div>
 
     <div id="shop-content">
-        <header>
+        <header id="mainHeader">
             <div class="logo-box">
                 <h2>Enis Collection</h2>
                 <span>Pamper Your Body</span>
@@ -238,6 +240,8 @@
         { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
     ];
 
+    let lastScrollTop = 0; // Tracks last scroll position
+
     function renderProducts(filter = 'All') {
         const grid = document.getElementById('productGrid');
         const filtered = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
@@ -255,13 +259,27 @@
             </div>
         `).join('');
 
-        handleScroll(); // Initial check for visibility
+        handleScroll(); 
     }
 
     function handleScroll() {
+        const feed = document.getElementById('mainFeed');
+        const header = document.getElementById('mainHeader');
+        const currentScroll = feed.scrollTop;
         const cards = document.querySelectorAll('.product-card');
         const triggerBottom = window.innerHeight * 0.9;
         
+        // --- HEADER HIDE/SHOW LOGIC ---
+        if (currentScroll > lastScrollTop && currentScroll > 100) {
+            // Downscroll - Hide
+            header.style.transform = "translateY(-100%)";
+        } else {
+            // Upscroll - Show
+            header.style.transform = "translateY(0)";
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+
+        // --- CARD VISIBILITY LOGIC ---
         cards.forEach(card => {
             const cardTop = card.getBoundingClientRect().top;
             if(cardTop < triggerBottom) {
