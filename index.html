@@ -102,7 +102,8 @@
         .product-card.visible { opacity: 1; transform: translateY(0); }
 
         .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.35; overflow: hidden; background: #eee; }
-        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.3s ease; }
+        .p-image-wrap img.loaded { opacity: 1; }
         
         .floating-tag {
             position: absolute; bottom: 10px; right: 10px; background: var(--gold-gradient); 
@@ -167,7 +168,7 @@
             position: relative; 
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0; 
-            height: 400px; /* Slim tall shape */
+            height: 400px; 
         }
         
         .preview-image { 
@@ -175,7 +176,7 @@
             height: 100%; 
             object-fit: cover; 
             display: block;
-            border-radius: 34px; /* Image matches container curve */
+            border-radius: 34px; 
         }
         
         .preview-content { padding: 12px 10px 8px; text-align: center; flex: 1 1 auto; }
@@ -264,13 +265,22 @@
         { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
     ];
 
+    // PRE-LOADER: Starts downloading images immediately while splash screen is active
+    myProducts.forEach(item => {
+        const img = new Image();
+        img.src = item.image;
+    });
+
     function renderProducts(filter = 'All') {
         const grid = document.getElementById('productGrid');
         const filtered = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
+        
         grid.innerHTML = filtered.map((item) => `
             <div class="product-card">
                 <div class="p-image-wrap" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
-                    <img src="${item.image}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x520?text=ENIS'">
+                    <img src="${item.image}" 
+                         onload="this.classList.add('loaded'); this.closest('.product-card').classList.add('visible');"
+                         onerror="this.src='https://via.placeholder.com/400x520?text=ENIS'; this.closest('.product-card').classList.add('visible');">
                     <div class="floating-tag">₵${item.price}</div>
                 </div>
                 <div class="p-details">
@@ -279,14 +289,17 @@
                 </div>
             </div>
         `).join('');
-        setTimeout(handleScroll, 50);
     }
 
     function handleScroll() {
-        const cards = document.querySelectorAll('.product-card');
+        const cards = document.querySelectorAll('.product-card:not(.visible)');
         cards.forEach(card => {
             const cardTop = card.getBoundingClientRect().top;
-            if(cardTop < window.innerHeight * 0.9) card.classList.add('visible');
+            if(cardTop < window.innerHeight * 0.95) {
+                // Check if image is already loaded for instant display
+                const img = card.querySelector('img');
+                if (img.complete) card.classList.add('visible');
+            }
         });
     }
 
