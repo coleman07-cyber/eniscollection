@@ -9,121 +9,123 @@
     
     <style>
         :root {
-            --bg: #000;
-            --card-bg: #111;
-            --text-main: #FFF;
-            --text-soft: #A1A1A6;
+            --bg: #FDFDFD;
+            --card-bg: #FFFFFF;
+            --text-main: #121212;
+            --text-soft: #8E8E93;
             --accent-gold: #D4AF37; 
-            --accent-orange: #FF8C00;
-            --orange-glow: 0 0 20px rgba(255, 140, 0, 0.6);
             --gold-gradient: linear-gradient(135deg, #D4AF37 0%, #F4D03F 100%);
-            --border: rgba(255, 255, 255, 0.1);
+            --gold-glow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            --glass: rgba(255, 255, 255, 0.9);
+            --border: rgba(0, 0, 0, 0.05);
+            --shadow: 0 8px 30px rgba(0,0,0,0.04);
             --accent-green: #25D366;
             --ease-fluid: cubic-bezier(0.23, 1, 0.32, 1);
+            --accent-orange: #FF8C00;
+            --orange-glow: 0 0 20px rgba(255, 140, 0, 0.6);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #000;
+                --card-bg: #0A0A0A;
+                --text-main: #FFF;
+                --text-soft: #A1A1A6;
+                --glass: rgba(10, 10, 10, 0.9);
+                --border: rgba(255, 255, 255, 0.12);
+            }
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { background: #000; height: 100vh; overflow: hidden; position: fixed; width: 100%; color: var(--text-main); }
+        body { background: #000; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
 
         .app-shell {
             width: 100%; max-width: 420px; height: 100vh; margin: 0 auto;
             background: var(--bg); position: relative; display: flex; flex-direction: column;
         }
 
-        /* MODERN CENTERED SPLASH SCREEN */
+        /* SPLASH SCREEN - RESTORED WRITINGS & CENTERED */
         #splash-screen {
             position: absolute; inset: 0; z-index: 9999;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.8)), url('images/Splash-Dress.PNG') center/cover;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG') center/cover;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: all 0.6s var(--ease-fluid);
+            transition: all 1s var(--ease-fluid);
             text-align: center;
             padding: 20px;
         }
-        #splash-screen.hidden { opacity: 0; visibility: hidden; transform: scale(1.1); }
+        #splash-screen.hidden { opacity: 0; visibility: hidden; transform: translateY(-20px); }
         
-        .splash-text h1 { 
-            font-size: 28px; 
-            font-weight: 700; 
-            letter-spacing: 2px; 
-            margin-bottom: 8px; 
-            text-transform: uppercase;
-            color: white;
-        }
-        .splash-text p { 
-            font-size: 11px; 
-            letter-spacing: 5px; 
-            color: var(--accent-gold); 
-            margin-bottom: 35px; 
-            font-weight: 600; 
-            text-transform: uppercase;
-        }
+        .splash-title { color: white; font-size: 28px; font-weight: 700; letter-spacing: 2px; margin-bottom: 5px; text-transform: uppercase; }
+        .splash-sub { font-size: 10px; letter-spacing: 7px; color: var(--accent-gold); margin-bottom: 40px; font-weight: 800; text-transform: uppercase; }
 
         .btn-launch {
-            background: var(--accent-orange); 
-            color: white; 
-            padding: 18px 55px;
-            border-radius: 50px; 
-            border: none; 
-            font-weight: 800; 
-            font-size: 13px;
-            box-shadow: var(--orange-glow); 
-            cursor: pointer; 
-            letter-spacing: 2px;
-            text-transform: uppercase; 
-            transition: 0.3s;
+            background: var(--accent-orange); color: #fff; padding: 18px 55px;
+            border-radius: 50px; border: none; font-weight: 800; font-size: 13px;
+            box-shadow: var(--orange-glow); cursor: pointer; letter-spacing: 2px;
+            text-transform: uppercase;
         }
-        .btn-launch:active { transform: scale(0.95); opacity: 0.9; }
 
-        /* HEADER & MODERN CATALOGUE */
+        /* SHOP CONTENT */
         #shop-content { display: none; flex-direction: column; height: 100%; }
-        #shop-content.active { display: flex; }
+        #shop-content.active { display: flex; animation: fadeIn 0.8s var(--ease-fluid); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        header { padding: calc(env(safe-area-inset-top) + 15px) 0 10px; }
-        .logo-box h2 { font-size: 18px; font-weight: 800; text-align: center; text-transform: uppercase; letter-spacing: 4px;}
-        .logo-box span { font-size: 8px; color: var(--accent-gold); letter-spacing: 5px; display: block; text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 700; }
+        header { padding: calc(env(safe-area-inset-top) + 15px) 0 8px; background: var(--bg); }
+        .logo-box h2 { font-size: 20px; font-weight: 800; text-align: center; color: var(--text-main); text-transform: uppercase; letter-spacing: 5px;}
+        .logo-box span { 
+            font-size: 8px; background: var(--gold-gradient); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; letter-spacing: 6px; display: block; 
+            text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 800; 
+        }
 
-        .catalog-bar { display: flex; gap: 10px; overflow-x: auto; padding: 15px 12px; scrollbar-width: none; }
+        /* NAVIGATION - MODERN RADIUS */
+        .catalog-container {
+            position: sticky; top: 0; z-index: 90;
+            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(30px);
+            border-bottom: 0.5px solid var(--border);
+        }
+        .catalog-bar { display: flex; gap: 8px; overflow-x: auto; padding: 12px; scrollbar-width: none; }
         .catalog-bar::-webkit-scrollbar { display: none; }
         
         .filter-tag {
-            padding: 10px 22px; 
-            background: #111; 
+            padding: 11px 22px; background: rgba(120, 120, 128, 0.1); 
             border-radius: 12px; /* Nice round radius */
-            font-size: 11px; font-weight: 700; color: var(--text-soft); white-space: nowrap; 
-            transition: 0.3s; text-transform: uppercase; 
-            border: 1px solid var(--border);
+            font-size: 10px; font-weight: 700; color: var(--text-soft); white-space: nowrap; 
+            transition: all 0.3s var(--ease-fluid); text-transform: uppercase; letter-spacing: 1px;
         }
-        .filter-tag.active { 
-            background: #fff; 
-            color: #000; 
-            border-color: #fff; 
-        }
+        .filter-tag.active { background: var(--text-main); color: var(--bg); }
 
         /* PRODUCT FEED */
-        .feed { flex: 1; overflow-y: auto; padding-bottom: 40px; }
+        .feed { flex: 1; overflow-y: auto; padding-bottom: 50px; scroll-behavior: smooth; }
         .feed::-webkit-scrollbar { display: none; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px 12px; }
         
         .product-card { 
-            background: var(--card-bg); border-radius: 24px; overflow: hidden;
-            border: 1px solid var(--border);
+            background: var(--card-bg); border-radius: 28px; 
+            overflow: hidden; box-shadow: var(--shadow); border: 0.5px solid var(--border);
+            opacity: 0; transform: translateY(15px); 
+            transition: all 0.6s var(--ease-fluid);
         }
-        .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.3; overflow: hidden; }
-        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .product-card.visible { opacity: 1; transform: translateY(0); }
+
+        .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.35; overflow: hidden; background: #eee; }
+        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.3s ease; }
+        .p-image-wrap img.loaded { opacity: 1; }
         
         .floating-tag {
             position: absolute; bottom: 10px; right: 10px; background: var(--gold-gradient); 
-            color: #000; padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: 900;
+            color: #000; padding: 5px 12px; border-radius: 14px; font-size: 11px;
+            font-weight: 900; box-shadow: var(--gold-glow);
         }
 
         .p-details { padding: 12px; } 
-        .p-name { font-size: 12px; font-weight: 600; line-height: 1.4; color: #fff; }
+        .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.3; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
-        /* ORIGINAL ABOUT SECTION */
+        /* ABOUT SECTION - RESTORED ORIGINAL LOOK */
         .about-modern {
-            margin: 40px 15px 30px;
-            padding: 50px 25px;
+            margin: 50px 15px 30px;
+            padding: 60px 25px;
             background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.05) 100%);
             border-top: 1px solid var(--border);
             text-align: center;
@@ -134,34 +136,46 @@
             transform: translateX(-50%); width: 40px; height: 1px;
             background: var(--gold-gradient);
         }
-        .headline { font-size: 22px; font-weight: 800; color: #FFF; margin: 15px 0; letter-spacing: -0.5px; line-height: 1.2; }
-        .subtext { font-size: 14px; color: var(--text-soft); line-height: 1.8; margin-bottom: 30px; padding: 0 10px; }
-        .social-row { display: flex; justify-content: center; gap: 20px; }
-        .social-btn { color: #fff; font-size: 22px; text-decoration: none; }
+        .headline { font-size: 22px; font-weight: 800; color: var(--text-main); margin: 15px 0; letter-spacing: -0.5px; line-height: 1.2; }
+        .subtext { font-size: 14px; color: var(--text-soft); line-height: 1.8; margin-bottom: 40px; padding: 0 10px; }
+        .social-row { display: flex; justify-content: center; gap: 18px; }
+        .social-btn {
+            width: 45px; height: 45px; border-radius: 50%;
+            background: var(--card-bg); display: flex; align-items: center; justify-content: center;
+            color: var(--text-main); border: 1px solid var(--border); transition: all 0.3s ease;
+            text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .social-btn:active { transform: scale(0.9); border-color: var(--accent-gold); color: var(--accent-gold); }
+        .establishment-note { margin-top: 50px; font-size: 9px; letter-spacing: 5px; text-transform: uppercase; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.8; }
 
-        /* INSTANT PREVIEW: NO DELAYS */
+        /* PREVIEW MODAL - INSTANT TRANSITION */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
-            background: rgba(0,0,0,0.95); display: none;
-            align-items: center; justify-content: center; padding: 20px;
+            background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            display: none; align-items: center; justify-content: center; padding: 20px;
+            opacity: 0; transition: opacity 0.2s ease; /* Faster */
         }
-        #item-preview.active { display: flex; }
+        #item-preview.active { display: flex; opacity: 1; }
         
         .preview-box { 
-            width: 300px; background: #000; border-radius: 35px;
-            padding: 10px; border: 1px solid var(--border);
-            transform: scale(0.95); transition: 0.15s var(--ease-fluid);
+            width: 280px; 
+            background: var(--card-bg); 
+            padding: 10px; 
+            border-radius: 38px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            transform: scale(0.95);
+            transition: transform 0.2s var(--ease-fluid);
         }
         #item-preview.active .preview-box { transform: scale(1); }
         
-        .preview-img-container { border-radius: 28px; overflow: hidden; height: 380px; }
-        .preview-image { width: 100%; height: 100%; object-fit: cover; }
-        .preview-content { padding: 15px 5px; text-align: center; }
+        .preview-img-container { border-radius: 30px; overflow: hidden; background: transparent; height: 380px; }
+        .preview-image { width: 100%; height: 100%; object-fit: cover; border-radius: 30px; }
+        .preview-content { padding: 15px 10px 10px; text-align: center; }
 
         .btn-order {
-            background: var(--accent-green); color: white; padding: 15px; border-radius: 18px;
+            background: var(--accent-green); color: white; padding: 14px; border-radius: 20px;
             text-decoration: none; font-weight: 800; display: flex; align-items: center; 
-            gap: 10px; font-size: 14px; justify-content: center; margin-top: 10px;
+            gap: 10px; font-size: 13px; justify-content: center; margin-top: 15px;
         }
     </style>
 </head>
@@ -169,26 +183,24 @@
 
 <div class="app-shell">
     <div id="splash-screen">
-        <div class="splash-text">
-            <h1>WELCOME TO ENIS COLLECTION</h1>
-            <p>PAMPER YOUR BODY</p>
-        </div>
-        <button class="btn-launch" onclick="launchApp()">DISCOVER COLLECTION</button>
+        <h1 class="splash-title">WELCOME TO ENIS COLLECTION</h1>
+        <p class="splash-sub">PAMPER YOUR BODY</p>
+        <button class="btn-launch" onclick="launchApp()">ENTER SHOP</button>
     </div>
 
     <div id="shop-content">
         <header>
             <div class="logo-box"><h2>Enis Collection</h2><span>Pamper Your Body</span></div>
         </header>
-        
-        <div class="catalog-bar">
-            <div class="filter-tag active" onclick="filterItems('All', this)">All</div>
-            <div class="filter-tag" onclick="filterItems('Dress', this)">Dresses</div>
-            <div class="filter-tag" onclick="filterItems('Set', this)">Sets</div>
-            <div class="filter-tag" onclick="filterItems('Work', this)">Work Wear</div>
+        <div class="catalog-container">
+            <div class="catalog-bar">
+                <div class="filter-tag active" onclick="filterItems('All', this)">All</div>
+                <div class="filter-tag" onclick="filterItems('Dress', this)">Dresses</div>
+                <div class="filter-tag" onclick="filterItems('Set', this)">Sets</div>
+                <div class="filter-tag" onclick="filterItems('Work', this)">Work Wear</div>
+            </div>
         </div>
-
-        <div class="feed" id="mainFeed">
+        <div class="feed" id="mainFeed" onscroll="handleScroll()">
             <div class="grid" id="productGrid"></div>
             
             <div class="about-modern">
@@ -199,6 +211,7 @@
                     <a href="https://www.tiktok.com/@eniscollection1" class="social-btn"><i class="fab fa-tiktok"></i></a>
                     <a href="tel:+233546527892" class="social-btn"><i class="fas fa-phone"></i></a>
                 </div>
+                <p class="establishment-note">CAPECOAST, GHANA • EST. 2022</p>
             </div>
         </div>
     </div>
@@ -209,8 +222,8 @@
                 <img id="preview-img" src="" class="preview-image">
             </div>
             <div class="preview-content">
-                <span id="preview-size" style="font-size: 10px; color: var(--accent-gold); font-weight: 800; text-transform: uppercase;"></span>
-                <h2 id="preview-name" style="font-size: 16px; margin: 4px 0 10px;"></h2>
+                <span id="preview-size" style="font-size: 10px; color: var(--accent-gold); font-weight: 800;"></span>
+                <h2 id="preview-name" style="font-size: 16px; color: var(--text-main); font-weight: 700;"></h2>
                 <a id="wa-btn" href="#" class="btn-order"><i class="fab fa-whatsapp"></i> ORDER NOW</a>
             </div>
         </div>
@@ -235,9 +248,9 @@
         const grid = document.getElementById('productGrid');
         const filtered = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
         grid.innerHTML = filtered.map((item) => `
-            <div class="product-card" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
-                <div class="p-image-wrap">
-                    <img src="${item.image}">
+            <div class="product-card">
+                <div class="p-image-wrap" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
+                    <img src="${item.image}" onload="this.classList.add('loaded'); this.closest('.product-card').classList.add('visible');">
                     <div class="floating-tag">₵${item.price}</div>
                 </div>
                 <div class="p-details">
@@ -253,22 +266,34 @@
         renderProducts();
     }
 
-    // INSTANT PREVIEW
+    // INSTANT PREVIEW TRIGGER
     function openPreview(name, price, image, size) {
         const modal = document.getElementById('item-preview');
-        document.getElementById('preview-img').src = image;
+        const previewImg = document.getElementById('preview-img');
+        
+        previewImg.src = image;
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size}`;
-        document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=I'd like to order: ${name}`;
+        document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=Order: ${name}`;
 
         modal.style.display = 'flex';
-        modal.classList.add('active');
+        // Remove delays - trigger immediately
+        requestAnimationFrame(() => {
+            modal.classList.add('active');
+        });
     }
 
     function closePreview() { 
         const modal = document.getElementById('item-preview');
         modal.classList.remove('active');
         setTimeout(() => modal.style.display = 'none', 200);
+    }
+
+    function handleScroll() {
+        const cards = document.querySelectorAll('.product-card:not(.visible)');
+        cards.forEach(card => {
+            if(card.getBoundingClientRect().top < window.innerHeight) card.classList.add('visible');
+        });
     }
 
     function filterItems(cat, el) {
