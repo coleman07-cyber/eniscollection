@@ -21,6 +21,7 @@
             --border: rgba(0, 0, 0, 0.05);
             --shadow: 0 4px 12px rgba(0,0,0,0.05);
             --accent-green: #25D366;
+            --header-height: 160px; /* Approximate height of your header */
         }
 
         @media (prefers-color-scheme: dark) {
@@ -37,19 +38,26 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
+        body { background: #000; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
 
         .app-shell {
-            width: 100%; max-width: 420px; height: 100vh;
+            width: 100%; max-width: 420px; height: 100vh; margin: 0 auto;
             background: var(--bg); position: relative; overflow: hidden;
         }
 
+        /* UPDATED HEADER: Added transition and hide class */
         header {
             position: absolute; top: 0; width: 100%;
             padding: calc(env(safe-area-inset-top) + 20px) 20px 20px;
             background: var(--glass); 
             backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%);
             z-index: 1000; border-bottom: 0.5px solid var(--border);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* This class is toggled via JavaScript */
+        .header-hidden {
+            transform: translateY(-100%);
         }
 
         .logo-box h2 { font-size: 22px; font-weight: 700; text-align: center; color: var(--text-main); letter-spacing: -0.5px; }
@@ -64,6 +72,7 @@
 
         .feed { 
             height: 100%; overflow-y: scroll; 
+            /* Top padding remains to account for header height */
             padding: calc(env(safe-area-inset-top) + 180px) 16px calc(env(safe-area-inset-bottom) + 60px); 
             -webkit-overflow-scrolling: touch; 
             scrollbar-width: none;
@@ -117,10 +126,7 @@
             transition: opacity 0.3s ease, visibility 0.3s;
         }
         
-        #item-preview.active { 
-            opacity: 1; 
-            visibility: visible; 
-        }
+        #item-preview.active { opacity: 1; visibility: visible; }
         
         .preview-content { 
             width: 100%; max-width: 270px; background: var(--card-bg);
@@ -130,15 +136,9 @@
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
         }
         
-        #item-preview.active .preview-content {
-            transform: scale(1) translateY(0);
-        }
+        #item-preview.active .preview-content { transform: scale(1) translateY(0); }
         
-        .preview-image { 
-            width: 100%; border-radius: 24px; margin-bottom: 20px; 
-            aspect-ratio: 3/4; object-fit: cover; cursor: pointer;
-            background: #8882; /* Placeholder background */
-        }
+        .preview-image { width: 100%; border-radius: 24px; margin-bottom: 20px; aspect-ratio: 3/4; object-fit: cover; }
 
         .btn-order-whatsapp {
             background: var(--accent-green); color: white; padding: 18px; border-radius: 20px;
@@ -150,7 +150,7 @@
             position: absolute; inset: 0; z-index: 4000;
             background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG');
             background-size: cover; background-position: center;
-            display: flex; flex-direction: column; justify-content: center; /* Centered content */
+            display: flex; flex-direction: column; justify-content: center;
             align-items: center;
             transition: opacity 0.5s ease;
         }
@@ -167,7 +167,7 @@
         <button style="background:white; color:black; padding:20px 70px; border-radius:40px; font-weight:800; border:none; cursor:pointer;" onclick="launchApp()">Enter Shop</button>
     </div>
 
-    <header>
+    <header id="mainHeader">
         <div class="logo-box">
             <h2>Enis Collection</h2>
             <span>Pamper Your Body</span>
@@ -178,18 +178,17 @@
         </div>
     </header>
 
-    <div class="feed">
+    <div class="feed" id="mainFeed">
         <div class="grid" id="productGrid"></div>
         
         <div class="about-section">
             <h4>About Enis</h4>
-            <p>Curated for the modern silhouette. We believe every piece should feel like a second skin while maintaining an air of timeless sophistication.</p>
+            <p>Curated for the modern silhouette. We believe every piece should feel like a second skin.</p>
             <div class="contact-hub">
                 <a href="tel:+233546527892" class="icon-circle"><i class="fas fa-phone"></i></a>
                 <a href="javascript:void(0)" class="icon-circle" onclick="copyAndEmail()"><i class="fas fa-envelope"></i></a>
                 <a href="https://www.tiktok.com/@eniscollection1" class="icon-circle"><i class="fab fa-tiktok"></i></a>
             </div>
-            <a href="https://www.tiktok.com/@eniscollection1" style="font-size:11px; font-weight:700; color:var(--text-soft); text-decoration:none; letter-spacing:2px;">@ENISCOLLECTION1</a>
         </div>
     </div>
 
@@ -220,6 +219,24 @@
         { name: "Refined Church Wear", price: 50, size: "10", image: "images/item10.jpg" }
     ];
 
+    // --- SCROLL BEHAVIOR LOGIC ---
+    const header = document.getElementById('mainHeader');
+    const feed = document.getElementById('mainFeed');
+    let lastScrollY = feed.scrollTop;
+
+    feed.addEventListener('scroll', () => {
+        const currentScrollY = feed.scrollTop;
+
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            // User is scrolling down - Hide Header
+            header.classList.add('header-hidden');
+        } else {
+            // User is scrolling up - Show Header
+            header.classList.remove('header-hidden');
+        }
+        lastScrollY = currentScrollY;
+    });
+
     function renderProducts(products) {
         document.getElementById('productGrid').innerHTML = products.map(item => `
             <div class="product-card" data-title="${item.name.toLowerCase()}">
@@ -239,27 +256,24 @@
     function launchApp() {
         document.getElementById('splash-screen').style.opacity = "0";
         setTimeout(() => document.getElementById('splash-screen').style.display = "none", 500);
+        
+        // Optional: Trigger Fullscreen to hide system bar (Requires user interaction)
+        // if (document.documentElement.requestFullscreen) {
+        //    document.documentElement.requestFullscreen();
+        // }
     }
 
     function openPreview(name, price, image, size) {
         const modal = document.getElementById('item-preview');
-        const previewImg = document.getElementById('preview-img');
-        
-        // Fix glitch: Clear source before loading new one
-        previewImg.src = "";
-        
-        previewImg.src = image;
+        document.getElementById('preview-img').src = image;
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `SIZE ${size} • GH₵ ${price}`;
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
         document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${msg}`;
-        
         modal.classList.add('active');
     }
 
-    function closePreview() { 
-        document.getElementById('item-preview').classList.remove('active'); 
-    }
+    function closePreview() { document.getElementById('item-preview').classList.remove('active'); }
 
     function filterShop() {
         let input = document.getElementById('shopSearch').value.toLowerCase();
@@ -271,7 +285,7 @@
 
     function copyAndEmail() {
         navigator.clipboard.writeText("sheilaenima@gmail.com");
-        alert("Email copied to clipboard!");
+        alert("Email copied!");
         window.location.href = "mailto:sheilaenima@gmail.com";
     }
 </script>
