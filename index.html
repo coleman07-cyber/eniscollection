@@ -14,7 +14,7 @@
             --text-main: #121212;
             --text-soft: #8E8E93;
             --accent-gold: #C5A02E;
-            --glass: rgba(255, 255, 255, 0.9);
+            --glass: rgba(255, 255, 255, 0.95);
             --border: rgba(0, 0, 0, 0.05);
             --shadow: 0 10px 40px rgba(0,0,0,0.04);
             --accent-green: #25D366;
@@ -54,12 +54,18 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* UPDATED HEADER: Now Sticky with Transition */
+        /* FIXED HEADER: Now floats and transforms relative to center */
         header {
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 420px;
             padding: calc(env(safe-area-inset-top) + 15px) 20px 15px;
-            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            background: var(--glass); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 0.5px solid var(--border); 
             z-index: 100;
             transition: transform 0.5s var(--ease-fluid);
@@ -82,13 +88,14 @@
         }
         .filter-tag.active { background: var(--text-main); color: var(--bg); transform: scale(1.05); }
 
-        /* FLUID FEED */
+        /* FEED: Padding-top ensures the first items aren't hidden behind the fixed header */
         .feed { 
-            flex: 1; overflow-y: auto; overflow-x: hidden;
-            padding: 20px 16px 60px; 
+            flex: 1; 
+            overflow-y: auto; 
+            overflow-x: hidden;
+            padding: 145px 16px 60px; /* Space for the fixed header */
             -webkit-overflow-scrolling: touch; 
             scroll-behavior: smooth;
-            margin-top: 0; /* Header is sticky, no extra margin needed */
         }
         .feed::-webkit-scrollbar { display: none; }
 
@@ -240,7 +247,7 @@
         { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
     ];
 
-    let lastScrollTop = 0; // Tracks last scroll position
+    let lastScrollTop = 0;
 
     function renderProducts(filter = 'All') {
         const grid = document.getElementById('productGrid');
@@ -269,17 +276,16 @@
         const cards = document.querySelectorAll('.product-card');
         const triggerBottom = window.innerHeight * 0.9;
         
-        // --- HEADER HIDE/SHOW LOGIC ---
-        if (currentScroll > lastScrollTop && currentScroll > 100) {
-            // Downscroll - Hide
-            header.style.transform = "translateY(-100%)";
+        // --- HEADER HIDE/SHOW ---
+        // We use translate(-50%, ...) to keep it centered on screen
+        if (currentScroll > lastScrollTop && currentScroll > 80) {
+            header.style.transform = "translate(-50%, -100%)";
         } else {
-            // Upscroll - Show
-            header.style.transform = "translateY(0)";
+            header.style.transform = "translate(-50%, 0)";
         }
         lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
 
-        // --- CARD VISIBILITY LOGIC ---
+        // --- CARD VISIBILITY ---
         cards.forEach(card => {
             const cardTop = card.getBoundingClientRect().top;
             if(cardTop < triggerBottom) {
