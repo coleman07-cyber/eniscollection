@@ -9,57 +9,62 @@
     
     <style>
         :root {
-            /* LUXURY NUDE & SOFT PINK PALETTE */
-            --bg: #F9F5F2;           /* Soft Nude */
+            /* LIGHT MODE: SILK NUDE */
+            --bg: #F9F5F2;
             --card-bg: #FFFFFF;
-            --text-main: #2D2424;    /* Deep Espresso for better readability */
-            --text-soft: #A6908A;    /* Muted Rose-Taupe */
-            --accent-pink: #D4A3A3;  /* Dusty Rose */
-            --accent-gold: #B89066;  /* Muted Gold */
-            --glass: rgba(249, 245, 242, 0.9);
-            --border: rgba(212, 163, 163, 0.15);
-            --shadow: 0 12px 30px rgba(166, 144, 138, 0.1);
-            --accent-green: #6B8E23; /* Olive Green - looks more luxury with Nude than bright green */
-            --ease-fluid: cubic-bezier(0.23, 1, 0.32, 1);
+            --header-bg: rgba(249, 245, 242, 0.9);
+            --text-main: #2D2424;
+            --text-soft: #8E7B77;
+            --accent-pink: #D4A3A3;
+            --border: rgba(212, 163, 163, 0.2);
+            --shadow: 0 10px 30px rgba(166, 144, 138, 0.15);
+            --tag-bg: #2D2424;
+            --tag-text: #FFFFFF;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg: #1A1616;
-                --card-bg: #252121;
+                /* DARK MODE: MIDNIGHT ROSE */
+                --bg: #0F0E0E;
+                --card-bg: #1A1818;
+                --header-bg: rgba(15, 14, 14, 0.9);
                 --text-main: #F2EBE9;
                 --text-soft: #A6908A;
-                --glass: rgba(26, 22, 22, 0.95);
-                --border: rgba(255, 255, 255, 0.05);
+                --accent-pink: #E2B4B4; /* Brighter pink for dark backgrounds */
+                --border: rgba(255, 255, 255, 0.08);
+                --shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+                --tag-bg: #E2B4B4;
+                --tag-text: #0F0E0E;
             }
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { background: var(--bg); height: 100vh; overflow: hidden; position: fixed; width: 100%; }
+        body { background: var(--bg); color: var(--text-main); height: 100vh; overflow: hidden; position: fixed; width: 100%; transition: background 0.3s ease; }
 
         .app-shell {
             width: 100%; max-width: 420px; height: 100vh; margin: 0 auto;
             background: var(--bg); position: relative; display: flex; flex-direction: column;
         }
 
+        /* SPLASH SCREEN */
         #splash-screen {
             position: absolute; inset: 0; z-index: 9999;
-            background: linear-gradient(rgba(212, 163, 163, 0.3), rgba(45, 36, 36, 0.8)), url('images/Splash-Dress.PNG') center/cover;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('images/Splash-Dress.PNG') center/cover;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: all 0.8s var(--ease-fluid);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
         #splash-screen.hidden { opacity: 0; visibility: hidden; transform: scale(1.1); }
 
         #shop-content { display: none; flex-direction: column; height: 100%; }
-        #shop-content.active { display: flex; animation: fadeIn 0.8s var(--ease-fluid); }
+        #shop-content.active { display: flex; animation: fadeIn 0.6s ease-out; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         header {
-            padding: calc(env(safe-area-inset-top) + 15px) 20px 15px;
-            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 0.5px solid var(--border); z-index: 100;
+            padding: calc(env(safe-area-inset-top) + 15px) 20px 10px;
+            background: var(--header-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); z-index: 100;
         }
 
         .logo-box h2 { font-size: 19px; font-weight: 700; text-align: center; color: var(--text-main); text-transform: uppercase; letter-spacing: 4px;}
@@ -72,11 +77,11 @@
         .catalog-bar::-webkit-scrollbar { display: none; }
         
         .filter-tag {
-            padding: 8px 18px; background: #FFF; border: 0.5px solid var(--border); border-radius: 40px;
+            padding: 8px 18px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 40px;
             font-size: 10px; font-weight: 700; color: var(--text-soft); white-space: nowrap; 
-            transition: 0.4s var(--ease-fluid); text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
         }
-        .filter-tag.active { background: var(--accent-pink); color: #FFF; border-color: var(--accent-pink); transform: scale(1.05); }
+        .filter-tag.active { background: var(--accent-pink); color: #FFF; border-color: var(--accent-pink); }
 
         .feed { 
             flex: 1; overflow-y: auto; overflow-x: hidden;
@@ -88,68 +93,58 @@
         
         .product-card { 
             background: var(--card-bg); border-radius: 24px; overflow: hidden; 
-            box-shadow: var(--shadow); border: 0.5px solid var(--border);
-            opacity: 0; transform: translateY(30px) scale(0.95); 
-            transition: all 0.7s var(--ease-fluid);
+            box-shadow: var(--shadow); border: 1px solid var(--border);
+            opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out;
         }
-        .product-card.visible { opacity: 1; transform: translateY(0) scale(1); }
+        .product-card.visible { opacity: 1; transform: translateY(0); }
 
         .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.3; overflow: hidden; }
         .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* THE NUDE PRICE TAG */
         .floating-tag {
             position: absolute; bottom: 12px; right: 12px;
-            background: var(--text-main); color: #FFF;
+            background: var(--tag-bg); color: var(--tag-text);
             padding: 5px 12px; border-radius: 12px; font-size: 11px;
-            font-weight: 700; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            z-index: 2;
+            font-weight: 800; z-index: 2;
         }
 
-        .p-details { padding: 14px 12px; background: #FFF; }
+        .p-details { padding: 14px 12px; }
         .p-name { font-size: 12px; font-weight: 600; color: var(--text-main); line-height: 1.4; }
         .p-size-tag { font-size: 9px; color: var(--accent-pink); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
 
         .about-modern {
             margin-top: 60px; padding: 60px 24px;
-            background: #FFF; border-radius: 40px 40px 0 0;
-            border-top: 0.5px solid var(--border); text-align: center;
+            background: var(--card-bg); border-radius: 40px 40px 0 0;
+            border-top: 1px solid var(--border); text-align: center;
         }
-        .about-modern h3 { font-size: 11px; letter-spacing: 3px; color: var(--accent-pink); text-transform: uppercase; margin-bottom: 15px; }
         
         .social-btn {
             width: 50px; height: 50px; border-radius: 50%;
             background: var(--bg); display: flex; align-items: center; justify-content: center;
-            color: var(--accent-pink); text-decoration: none; border: 0.5px solid var(--border);
-            transition: 0.4s var(--ease-fluid); font-size: 20px;
+            color: var(--accent-pink); border: 1px solid var(--border);
+            transition: 0.3s; font-size: 20px; text-decoration: none;
         }
-        .social-btn:active { transform: scale(0.9); background: var(--accent-pink); color: white; }
 
-        /* PREVIEW */
+        /* PREVIEW MODAL */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
-            background: rgba(45, 36, 36, 0.4); backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);
             display: none; align-items: center; justify-content: center; padding: 25px;
-            opacity: 0; transition: opacity 0.5s var(--ease-fluid);
+            opacity: 0; transition: opacity 0.4s ease;
         }
         #item-preview.active { display: flex; opacity: 1; }
 
         .preview-box { 
-            width: 100%; max-width: 350px; background: #FFF; 
-            padding: 10px; border-radius: 32px;
-            box-shadow: 0 30px 60px rgba(45, 36, 36, 0.2);
-            transform: translateY(40px) scale(0.9); transition: all 0.5s var(--ease-fluid);
+            width: 100%; max-width: 350px; background: var(--card-bg); 
+            padding: 10px; border-radius: 32px; border: 1px solid var(--border);
+            transform: translateY(20px); transition: 0.4s ease;
         }
-        #item-preview.active .preview-box { transform: translateY(0) scale(1); }
+        #item-preview.active .preview-box { transform: translateY(0); }
 
-        .preview-img-container { max-height: 55vh; border-radius: 24px; overflow: hidden; }
-        
         .btn-order {
-            background: var(--accent-pink); color: white; padding: 16px; border-radius: 20px;
+            background: #25D366; color: white; padding: 16px; border-radius: 20px;
             text-decoration: none; font-weight: 700; display: flex; align-items: center; 
             gap: 12px; font-size: 14px; justify-content: center; margin-top: 15px;
-            box-shadow: 0 10px 20px rgba(212, 163, 163, 0.3);
         }
     </style>
 </head>
@@ -159,9 +154,9 @@
     <div id="splash-screen">
         <div style="text-align:center; color:white; margin-bottom:40px;">
             <h1 style="font-weight: 700; font-size: 26px; letter-spacing: 5px;">ENIS</h1>
-            <p style="font-size:9px; letter-spacing:8px; color: var(--accent-pink); margin-top: 10px; font-weight:600;">PAMPER YOUR BODY</p>
+            <p style="font-size:9px; letter-spacing:8px; color: #D4A3A3; margin-top: 10px; font-weight:600;">PAMPER YOUR BODY</p>
         </div>
-        <button style="background:#fff; color:var(--text-main); padding:20px 60px; border-radius:40px; border:none; font-weight:700; font-size:12px; letter-spacing:2px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);" onclick="launchApp()">SHOP COLLECTION</button>
+        <button style="background:#fff; color:#000; padding:20px 60px; border-radius:40px; border:none; font-weight:700; font-size:12px; letter-spacing:2px;" onclick="launchApp()">SHOP COLLECTION</button>
     </div>
 
     <div id="shop-content">
@@ -182,33 +177,27 @@
             <div class="grid" id="productGrid"></div>
             
             <div class="about-modern">
-                <h3>The Enis Story</h3>
-                <p style="font-weight: 600; font-size: 17px; margin-top: 10px; color: var(--text-main);">Elegance in every thread.</p>
-                <p style="font-size: 13px; color: var(--text-soft); line-height: 1.8; margin: 15px auto; max-width: 280px;">
-                    Hand-selected pieces curated to empower the modern woman through comfort and timeless silhouettes.
-                </p>
-
-                <div class="social-row" style="display:flex; justify-content:center; gap:15px; margin: 30px 0;">
+                <h3 style="font-size: 11px; letter-spacing: 3px; color: var(--accent-pink); text-transform: uppercase;">The Enis Story</h3>
+                <p style="font-weight: 600; font-size: 17px; margin-top: 10px;">Elegance in every thread.</p>
+                
+                <div style="display:flex; justify-content:center; gap:15px; margin: 30px 0;">
                     <a href="tel:+233546527892" class="social-btn"><i class="fas fa-phone"></i></a>
                     <a href="https://wa.me/233546527892" class="social-btn"><i class="fab fa-whatsapp"></i></a>
                     <a href="https://www.tiktok.com/@eniscollection1" class="social-btn"><i class="fab fa-tiktok"></i></a>
                 </div>
-
-                <div style="margin-top: 40px; padding-top: 25px; border-top: 1px solid var(--border);">
-                    <p style="font-size: 8px; letter-spacing: 5px; color: var(--text-soft); text-transform: uppercase;">Accra • Established 2024</p>
-                </div>
+                <p style="font-size: 8px; letter-spacing: 5px; color: var(--text-soft); text-transform: uppercase;">Accra • Established 2024</p>
             </div>
         </div>
     </div>
 
     <div id="item-preview" onclick="closePreview()">
-        <div class="preview-box" id="previewBox" onclick="event.stopPropagation()">
-            <div class="preview-img-container">
-                <img id="preview-img" src="" style="width:100%; display:block;" onclick="closePreview()">
+        <div class="preview-box" onclick="event.stopPropagation()">
+            <div style="border-radius: 22px; overflow: hidden;">
+                <img id="preview-img" src="" style="width:100%; display:block;">
             </div>
             <div style="padding: 20px 10px;">
-                <span id="preview-tag" style="font-size: 18px; color: var(--text-main); font-weight: 800; display: block; margin-bottom: 5px;"></span>
-                <h2 id="preview-name" style="font-size: 15px; color: var(--text-soft); font-weight: 500; letter-spacing: 0.5px;"></h2>
+                <span id="preview-tag" style="font-size: 18px; font-weight: 800; display: block; margin-bottom: 5px;"></span>
+                <h2 id="preview-name" style="font-size: 15px; color: var(--text-soft); font-weight: 500;"></h2>
                 <a id="wa-btn" href="#" class="btn-order"><i class="fab fa-whatsapp"></i> ORDER VIA WHATSAPP</a>
             </div>
         </div>
@@ -233,7 +222,7 @@
         const grid = document.getElementById('productGrid');
         const filtered = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
         
-        grid.innerHTML = filtered.map((item, idx) => `
+        grid.innerHTML = filtered.map(item => `
             <div class="product-card">
                 <div class="p-image-wrap" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
                     <img src="${item.image}" onerror="this.src='https://via.placeholder.com/400x520?text=ENIS'">
@@ -245,19 +234,12 @@
                 </div>
             </div>
         `).join('');
-
-        handleScroll();
+        setTimeout(handleScroll, 100);
     }
 
     function handleScroll() {
-        const cards = document.querySelectorAll('.product-card');
-        const triggerBottom = window.innerHeight * 0.95;
-        
-        cards.forEach(card => {
-            const cardTop = card.getBoundingClientRect().top;
-            if(cardTop < triggerBottom) {
-                card.classList.add('visible');
-            }
+        document.querySelectorAll('.product-card').forEach(card => {
+            if(card.getBoundingClientRect().top < window.innerHeight * 0.95) card.classList.add('visible');
         });
     }
 
@@ -269,22 +251,19 @@
 
     function openPreview(name, price, image, size) {
         const modal = document.getElementById('item-preview');
-        const pImg = document.getElementById('preview-img');
-        pImg.src = image;
-        pImg.onload = () => {
-            document.getElementById('preview-name').innerText = name;
-            document.getElementById('preview-tag').innerText = `₵${price}`;
-            const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
-            document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
-            modal.style.display = 'flex';
-            setTimeout(() => modal.classList.add('active'), 10);
-        };
+        document.getElementById('preview-img').src = image;
+        document.getElementById('preview-name').innerText = name;
+        document.getElementById('preview-tag').innerText = `₵${price}`;
+        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
+        document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('active'), 10);
     }
 
     function closePreview() { 
         const modal = document.getElementById('item-preview');
         modal.classList.remove('active');
-        setTimeout(() => modal.style.display = 'none', 500);
+        setTimeout(() => modal.style.display = 'none', 400);
     }
 
     function filterItems(cat, el) {
