@@ -15,7 +15,7 @@
             --text-soft: #A1A1A6;
             --accent-gold: #D4AF37; 
             --accent-orange: #FF8C00;
-            --orange-glow: 0 0 20px rgba(255, 140, 0, 0.5);
+            --orange-glow: 0 0 20px rgba(255, 140, 0, 0.6);
             --gold-gradient: linear-gradient(135deg, #D4AF37 0%, #F4D03F 100%);
             --border: rgba(255, 255, 255, 0.1);
             --accent-green: #25D366;
@@ -38,25 +38,48 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             transition: all 0.6s var(--ease-fluid);
             text-align: center;
+            padding: 20px;
         }
         #splash-screen.hidden { opacity: 0; visibility: hidden; transform: scale(1.1); }
         
-        .splash-text h1 { font-size: 28px; font-weight: 700; letter-spacing: 4px; margin-bottom: 8px; }
-        .splash-text p { font-size: 11px; letter-spacing: 6px; color: var(--accent-gold); margin-bottom: 35px; font-weight: 600; }
+        .splash-text h1 { 
+            font-size: 28px; 
+            font-weight: 700; 
+            letter-spacing: 2px; 
+            margin-bottom: 8px; 
+            text-transform: uppercase;
+            color: white;
+        }
+        .splash-text p { 
+            font-size: 11px; 
+            letter-spacing: 5px; 
+            color: var(--accent-gold); 
+            margin-bottom: 35px; 
+            font-weight: 600; 
+            text-transform: uppercase;
+        }
 
         .btn-launch {
-            background: var(--accent-orange); color: white; padding: 18px 50px;
-            border-radius: 50px; border: none; font-weight: 800; font-size: 13px;
-            box-shadow: var(--orange-glow); cursor: pointer; letter-spacing: 2px;
-            text-transform: uppercase; transition: 0.3s;
+            background: var(--accent-orange); 
+            color: white; 
+            padding: 18px 55px;
+            border-radius: 50px; 
+            border: none; 
+            font-weight: 800; 
+            font-size: 13px;
+            box-shadow: var(--orange-glow); 
+            cursor: pointer; 
+            letter-spacing: 2px;
+            text-transform: uppercase; 
+            transition: 0.3s;
         }
-        .btn-launch:active { transform: scale(0.95); opacity: 0.8; }
+        .btn-launch:active { transform: scale(0.95); opacity: 0.9; }
 
-        /* HEADER & CATALOGUE */
+        /* HEADER & MODERN CATALOGUE */
         #shop-content { display: none; flex-direction: column; height: 100%; }
         #shop-content.active { display: flex; }
 
-        header { padding: calc(env(safe-area-inset-top) + 15px) 0 10px; border-bottom: 1px solid var(--border); }
+        header { padding: calc(env(safe-area-inset-top) + 15px) 0 10px; }
         .logo-box h2 { font-size: 18px; font-weight: 800; text-align: center; text-transform: uppercase; letter-spacing: 4px;}
         .logo-box span { font-size: 8px; color: var(--accent-gold); letter-spacing: 5px; display: block; text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 700; }
 
@@ -64,11 +87,18 @@
         .catalog-bar::-webkit-scrollbar { display: none; }
         
         .filter-tag {
-            padding: 10px 22px; background: #1a1a1a; border-radius: 15px;
+            padding: 10px 22px; 
+            background: #111; 
+            border-radius: 12px; /* Nice round radius */
             font-size: 11px; font-weight: 700; color: var(--text-soft); white-space: nowrap; 
-            transition: 0.3s; text-transform: uppercase; border: 1px solid var(--border);
+            transition: 0.3s; text-transform: uppercase; 
+            border: 1px solid var(--border);
         }
-        .filter-tag.active { background: #fff; color: #000; border-color: #fff; }
+        .filter-tag.active { 
+            background: #fff; 
+            color: #000; 
+            border-color: #fff; 
+        }
 
         /* PRODUCT FEED */
         .feed { flex: 1; overflow-y: auto; padding-bottom: 40px; }
@@ -77,7 +107,7 @@
         
         .product-card { 
             background: var(--card-bg); border-radius: 24px; overflow: hidden;
-            border: 1px solid var(--border); transition: 0.3s;
+            border: 1px solid var(--border);
         }
         .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.3; overflow: hidden; }
         .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
@@ -90,20 +120,26 @@
         .p-details { padding: 12px; } 
         .p-name { font-size: 12px; font-weight: 600; line-height: 1.4; color: #fff; }
 
-        /* ABOUT SECTION */
+        /* ORIGINAL ABOUT SECTION */
         .about-modern {
-            margin: 40px 15px; padding: 40px 20px;
-            background: linear-gradient(180deg, #000 0%, #111 100%);
-            border-top: 1px solid var(--border); text-align: center;
+            margin: 40px 15px 30px;
+            padding: 50px 25px;
+            background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.05) 100%);
+            border-top: 1px solid var(--border);
+            text-align: center;
+            position: relative;
         }
-        .headline { font-size: 20px; font-weight: 800; margin-bottom: 12px; }
-        .subtext { font-size: 13px; color: var(--text-soft); line-height: 1.6; margin-bottom: 25px; }
-        
+        .about-modern::before {
+            content: ''; position: absolute; top: -1px; left: 50%;
+            transform: translateX(-50%); width: 40px; height: 1px;
+            background: var(--gold-gradient);
+        }
+        .headline { font-size: 22px; font-weight: 800; color: #FFF; margin: 15px 0; letter-spacing: -0.5px; line-height: 1.2; }
+        .subtext { font-size: 14px; color: var(--text-soft); line-height: 1.8; margin-bottom: 30px; padding: 0 10px; }
         .social-row { display: flex; justify-content: center; gap: 20px; }
-        .social-btn { color: #fff; font-size: 20px; transition: 0.2s; }
-        .social-btn:active { color: var(--accent-gold); }
+        .social-btn { color: #fff; font-size: 22px; text-decoration: none; }
 
-        /* INSTANT PREVIEW */
+        /* INSTANT PREVIEW: NO DELAYS */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
             background: rgba(0,0,0,0.95); display: none;
@@ -112,13 +148,13 @@
         #item-preview.active { display: flex; }
         
         .preview-box { 
-            width: 290px; background: #000; border-radius: 35px;
+            width: 300px; background: #000; border-radius: 35px;
             padding: 10px; border: 1px solid var(--border);
-            transform: scale(0.9); transition: 0.2s var(--ease-fluid);
+            transform: scale(0.95); transition: 0.15s var(--ease-fluid);
         }
         #item-preview.active .preview-box { transform: scale(1); }
         
-        .preview-img-container { border-radius: 28px; overflow: hidden; height: 380px; position: relative; }
+        .preview-img-container { border-radius: 28px; overflow: hidden; height: 380px; }
         .preview-image { width: 100%; height: 100%; object-fit: cover; }
         .preview-content { padding: 15px 5px; text-align: center; }
 
@@ -171,7 +207,6 @@
         <div class="preview-box" onclick="event.stopPropagation()">
             <div class="preview-img-container">
                 <img id="preview-img" src="" class="preview-image">
-                <div id="preview-tag" class="floating-tag"></div>
             </div>
             <div class="preview-content">
                 <span id="preview-size" style="font-size: 10px; color: var(--accent-gold); font-weight: 800; text-transform: uppercase;"></span>
@@ -218,15 +253,13 @@
         renderProducts();
     }
 
-    // INSTANT PREVIEW: NO DELAYS
+    // INSTANT PREVIEW
     function openPreview(name, price, image, size) {
         const modal = document.getElementById('item-preview');
-        
         document.getElementById('preview-img').src = image;
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size}`;
-        document.getElementById('preview-tag').innerText = `₵${price}`;
-        document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=I want to order: ${name}`;
+        document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=I'd like to order: ${name}`;
 
         modal.style.display = 'flex';
         modal.classList.add('active');
