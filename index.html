@@ -14,7 +14,8 @@
             --text-main: #121212;
             --text-soft: #8E8E93;
             --accent-gold: #C5A02E;
-            --glass: rgba(255, 255, 255, 0.95);
+            /* Light Mode Glass: High transparency + High blur */
+            --glass: rgba(253, 253, 253, 0.75); 
             --border: rgba(0, 0, 0, 0.05);
             --shadow: 0 10px 40px rgba(0,0,0,0.04);
             --accent-green: #25D366;
@@ -27,8 +28,9 @@
                 --card-bg: #111;
                 --text-main: #FFF;
                 --text-soft: #A1A1A6;
-                --glass: rgba(10, 10, 10, 0.95);
-                --border: rgba(255, 255, 255, 0.08);
+                /* Dark Mode Glass: Deep transparency + High blur */
+                --glass: rgba(0, 0, 0, 0.7); 
+                --border: rgba(255, 255, 255, 0.1);
             }
         }
 
@@ -49,27 +51,22 @@
         }
         #splash-screen.hidden { opacity: 0; visibility: hidden; transform: scale(1.1); }
 
-        #shop-content { display: none; flex-direction: column; height: 100%; position: relative; }
+        #shop-content { display: none; flex-direction: column; height: 100%; }
         #shop-content.active { display: flex; animation: fadeIn 0.8s var(--ease-fluid); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* FIXED HEADER: Now floats and transforms relative to center */
+        /* GLASSY STICKY HEADER */
         header {
-            position: fixed;
+            position: sticky;
             top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 420px;
             padding: calc(env(safe-area-inset-top) + 15px) 20px 15px;
             background: var(--glass); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
+            /* This creates the "see-through blur" effect */
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
             border-bottom: 0.5px solid var(--border); 
             z-index: 100;
-            transition: transform 0.5s var(--ease-fluid);
-            will-change: transform;
         }
 
         .logo-box h2 { font-size: 18px; font-weight: 800; text-align: center; color: var(--text-main); text-transform: uppercase; letter-spacing: 3px;}
@@ -82,18 +79,15 @@
         .catalog-bar::-webkit-scrollbar { display: none; }
         
         .filter-tag {
-            padding: 8px 18px; background: rgba(120, 120, 128, 0.08); border-radius: 40px;
+            padding: 8px 18px; background: rgba(120, 120, 128, 0.12); border-radius: 40px;
             font-size: 10px; font-weight: 700; color: var(--text-soft); white-space: nowrap; 
             transition: 0.4s var(--ease-fluid); text-transform: uppercase; letter-spacing: 1px;
         }
         .filter-tag.active { background: var(--text-main); color: var(--bg); transform: scale(1.05); }
 
-        /* FEED: Padding-top ensures the first items aren't hidden behind the fixed header */
         .feed { 
-            flex: 1; 
-            overflow-y: auto; 
-            overflow-x: hidden;
-            padding: 145px 16px 60px; /* Space for the fixed header */
+            flex: 1; overflow-y: auto; overflow-x: hidden;
+            padding: 20px 16px 60px; 
             -webkit-overflow-scrolling: touch; 
             scroll-behavior: smooth;
         }
@@ -106,41 +100,37 @@
             box-shadow: var(--shadow); border: 0.5px solid var(--border);
             opacity: 0; transform: translateY(30px) scale(0.95); 
             transition: all 0.7s var(--ease-fluid);
-            will-change: transform, opacity;
         }
         .product-card.visible { opacity: 1; transform: translateY(0) scale(1); }
-        .product-card:active { transform: scale(0.96); transition: 0.2s; }
 
         .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.3; overflow: hidden; }
-        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s var(--ease-fluid); }
+        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
         
         .floating-tag {
             position: absolute; bottom: 10px; right: 10px;
             background: var(--accent-gold); color: #000;
             padding: 4px 10px; border-radius: 10px; font-size: 11px;
-            font-weight: 900; border: 1px solid rgba(0,0,0,0.1);
-            box-shadow: 0 4px 10px rgba(197, 160, 46, 0.3);
-            z-index: 2;
+            font-weight: 900; z-index: 2;
         }
 
         .p-details { padding: 12px 10px; }
         .p-name { font-size: 12px; font-weight: 600; color: var(--text-main); line-height: 1.3; }
 
+        /* FOOTER AREA */
         .about-modern {
             margin-top: 60px; padding: 60px 20px 40px;
             background: var(--card-bg); border-radius: 40px 40px 0 0;
             border-top: 1px solid var(--border); text-align: center;
         }
-        .about-modern h3 { font-size: 10px; letter-spacing: 4px; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 10px; }
-        
         .social-row { display: flex; justify-content: center; gap: 15px; margin: 25px 0; }
         .social-btn {
             width: 48px; height: 48px; border-radius: 16px;
             background: var(--bg); display: flex; align-items: center; justify-content: center;
             color: var(--text-main); text-decoration: none; border: 0.5px solid var(--border);
-            transition: 0.4s var(--ease-fluid); font-size: 18px;
+            font-size: 18px;
         }
 
+        /* PREVIEW MODAL */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
             background: rgba(0,0,0,0.8); backdrop-filter: blur(15px);
@@ -148,22 +138,10 @@
             opacity: 0; transition: opacity 0.5s var(--ease-fluid);
         }
         #item-preview.active { display: flex; opacity: 1; }
-
-        .preview-box { 
-            width: fit-content; max-width: 85%; background: var(--card-bg); 
-            padding: 8px; border-radius: 28px;
-            transform: translateY(40px) scale(0.9); transition: all 0.5s var(--ease-fluid);
-        }
-        #item-preview.active .preview-box { transform: translateY(0) scale(1); }
-
+        .preview-box { width: fit-content; max-width: 85%; background: var(--card-bg); padding: 8px; border-radius: 28px; }
         .preview-img-container { max-height: 50vh; border-radius: 22px; overflow: hidden; background: #000; }
         .preview-image { display: block; max-width: 100%; max-height: 50vh; object-fit: contain; }
-        
-        .btn-order {
-            background: var(--accent-green); color: white; padding: 14px; border-radius: 18px;
-            text-decoration: none; font-weight: 700; display: flex; align-items: center; 
-            gap: 10px; font-size: 14px; justify-content: center; margin-top: 15px;
-        }
+        .btn-order { background: var(--accent-green); color: white; padding: 14px; border-radius: 18px; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 10px; justify-content: center; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -195,24 +173,12 @@
             <div class="grid" id="productGrid"></div>
             
             <div class="about-modern">
-                <div>
-                    <h3>Our Heritage</h3>
-                    <p style="font-weight: 600; font-size: 16px; margin-top: 10px; color: var(--text-main);">Curating silhouettes for the modern woman.</p>
-                    <p style="font-size: 13px; color: var(--text-soft); line-height: 1.8; margin-top: 10px; max-width: 280px; margin-left: auto; margin-right: auto;">
-                        Hand-selected pieces designed to ensure luxury, comfort, and an unmistakable aura of sophistication.
-                    </p>
-                </div>
-
+                <h3>Our Heritage</h3>
+                <p style="font-weight: 600; font-size: 16px; margin-top: 10px; color: var(--text-main);">Curating silhouettes for the modern woman.</p>
                 <div class="social-row">
                     <a href="tel:+233546527892" class="social-btn"><i class="fas fa-phone"></i></a>
                     <a href="https://wa.me/233546527892" class="social-btn"><i class="fab fa-whatsapp"></i></a>
                     <a href="https://www.tiktok.com/@eniscollection1" class="social-btn"><i class="fab fa-tiktok"></i></a>
-                    <a href="mailto:sheilaenima@gmail.com" class="social-btn"><i class="fas fa-envelope"></i></a>
-                </div>
-
-                <div style="margin-top: 40px; padding-top: 20px; border-top: 0.5px solid var(--border);">
-                    <p style="font-size: 8px; letter-spacing: 5px; opacity: 0.5; text-transform: uppercase;">Accra, Ghana • Est. 2024</p>
-                    <p style="font-size: 7px; letter-spacing: 2px; color: var(--accent-gold); margin-top: 8px; font-weight: 700; text-transform: uppercase;">Crafted for Excellence</p>
                 </div>
             </div>
         </div>
@@ -225,7 +191,7 @@
                 <div id="preview-tag" class="floating-tag"></div>
             </div>
             <div style="padding: 15px 10px;">
-                <span id="preview-size" style="font-size: 10px; color: var(--text-soft); font-weight: 800; display: block; margin-bottom: 5px;"></span>
+                <span id="preview-size" style="font-size: 10px; color: var(--text-soft); font-weight: 800; display: block; mb: 5px;"></span>
                 <h2 id="preview-name" style="font-size: 16px; color: var(--text-main); font-weight: 700;"></h2>
                 <a id="wa-btn" href="#" class="btn-order"><i class="fab fa-whatsapp"></i> INSTANT ORDER</a>
             </div>
@@ -247,8 +213,6 @@
         { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
     ];
 
-    let lastScrollTop = 0;
-
     function renderProducts(filter = 'All') {
         const grid = document.getElementById('productGrid');
         const filtered = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
@@ -265,32 +229,15 @@
                 </div>
             </div>
         `).join('');
-
         handleScroll(); 
     }
 
     function handleScroll() {
-        const feed = document.getElementById('mainFeed');
-        const header = document.getElementById('mainHeader');
-        const currentScroll = feed.scrollTop;
         const cards = document.querySelectorAll('.product-card');
         const triggerBottom = window.innerHeight * 0.9;
-        
-        // --- HEADER HIDE/SHOW ---
-        // We use translate(-50%, ...) to keep it centered on screen
-        if (currentScroll > lastScrollTop && currentScroll > 80) {
-            header.style.transform = "translate(-50%, -100%)";
-        } else {
-            header.style.transform = "translate(-50%, 0)";
-        }
-        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-
-        // --- CARD VISIBILITY ---
         cards.forEach(card => {
             const cardTop = card.getBoundingClientRect().top;
-            if(cardTop < triggerBottom) {
-                card.classList.add('visible');
-            }
+            if(cardTop < triggerBottom) card.classList.add('visible');
         });
     }
 
