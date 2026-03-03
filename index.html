@@ -34,10 +34,19 @@
             }
         }
 
+        /* 1. REMOVE SCROLLBAR AT THE CORNER */
+        html, body { 
+            background: var(--bg); 
+            min-height: 100vh; 
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+            overflow-x: hidden;
+        }
+        body::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
-        body.modal-open { overflow: hidden; height: 100vh; }
+        body.modal-open { overflow: hidden !important; height: 100vh; position: fixed; width: 100%; }
 
         /* SPLASH SCREEN */
         #splash-screen {
@@ -58,6 +67,7 @@
             backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%);
             z-index: 1000; border-bottom: 0.5px solid var(--border);
             transition: transform 0.4s ease;
+            will-change: transform;
         }
         .header-hidden { transform: translateY(-100%); }
 
@@ -71,6 +81,7 @@
         .product-card { 
             background: var(--card-bg); border-radius: 20px; overflow: hidden; 
             box-shadow: var(--shadow); border: 0.5px solid var(--border);
+            cursor: pointer;
         }
         .p-image { width: 100%; aspect-ratio: 1 / 1.35; overflow: hidden; background: #8881; }
         .p-image img { width: 100%; height: 100%; object-fit: cover; }
@@ -79,43 +90,44 @@
         .p-name { font-size: 13px; font-weight: 600; line-height: 1.2; height: 32px; overflow: hidden; color: var(--text-main); }
         .price { font-size: 15px; font-weight: 700; margin-top: 4px; color: var(--text-main); }
 
-        /* REFINED & REDUCED PREVIEW */
+        /* ANTI-GLITCH PREVIEW */
         #item-preview {
             position: fixed; inset: 0; 
             background: rgba(0,0,0,0.7); 
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             z-index: 11000; 
             display: none; align-items: center; justify-content: center; 
-            opacity: 0; transition: opacity 0.2s ease-out;
-            will-change: opacity;
+            opacity: 0; transition: opacity 0.2s ease-in-out;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
         #item-preview.active { display: flex; opacity: 1; }
         
         .preview-content { 
-            width: 70%; /* Reduced size */
-            max-width: 280px; 
+            width: 72%; 
+            max-width: 290px; 
             background: var(--card-bg); padding: 8px; 
-            border-radius: 24px; text-align: center; 
-            transform: scale(0.95) translateZ(0); 
-            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            will-change: transform;
+            border-radius: 26px; text-align: center; 
+            transform: scale(0.9) translateZ(0); 
+            transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
         #item-preview.active .preview-content { transform: scale(1) translateZ(0); }
         
         .preview-image { 
-            width: 100%; border-radius: 18px; 
-            max-height: 50vh; object-fit: cover;
+            width: 100%; border-radius: 20px; 
+            max-height: 52vh; object-fit: cover;
             margin-bottom: 12px; display: block;
+            pointer-events: none; /* Prevents long-press drag glitches */
         }
 
         #preview-name { 
-            font-size: 14px; font-weight: 800; text-transform: uppercase; 
+            font-size: 15px; font-weight: 800; text-transform: uppercase; 
             letter-spacing: 1.5px; margin-bottom: 12px; color: var(--text-main);
         }
 
         .btn-order-whatsapp {
-            background: var(--accent-green); color: white; padding: 14px; border-radius: 14px;
+            background: var(--accent-green); color: white; padding: 15px; border-radius: 16px;
             text-decoration: none; font-weight: 800; display: flex; align-items: center; 
             gap: 8px; font-size: 13px; width: 100%; justify-content: center;
         }
@@ -125,13 +137,6 @@
             background: var(--card-bg); border-radius: 30px; 
             padding: 40px 24px; text-align: center;
             border: 0.5px solid var(--border); box-shadow: var(--shadow);
-        }
-        .contact-hub { display: flex; justify-content: center; gap: 20px; margin-top: 25px;}
-        .icon-circle {
-            width: 45px; height: 45px; border-radius: 50%;
-            background: rgba(120, 120, 128, 0.1); 
-            display: flex; align-items: center; justify-content: center;
-            text-decoration: none; color: var(--text-main);
         }
     </style>
 </head>
@@ -143,7 +148,7 @@
             <h1 style="font-weight: 700; letter-spacing: 2px; font-size: 30px; margin-top: 5px;">ENIS COLLECTION</h1>
             <p style="font-size:9px; letter-spacing:6px; opacity: 0.6; margin-top: 15px;">PAMPER YOUR BODY</p>
         </div>
-        <button style="background:white; color:black; padding:20px 60px; border-radius:50px; font-weight:900; border:none;" onclick="launchApp()">ENTER SHOP</button>
+        <button style="background:white; color:black; padding:20px 60px; border-radius:50px; font-weight:900; border:none; cursor:pointer;" onclick="launchApp()">ENTER SHOP</button>
     </div>
 
     <header id="mainHeader">
@@ -155,32 +160,35 @@
 
     <div class="content">
         <div class="grid" id="productGrid"></div>
-        
         <div class="about-section">
             <h4 style="font-size:10px; letter-spacing:5px; color:var(--text-soft); text-transform:uppercase;">About Enis</h4>
             <p style="font-size:14px; line-height:1.6; margin-top:15px; color:var(--text-main);">Curated for the modern silhouette. Every piece is selected to feel like a second skin.</p>
-            <div class="contact-hub">
-                <a href="tel:+233546527892" class="icon-circle"><i class="fas fa-phone"></i></a>
-                <a href="https://www.tiktok.com/@eniscollection1" class="icon-circle"><i class="fab fa-tiktok"></i></a>
-                <a href="mailto:sheilaenima@gmail.com" class="icon-circle"><i class="fas fa-envelope"></i></a>
+            <div style="display:flex; justify-content:center; gap:20px; margin-top:25px;">
+                <a href="tel:+233546527892" style="color:var(--text-main); font-size:18px;"><i class="fas fa-phone"></i></a>
+                <a href="https://www.tiktok.com/@eniscollection1" style="color:var(--text-main); font-size:18px;"><i class="fab fa-tiktok"></i></a>
+                <a href="mailto:sheilaenima@gmail.com" style="color:var(--text-main); font-size:18px;"><i class="fas fa-envelope"></i></a>
             </div>
         </div>
     </div>
 
     <div id="item-preview" onclick="closePreview()">
         <div class="preview-content" onclick="event.stopPropagation()">
-            <img id="preview-img" src="" class="preview-image" onclick="closePreview()">
+            <img id="preview-img" src="" class="preview-image">
             <div>
                 <span id="preview-size" style="font-size: 9px; color: var(--text-soft); font-weight: 800; display: block; margin-bottom: 4px;"></span>
                 <h2 id="preview-name"></h2>
                 <a id="whatsapp-order-btn" href="#" class="btn-order-whatsapp">
-                    <i class="fab fa-whatsapp"></i> ORDER NOW
+                    <i class="fab fa-whatsapp"></i> ORDER ON WHATSAPP
                 </a>
             </div>
         </div>
     </div>
 
 <script>
+    // 2. FORCE TOP ON REFRESH
+    if (history.scrollRestoration) { history.scrollRestoration = 'manual'; }
+    window.scrollTo(0, 0);
+
     const myProducts = [
         { name: "Thick Seamless Dress", price: 50, size: "10", image: "images/item1.jpg" },
         { name: "Plaited Skirts & Top", price: 50, size: "8/10", image: "images/item2.jpg" },
@@ -212,32 +220,36 @@
 
     function openPreview(name, price, image, size) {
         const modal = document.getElementById('item-preview');
-        document.getElementById('preview-img').src = image;
+        const img = document.getElementById('preview-img');
+        
+        // Load image first before showing modal to prevent "pop"
+        img.src = image;
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size} • GH₵ ${price}`;
-        document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${encodeURIComponent('Hi Enis! I want: ' + name)}`;
+        document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${encodeURIComponent('Hi Enis! I want to order: ' + name)}`;
         
         modal.style.display = 'flex';
         setTimeout(() => {
             modal.classList.add('active');
             document.body.classList.add('modal-open');
-        }, 10);
+        }, 30);
     }
 
     function closePreview() { 
         const modal = document.getElementById('item-preview');
         modal.classList.remove('active');
         document.body.classList.remove('modal-open');
-        setTimeout(() => { modal.style.display = 'none'; }, 200);
+        setTimeout(() => { modal.style.display = 'none'; }, 250);
     }
 
     let lastS = 0;
     window.addEventListener('scroll', () => {
         const h = document.getElementById('mainHeader');
-        if (window.scrollY > lastS && window.scrollY > 100) h.classList.add('header-hidden');
+        const cur = window.scrollY;
+        if (cur > lastS && cur > 120) h.classList.add('header-hidden');
         else h.classList.remove('header-hidden');
-        lastS = window.scrollY;
-    });
+        lastS = cur;
+    }, { passive: true });
 </script>
 </body>
 </html>
