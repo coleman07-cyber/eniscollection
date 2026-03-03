@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ENIS">
     <meta name="theme-color" content="#000000">
     
     <title>ENIS COLLECTION</title>
@@ -17,7 +19,7 @@
             --card-bg: #FFFFFF;
             --text-main: #1C1C1E;
             --text-soft: #8E8E93;
-            --glass: rgba(255, 255, 255, 0.85);
+            --glass: rgba(255, 255, 255, 0.9);
             --border: rgba(0, 0, 0, 0.05);
             --shadow: 0 4px 12px rgba(0,0,0,0.05);
             --accent-green: #25D366;
@@ -31,130 +33,140 @@
                 --card-bg: #1C1C1E;
                 --text-main: #FFFFFF;
                 --text-soft: #A1A1A6;
-                --glass: rgba(28, 28, 30, 0.95);
+                --glass: rgba(20, 20, 20, 0.95);
                 --border: rgba(255, 255, 255, 0.1);
                 --shadow: 0 8px 24px rgba(0,0,0,0.4);
             }
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
-        
-        body { background: #000; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
-
-        /* Prevent content flash */
-        .app-shell {
-            width: 100%; max-width: 420px; height: 100vh; margin: 0 auto;
-            background: var(--bg); position: relative; overflow: hidden;
+        /* Prevent all scrolling and flashing while loading */
+        html, body { 
+            background: #000; 
+            height: 100%; 
+            width: 100%; 
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden; 
+            position: fixed; 
         }
 
-        /* The Shop Content - hidden until Enter is clicked */
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        .app-shell {
+            width: 100%; 
+            max-width: 450px; 
+            height: 100vh; 
+            margin: 0 auto;
+            background: var(--bg); 
+            position: relative; 
+            overflow: hidden;
+        }
+
+        /* SPLASH SCREEN - Fixed to prevent glitches */
+        #splash-screen {
+            position: absolute; 
+            inset: 0; 
+            z-index: 9999;
+            background: #000;
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.95)), url('images/Splash-Dress.PNG');
+            background-size: cover; 
+            background-position: center;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center;
+            transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.5s ease;
+        }
+
+        /* SHOP CONTENT - Completely hidden from DOM rendering initially */
         #shop-content {
+            display: none; 
             opacity: 0;
-            transition: opacity 0.6s ease;
             height: 100%;
             width: 100%;
+            overflow: hidden;
+            background: var(--bg);
         }
 
         header {
             position: absolute; top: 0; width: 100%;
-            padding: calc(env(safe-area-inset-top) + 20px) 20px 20px;
+            /* Uses env() to respect iPhone notch area */
+            padding: calc(env(safe-area-inset-top) + 15px) 20px 15px;
             background: var(--glass); 
-            backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%);
             z-index: 1000; border-bottom: 0.5px solid var(--border);
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease;
         }
         .header-hidden { transform: translate3d(0, -100%, 0); }
 
-        .logo-box h2 { font-size: 22px; font-weight: 700; text-align: center; color: var(--text-main); letter-spacing: -0.5px; }
-        .logo-box span { font-size: 9px; color: var(--text-soft); letter-spacing: 4px; display: block; text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 600; }
+        .logo-box h2 { font-size: 24px; font-weight: 800; text-align: center; color: var(--text-main); letter-spacing: -0.5px; }
+        .logo-box span { font-size: 9px; color: var(--text-soft); letter-spacing: 5px; display: block; text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 700; }
 
         .feed { 
             height: 100%; overflow-y: scroll; 
-            padding: calc(env(safe-area-inset-top) + 120px) 16px calc(env(safe-area-inset-bottom) + 80px); 
+            /* Extra top padding for the notch-friendly header */
+            padding: calc(env(safe-area-inset-top) + 110px) 12px calc(env(safe-area-inset-bottom) + 100px); 
             -webkit-overflow-scrolling: touch; 
-            scrollbar-width: none;
         }
-        .feed::-webkit-scrollbar { display: none; }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         
         .product-card { 
-            background: var(--card-bg); border-radius: 20px; overflow: hidden; 
+            background: var(--card-bg); border-radius: 24px; overflow: hidden; 
             box-shadow: var(--shadow); border: 0.5px solid var(--border);
         }
 
-        .p-image { width: 100%; aspect-ratio: 3.5/4.5; overflow: hidden; cursor: pointer; background: #8881; }
-        .p-image img { width: 100%; height: 100%; object-fit: cover; }
+        .p-image { width: 100%; aspect-ratio: 1 / 1.4; overflow: hidden; cursor: pointer; background: #8881; }
+        .p-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .p-image:active img { transform: scale(1.05); }
         
-        .p-details { padding: 14px 12px; }
-        .size-tag { font-size: 10px; color: var(--text-soft); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; }
-        .p-name { font-size: 14px; font-weight: 600; color: var(--text-main); line-height: 1.2; }
-        .price { font-size: 16px; font-weight: 700; color: var(--text-main); margin-top: 6px; }
+        .p-details { padding: 12px; }
+        .size-tag { font-size: 9px; color: var(--text-soft); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.2; height: 32px; overflow: hidden; }
+        .price { font-size: 15px; font-weight: 700; color: var(--text-main); margin-top: 6px; }
 
-        .about-section { 
-            margin-top: 40px; padding: 40px 24px; 
-            background: var(--card-bg); border-radius: 30px; 
-            text-align: center; border: 0.5px solid var(--border);
-            box-shadow: var(--shadow);
-        }
-        .about-section h4 { font-size: 10px; letter-spacing: 5px; color: var(--text-soft); margin-bottom: 15px; text-transform: uppercase; }
-        .about-section p { font-size: 15px; color: var(--text-main); line-height: 1.6; margin-bottom: 30px; }
-        
-        .contact-hub { display: flex; justify-content: center; gap: 24px; margin-bottom: 35px; }
-        .icon-circle {
-            width: 54px; height: 54px; border-radius: 50%;
-            background: rgba(120, 120, 128, 0.1); 
-            display: flex; align-items: center; justify-content: center;
-            text-decoration: none; border: 1px solid var(--border);
-        }
-        .icon-circle i { font-size: 20px; color: var(--text-main); }
-
-        /* PREVIEW MODAL */
+        /* PREVIEW MODAL (The Dress Outlet Style) */
         #item-preview {
             position: absolute; inset: 0; 
-            background: rgba(0,0,0,0.8); 
+            background: rgba(0,0,0,0.85); 
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            z-index: 3000; display: flex; align-items: center; justify-content: center; 
+            z-index: 9000; display: flex; align-items: center; justify-content: center; 
             opacity: 0; visibility: hidden;
-            transition: all 0.2s ease-in-out;
+            transition: all 0.25s ease;
         }
         #item-preview.active { opacity: 1; visibility: visible; }
         
         .preview-content { 
             width: 75%; max-width: 300px; 
-            background: var(--card-bg); padding: 10px; 
+            background: var(--card-bg); padding: 8px; 
             border-radius: var(--radius-outer); text-align: center; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            transform: scale(0.9);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            transform: translateY(20px) scale(0.9);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        #item-preview.active .preview-content { transform: scale(1); }
+        #item-preview.active .preview-content { transform: translateY(0) scale(1); }
         
         .preview-image { 
             width: 100%; border-radius: var(--radius-inner); 
-            margin-bottom: 12px; aspect-ratio: 3 / 4.5; 
+            margin-bottom: 12px; aspect-ratio: 1 / 1.5; 
             object-fit: cover; display: block;
         }
 
         #preview-name { 
             font-size: 16px; font-weight: 800; color: var(--text-main);
-            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;
         }
 
         .btn-order-whatsapp {
-            background: var(--accent-green); color: white; padding: 14px; border-radius: 16px;
+            background: var(--accent-green); color: white; padding: 16px; border-radius: 18px;
             text-decoration: none; font-weight: 700; display: flex; align-items: center; 
             gap: 10px; font-size: 14px; width: 100%; justify-content: center;
         }
 
-        /* FIXED SPLASH SCREEN */
-        #splash-screen {
-            position: absolute; inset: 0; z-index: 4000;
-            background-color: #000; /* Solid background prevents flickering */
-            background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG');
-            background-size: cover; background-position: center;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        .about-section { 
+            margin-top: 40px; padding: 40px 24px; 
+            background: var(--card-bg); border-radius: 32px; 
+            text-align: center; border: 0.5px solid var(--border);
         }
     </style>
 </head>
@@ -162,11 +174,11 @@
 
 <div class="app-shell">
     <div id="splash-screen">
-        <div style="text-align:center; color:white; margin-bottom:40px;">
-            <h1 style="font-weight: 550; letter-spacing: 2px; font-size: 28px;">WELCOME TO ENIS COLLECTION</h1>
-            <p style="font-size:11px; letter-spacing:6px; opacity: 0.7; margin-top: 8px;">PAMPER YOUR BODY</p>
+        <div style="text-align:center; color:white; margin-bottom:40px; padding: 0 30px;">
+            <h1 style="font-weight: 550; letter-spacing: 2px; font-size: 32px; line-height: 1.1;">ENIS COLLECTION</h1>
+            <p style="font-size:10px; letter-spacing:7px; opacity: 0.8; margin-top: 12px; font-weight: 600;">PAMPER YOUR BODY</p>
         </div>
-        <button style="background:white; color:black; padding:20px 70px; border-radius:40px; font-weight:800; border:none; cursor:pointer;" onclick="launchApp()">Enter Shop</button>
+        <button id="enter-btn" style="background:white; color:black; padding:22px 80px; border-radius:50px; font-weight:900; border:none; cursor:pointer; font-size:15px; letter-spacing:1px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" onclick="launchApp()">ENTER SHOP</button>
     </div>
 
     <div id="shop-content">
@@ -181,14 +193,12 @@
             <div class="grid" id="productGrid"></div>
             
             <div class="about-section">
-                <h4>About Enis</h4>
-                <p>Curated for the modern silhouette. We believe every piece should feel like a second skin while maintaining an air of timeless sophistication.</p>
-                <div class="contact-hub">
-                    <a href="tel:+233546527892" class="icon-circle"><i class="fas fa-phone"></i></a>
-                    <a href="javascript:void(0)" class="icon-circle" onclick="copyAndEmail()"><i class="fas fa-envelope"></i></a>
-                    <a href="https://www.tiktok.com/@eniscollection1" class="icon-circle"><i class="fab fa-tiktok"></i></a>
+                <h4 style="font-size:10px; letter-spacing:5px; color:var(--text-soft); text-transform:uppercase; margin-bottom:15px;">About Enis</h4>
+                <p style="font-size:15px; color:var(--text-main); line-height:1.6; margin-bottom:30px;">Curated for the modern silhouette. Every piece is selected to feel like a second skin while maintaining timeless sophistication.</p>
+                <div style="display:flex; justify-content:center; gap:24px; margin-bottom:30px;">
+                    <a href="tel:+233546527892" style="width:50px; height:50px; background:rgba(120,120,128,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text-main); text-decoration:none;"><i class="fas fa-phone"></i></a>
+                    <a href="https://www.tiktok.com/@eniscollection1" style="width:50px; height:50px; background:rgba(120,120,128,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text-main); text-decoration:none;"><i class="fab fa-tiktok"></i></a>
                 </div>
-                <a href="https://www.tiktok.com/@eniscollection1" style="font-size:11px; font-weight:700; color:var(--text-soft); text-decoration:none; letter-spacing:2px;">@ENISCOLLECTION1</a>
             </div>
         </div>
     </div>
@@ -196,11 +206,11 @@
     <div id="item-preview" onclick="closePreview()">
         <div class="preview-content" onclick="event.stopPropagation()">
             <img id="preview-img" src="" class="preview-image" onclick="closePreview()">
-            <div class="preview-info-box">
-                <span id="preview-size" style="font-size: 9px; color: var(--text-soft); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block;"></span>
+            <div style="padding: 0 10px 10px;">
+                <span id="preview-size" style="font-size: 9px; color: var(--text-soft); font-weight: 800; text-transform: uppercase; margin-bottom: 6px; display: block;"></span>
                 <h2 id="preview-name"></h2>
                 <a id="whatsapp-order-btn" href="#" class="btn-order-whatsapp">
-                    <i class="fab fa-whatsapp"></i> Instant Order
+                    <i class="fab fa-whatsapp"></i> INSTANT ORDER
                 </a>
             </div>
         </div>
@@ -221,22 +231,8 @@
         { name: "Refined Church Wear", price: 50, size: "10", image: "images/item10.jpg" }
     ];
 
-    const feed = document.getElementById('mainFeed');
-    const header = document.getElementById('mainHeader');
-    let lastScroll = 0;
-
-    feed.addEventListener('scroll', () => {
-        const currentScroll = feed.scrollTop;
-        if (currentScroll > lastScroll && currentScroll > 60) {
-            header.classList.add('header-hidden');
-        } else {
-            header.classList.remove('header-hidden');
-        }
-        lastScroll = currentScroll;
-    });
-
-    function renderProducts(products) {
-        document.getElementById('productGrid').innerHTML = products.map(item => `
+    function renderProducts() {
+        document.getElementById('productGrid').innerHTML = myProducts.map(item => `
             <div class="product-card">
                 <div class="p-image" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
                     <img src="${item.image}" onerror="this.src='https://via.placeholder.com/400x520?text=ENIS'">
@@ -249,44 +245,55 @@
             </div>
         `).join('');
     }
-    renderProducts(myProducts);
+    renderProducts();
 
     function launchApp() {
         const splash = document.getElementById('splash-screen');
-        const content = document.getElementById('shop-content');
+        const shop = document.getElementById('shop-content');
         
-        splash.style.opacity = "0";
-        content.style.opacity = "1"; // Fade the shop in
+        // 1. Instantly show shop in background (hidden by splash)
+        shop.style.display = "block";
         
+        // 2. Animate splash screen lifting away (Native App feel)
+        setTimeout(() => {
+            splash.style.transform = "translateY(-100%)";
+            shop.style.opacity = "1";
+        }, 50);
+
+        // 3. Remove splash from DOM once animation finishes
         setTimeout(() => {
             splash.style.display = "none";
-        }, 600);
+            document.body.style.position = "static";
+            document.body.style.overflow = "auto";
+        }, 850);
     }
 
     function openPreview(name, price, image, size) {
-        const modal = document.getElementById('item-preview');
         const imgElement = document.getElementById('preview-img');
-        
         imgElement.src = image;
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size} • GH₵ ${price}`;
         
-        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order the ${name} (Size ${size})`);
+        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
         document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${msg}`;
         
-        modal.classList.add('active');
+        document.getElementById('item-preview').classList.add('active');
     }
 
     function closePreview() { 
-        document.getElementById('item-preview').classList.remove('active');
-        setTimeout(() => { document.getElementById('preview-img').src = ""; }, 200);
+        document.getElementById('item-preview').classList.remove('active'); 
     }
 
-    function copyAndEmail() {
-        navigator.clipboard.writeText("sheilaenima@gmail.com");
-        alert("Email copied!");
-        window.location.href = "mailto:sheilaenima@gmail.com";
-    }
+    // Auto-hide header logic
+    let lastScroll = 0;
+    const feed = document.getElementById('mainFeed');
+    const header = document.getElementById('mainHeader');
+    feed.addEventListener('scroll', () => {
+        const cur = feed.scrollTop;
+        if (cur > lastScroll && cur > 100) header.classList.add('header-hidden');
+        else header.classList.remove('header-hidden');
+        lastScroll = cur;
+    });
 </script>
 
 </body>
