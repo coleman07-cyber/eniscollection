@@ -18,8 +18,7 @@
             --border: rgba(0, 0, 0, 0.05);
             --shadow: 0 10px 40px rgba(0,0,0,0.04);
             --accent-green: #25D366;
-            /* Improved easing for snappier feel */
-            --ease-fluid: cubic-bezier(0.16, 1, 0.3, 1); 
+            --ease-fluid: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -94,7 +93,6 @@
             transition: opacity 0.5s ease, transform 0.5s var(--ease-fluid);
             will-change: transform, opacity;
         }
-        /* Reveal class for Intersection Observer */
         .product-card.reveal { opacity: 1; transform: translateY(0); }
         .product-card:active { transform: scale(0.97); transition: 0.2s; }
 
@@ -127,7 +125,7 @@
         }
         .social-btn:active { transform: scale(0.85); background: var(--accent-gold); color: #000; }
 
-        /* PREVIEW - Using Visibility for faster response */
+        /* PREVIEW SYSTEM */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
             background: rgba(0,0,0,0); backdrop-filter: blur(0px);
@@ -148,8 +146,13 @@
         }
         #item-preview.active .preview-box { transform: translateY(0) scale(1); opacity: 1; }
 
-        .preview-img-container { max-height: 50vh; border-radius: 22px; overflow: hidden; background: #000; }
-        .preview-image { display: block; max-width: 100%; max-height: 50vh; object-fit: contain; }
+        .preview-img-container { position: relative; max-height: 50vh; border-radius: 22px; overflow: hidden; background: #000; }
+        
+        /* Fixed image glitch with opacity transition */
+        .preview-image { 
+            display: block; max-width: 100%; max-height: 50vh; object-fit: contain; 
+            opacity: 0; transition: opacity 0.3s ease-in-out;
+        }
         
         .btn-order {
             background: var(--accent-green); color: white; padding: 14px; border-radius: 18px;
@@ -157,6 +160,7 @@
             gap: 10px; font-size: 14px; justify-content: center; margin-top: 15px;
             transition: transform 0.2s;
         }
+        .btn-order:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
@@ -240,7 +244,6 @@
         { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
     ];
 
-    // intersection observer for buttery smooth scroll reveals
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -267,7 +270,6 @@
             </div>
         `).join('');
 
-        // Observe new cards
         document.querySelectorAll('.product-card').forEach(card => revealObserver.observe(card));
     }
 
@@ -281,19 +283,33 @@
         const modal = document.getElementById('item-preview');
         const pImg = document.getElementById('preview-img');
         
-        // Populate content immediately to avoid "ghost" text
+        // Immediate reset to prevent glitching
+        pImg.style.opacity = '0';
+        
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size}`;
         document.getElementById('preview-tag').innerText = `₵${price}`;
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
         
+        // Load the new image and fade in
         pImg.src = image;
+        pImg.onload = () => { pImg.style.opacity = '1'; };
+        
         modal.classList.add('active');
     }
 
     function closePreview() { 
-        document.getElementById('item-preview').classList.remove('active');
+        const modal = document.getElementById('item-preview');
+        const pImg = document.getElementById('preview-img');
+        
+        modal.classList.remove('active');
+        
+        // Wait for slide-down animation to end before clearing src
+        setTimeout(() => {
+            pImg.src = '';
+            pImg.style.opacity = '0';
+        }, 400);
     }
 
     function filterItems(cat, el) {
