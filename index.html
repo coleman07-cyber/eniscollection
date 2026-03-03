@@ -114,7 +114,7 @@
         .p-details { padding: 12px; } 
         .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.3; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
-        /* ABOUT SECTION */
+        /* MODERNIZED ABOUT SECTION */
         .about-modern {
             margin: 50px 15px 30px;
             padding: 60px 25px;
@@ -140,7 +140,7 @@
         .social-btn:active { transform: scale(0.9); border-color: var(--accent-gold); color: var(--accent-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
         .establishment-note { margin-top: 50px; font-size: 9px; letter-spacing: 5px; text-transform: uppercase; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.8; }
 
-        /* REFINED SLIM PREVIEW */
+        /* REFINED SLIM PREVIEW (270px) */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
             background: rgba(0,0,0,0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -164,7 +164,7 @@
         .preview-img-container { 
             border-radius: 34px; 
             overflow: hidden; 
-            background: #f0f0f0; 
+            background: #1a1a1a; /* Dark background so no white screen */
             position: relative; 
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0; 
@@ -177,7 +177,8 @@
             object-fit: cover; 
             display: block;
             border-radius: 34px; 
-            opacity: 1; /* Instant appearance */
+            opacity: 0; /* Hidden until loaded */
+            transition: opacity 0.2s ease;
         }
         
         .preview-content { padding: 12px 10px 8px; text-align: center; flex: 1 1 auto; }
@@ -266,12 +267,6 @@
         { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
     ];
 
-    // Pre-load all images instantly for cache
-    myProducts.forEach(item => {
-        const img = new Image();
-        img.src = item.image;
-    });
-
     function renderProducts(filter = 'All') {
         const grid = document.getElementById('productGrid');
         const filtered = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
@@ -313,7 +308,10 @@
         const modal = document.getElementById('item-preview');
         const previewImg = document.getElementById('preview-img');
         
-        // Instant data swap
+        // Hide the image tag immediately so no white screen or old image shows
+        previewImg.style.opacity = '0';
+        
+        // Set content
         previewImg.src = image;
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size}`;
@@ -322,14 +320,17 @@
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
         
-        // Show modal instantly
         modal.style.display = 'flex';
+
+        // Check if image is already cached
+        if (previewImg.complete) {
+            previewImg.style.opacity = '1';
+        } else {
+            previewImg.onload = () => { previewImg.style.opacity = '1'; };
+        }
         
-        // Use double frame to ensure UI is ready for the "pop" animation
         requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                modal.classList.add('active');
-            });
+            setTimeout(() => modal.classList.add('active'), 10);
         });
     }
 
@@ -338,7 +339,7 @@
         modal.classList.remove('active');
         setTimeout(() => {
             modal.style.display = 'none';
-        }, 300); // Shorter exit for snappier feel
+        }, 300);
     }
 
     function filterItems(cat, el) {
