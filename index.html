@@ -139,7 +139,7 @@
         .social-btn:active { transform: scale(0.9); border-color: var(--accent-gold); color: var(--accent-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
         .establishment-note { margin-top: 50px; font-size: 9px; letter-spacing: 5px; text-transform: uppercase; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.8; }
 
-        /* BROWSER-PROOFED COMPACT PREVIEW (270px) */
+        /* REFINED SLIM PREVIEW (270px) */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
             background: rgba(0,0,0,0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -151,33 +151,39 @@
         .preview-box { 
             width: 270px; 
             background: var(--card-bg); 
-            padding: 10px; 
-            border-radius: 40px; 
+            padding: 8px; 
+            border-radius: 42px; 
             box-shadow: 0 30px 60px rgba(0,0,0,0.8);
             transform: translateY(30px) scale(0.95); transition: 0.5s var(--ease-fluid);
             display: flex; flex-direction: column;
-            max-height: 90vh; margin: auto; /* Browser centering */
+            max-height: 90vh; margin: auto;
         }
         #item-preview.active .preview-box { transform: translateY(0) scale(1); }
         
         .preview-img-container { 
-            border-radius: 32px; overflow: hidden; background: #000; 
-            position: relative; display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; /* Prevents Chrome from squashing image */
-            height: 380px; 
+            border-radius: 34px; 
+            overflow: hidden; 
+            background: #f0f0f0; 
+            position: relative; 
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; 
+            height: 400px; /* Slim tall shape */
         }
         
         .preview-image { 
-            width: 100%; height: 100%; 
-            object-fit: contain; display: block;
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block;
+            border-radius: 34px; /* Image matches container curve */
         }
         
-        .preview-content { padding: 15px 5px 5px; text-align: center; flex: 1 1 auto; }
+        .preview-content { padding: 12px 10px 8px; text-align: center; flex: 1 1 auto; }
 
         .btn-order {
-            background: var(--accent-green); color: white; padding: 16px; border-radius: 24px;
+            background: var(--accent-green); color: white; padding: 14px; border-radius: 22px;
             text-decoration: none; font-weight: 800; display: flex; align-items: center; 
-            gap: 10px; font-size: 13px; justify-content: center; margin-top: 12px;
+            gap: 10px; font-size: 13px; justify-content: center; margin-top: 10px;
         }
     </style>
 </head>
