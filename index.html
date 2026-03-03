@@ -21,8 +21,6 @@
             --border: rgba(0, 0, 0, 0.05);
             --shadow: 0 4px 12px rgba(0,0,0,0.05);
             --accent-green: #25D366;
-            --radius-outer: 28px;
-            --radius-inner: 20px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -31,45 +29,51 @@
                 --card-bg: #1C1C1E;
                 --text-main: #FFFFFF;
                 --text-soft: #A1A1A6;
-                --glass: rgba(28, 28, 30, 0.9);
+                --glass: rgba(20, 20, 20, 0.9);
                 --border: rgba(255, 255, 255, 0.1);
             }
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { 
+        /* Remove Scrollbar/Corner artifacts */
+        html, body { 
             background: var(--bg); 
             min-height: 100vh;
-            color: var(--text-main);
+            overflow-x: hidden;
+            scrollbar-width: none; /* Firefox */
         }
+        body::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
-        /* SPLASH SCREEN - STAYS FIXED */
+        /* Prevent background scroll when preview is open */
+        body.no-scroll { overflow: hidden; }
+
+        /* SPLASH SCREEN */
         #splash-screen {
             position: fixed; inset: 0; z-index: 10000;
             background: #000;
-            background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.85)), url('images/Splash-Dress.PNG');
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG');
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
         }
-        #splash-screen.lifted { transform: translateY(-100%); }
+        #splash-screen.lifted { transform: translateY(-100%); pointer-events: none; }
 
-        /* HEADER - FIXED TOP */
+        /* HEADER */
         header {
             position: fixed; top: 0; left: 0; right: 0;
             padding: calc(env(safe-area-inset-top) + 15px) 20px 15px;
             background: var(--glass); 
-            backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%);
             z-index: 1000; border-bottom: 0.5px solid var(--border);
             transition: transform 0.4s ease;
         }
         .header-hidden { transform: translateY(-100%); }
 
-        .logo-box h2 { font-size: 22px; font-weight: 800; text-align: center; letter-spacing: -0.5px; }
+        .logo-box h2 { font-size: 22px; font-weight: 800; text-align: center; letter-spacing: -0.5px; color: var(--text-main); }
         .logo-box span { font-size: 9px; color: var(--text-soft); letter-spacing: 5px; display: block; text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 700; }
 
-        /* CONTENT WRAPPER */
+        /* FEED CONTENT */
         .content {
             max-width: 450px; margin: 0 auto;
             padding: calc(env(safe-area-inset-top) + 90px) 16px 60px;
@@ -80,17 +84,19 @@
         .product-card { 
             background: var(--card-bg); border-radius: 20px; overflow: hidden; 
             box-shadow: var(--shadow); border: 0.5px solid var(--border);
+            transition: transform 0.2s ease;
         }
+        .product-card:active { transform: scale(0.97); }
 
         .p-image { width: 100%; aspect-ratio: 1 / 1.35; overflow: hidden; background: #8881; }
         .p-image img { width: 100%; height: 100%; object-fit: cover; }
         
         .p-details { padding: 12px; }
         .size-tag { font-size: 9px; color: var(--text-soft); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
-        .p-name { font-size: 13px; font-weight: 600; line-height: 1.2; height: 32px; overflow: hidden; }
-        .price { font-size: 15px; font-weight: 700; margin-top: 4px; }
+        .p-name { font-size: 13px; font-weight: 600; line-height: 1.2; height: 32px; overflow: hidden; color: var(--text-main); }
+        .price { font-size: 15px; font-weight: 700; margin-top: 4px; color: var(--text-main); }
 
-        /* ABOUT SECTION - RESTORED STYLE */
+        /* ABOUT SECTION */
         .about-section { 
             background: var(--card-bg); border-radius: 30px; 
             padding: 40px 24px; text-align: center;
@@ -98,7 +104,7 @@
             margin-bottom: 40px;
         }
         .about-section h4 { font-size: 10px; letter-spacing: 5px; color: var(--text-soft); text-transform: uppercase; margin-bottom: 15px; }
-        .about-section p { font-size: 15px; line-height: 1.6; margin-bottom: 30px; }
+        .about-section p { font-size: 15px; line-height: 1.6; margin-bottom: 30px; color: var(--text-main); }
         
         .contact-hub { display: flex; justify-content: center; gap: 20px; }
         .icon-circle {
@@ -108,38 +114,43 @@
             text-decoration: none; color: var(--text-main); font-size: 18px;
         }
 
-        /* PREVIEW MODAL */
+        /* PERFECT PREVIEW MODAL */
         #item-preview {
             position: fixed; inset: 0; 
             background: rgba(0,0,0,0.85); 
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            z-index: 11000; display: none; align-items: center; justify-content: center; 
-            padding: 20px;
+            z-index: 11000; 
+            display: flex; align-items: center; justify-content: center; 
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
         }
-        #item-preview.active { display: flex; }
+        #item-preview.active { opacity: 1; pointer-events: auto; }
         
         .preview-content { 
-            width: 80%; max-width: 320px; 
+            width: 85%; max-width: 330px; 
             background: var(--card-bg); padding: 10px; 
-            border-radius: var(--radius-outer); text-align: center; 
-            transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+            border-radius: 30px; text-align: center; 
+            transform: scale(0.85); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
         #item-preview.active .preview-content { transform: scale(1); }
         
         .preview-image { 
-            width: 100%; border-radius: var(--radius-inner); 
-            aspect-ratio: 1 / 1.4; object-fit: cover;
+            width: 100%; 
+            border-radius: 22px; 
+            max-height: 60vh; /* Prevents overflow on smaller screens */
+            object-fit: cover; /* Keeps dress full and clear */
             margin-bottom: 15px; display: block;
         }
 
         #preview-name { 
             font-size: 16px; font-weight: 800; text-transform: uppercase; 
-            letter-spacing: 2px; margin-bottom: 15px;
+            letter-spacing: 2px; margin-bottom: 15px; color: var(--text-main);
         }
 
         .btn-order-whatsapp {
             background: var(--accent-green); color: white; padding: 16px; border-radius: 18px;
-            text-decoration: none; font-weight: 700; display: flex; align-items: center; 
+            text-decoration: none; font-weight: 800; display: flex; align-items: center; 
             gap: 10px; font-size: 14px; width: 100%; justify-content: center;
         }
     </style>
@@ -152,7 +163,7 @@
             <h1 style="font-weight: 700; letter-spacing: 2px; font-size: 30px; margin-top: 5px;">ENIS COLLECTION</h1>
             <p style="font-size:9px; letter-spacing:6px; opacity: 0.6; margin-top: 15px;">PAMPER YOUR BODY</p>
         </div>
-        <button style="background:white; color:black; padding:20px 60px; border-radius:50px; font-weight:900; border:none; cursor:pointer;" onclick="launchApp()">ENTER SHOP</button>
+        <button style="background:white; color:black; padding:22px 70px; border-radius:50px; font-weight:900; border:none; cursor:pointer; font-size:14px; box-shadow: 0 10px 20px rgba(0,0,0,0.4);" onclick="launchApp()">ENTER SHOP</button>
     </div>
 
     <header id="mainHeader">
@@ -178,7 +189,7 @@
 
     <div id="item-preview" onclick="closePreview()">
         <div class="preview-content" onclick="event.stopPropagation()">
-            <img id="preview-img" src="" class="preview-image">
+            <img id="preview-img" src="" class="preview-image" onclick="closePreview()">
             <div style="padding-bottom: 5px;">
                 <span id="preview-size" style="font-size: 9px; color: var(--text-soft); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block;"></span>
                 <h2 id="preview-name"></h2>
@@ -227,23 +238,25 @@
         document.getElementById('preview-img').src = image;
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size} • GH₵ ${price}`;
-        const msg = encodeURIComponent(`Hi Enis! I'd like to order: ${name} (Size ${size})`);
+        
+        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
         document.getElementById('whatsapp-order-btn').href = `https://wa.me/233546527892?text=${msg}`;
-        document.getElementById('item-preview').style.display = 'flex';
-        setTimeout(() => document.getElementById('item-preview').classList.add('active'), 10);
+        
+        document.getElementById('item-preview').classList.add('active');
+        document.body.classList.add('no-scroll'); // Lock background scroll
     }
 
     function closePreview() { 
         document.getElementById('item-preview').classList.remove('active'); 
-        setTimeout(() => document.getElementById('item-preview').style.display = 'none', 300);
+        document.body.classList.remove('no-scroll'); // Unlock background scroll
     }
 
-    // SCROLL LOGIC
+    // Smart Header Hiding
     let lastScroll = 0;
     window.addEventListener('scroll', () => {
         const cur = window.scrollY;
         const header = document.getElementById('mainHeader');
-        if (cur > lastScroll && cur > 80) header.classList.add('header-hidden');
+        if (cur > lastScroll && cur > 100) header.classList.add('header-hidden');
         else header.classList.remove('header-hidden');
         lastScroll = cur;
     });
