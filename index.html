@@ -15,12 +15,11 @@
             --text-soft: #8E8E93;
             --accent-gold: #D4AF37; 
             --gold-gradient: linear-gradient(135deg, #D4AF37 0%, #F4D03F 100%);
-            --gold-glow: 0 4px 15px rgba(212, 175, 55, 0.4);
             --glass: rgba(255, 255, 255, 0.9);
             --border: rgba(0, 0, 0, 0.05);
-            --shadow: 0 8px 30px rgba(0,0,0,0.04);
             --accent-green: #25D366;
             --ease-fluid: cubic-bezier(0.23, 1, 0.32, 1);
+            --accent-orange: #FF8C00;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -43,24 +42,30 @@
             background: var(--bg); position: relative; display: flex; flex-direction: column;
         }
 
-        /* SPLASH SCREEN */
+        /* REFINED SPLASH SCREEN - MATCHING VIDEO */
         #splash-screen {
             position: absolute; inset: 0; z-index: 9999;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG') center/cover;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG') center/cover;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: all 1s var(--ease-fluid);
+            transition: all 0.8s var(--ease-fluid);
+            text-align: center;
+            will-change: opacity, transform;
         }
-        #splash-screen.hidden { opacity: 0; visibility: hidden; transform: translateY(-20px); }
+        #splash-screen.hidden { opacity: 0; visibility: hidden; transform: scale(1.05); }
         
+        .splash-title { color: white; font-size: 28px; font-weight: 700; letter-spacing: 2px; margin-bottom: 5px; text-transform: uppercase; }
+        .splash-sub { font-size: 10px; letter-spacing: 7px; color: var(--accent-gold); margin-bottom: 40px; font-weight: 800; text-transform: uppercase; }
+
         .btn-launch {
-            background: var(--gold-gradient); color: #000; padding: 18px 55px;
+            background: var(--accent-orange); color: #fff; padding: 18px 55px;
             border-radius: 50px; border: none; font-weight: 800; font-size: 13px;
-            box-shadow: var(--gold-glow); cursor: pointer; letter-spacing: 2px;
+            cursor: pointer; letter-spacing: 2px; text-transform: uppercase;
+            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.4);
         }
 
         /* SHOP CONTENT */
         #shop-content { display: none; flex-direction: column; height: 100%; }
-        #shop-content.active { display: flex; animation: fadeIn 0.8s var(--ease-fluid); }
+        #shop-content.active { display: flex; animation: fadeIn 0.6s var(--ease-fluid); }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         header { padding: calc(env(safe-area-inset-top) + 15px) 0 8px; background: var(--bg); }
@@ -71,7 +76,6 @@
             text-transform: uppercase; text-align: center; margin-top: 4px; font-weight: 800; 
         }
 
-        /* NAVIGATION */
         .catalog-container {
             position: sticky; top: 0; z-index: 90;
             background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(30px);
@@ -81,7 +85,7 @@
         .catalog-bar::-webkit-scrollbar { display: none; }
         
         .filter-tag {
-            padding: 11px 22px; background: rgba(120, 120, 128, 0.1); border-radius: 50px;
+            padding: 11px 22px; background: rgba(120, 120, 128, 0.1); border-radius: 12px;
             font-size: 10px; font-weight: 700; color: var(--text-soft); white-space: nowrap; 
             transition: all 0.3s var(--ease-fluid); text-transform: uppercase; letter-spacing: 1px;
         }
@@ -90,12 +94,11 @@
         /* PRODUCT FEED */
         .feed { flex: 1; overflow-y: auto; padding-bottom: 50px; scroll-behavior: smooth; }
         .feed::-webkit-scrollbar { display: none; }
-
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px 12px; }
         
         .product-card { 
             background: var(--card-bg); border-radius: 28px; 
-            overflow: hidden; box-shadow: var(--shadow); border: 0.5px solid var(--border);
+            overflow: hidden; border: 0.5px solid var(--border);
             opacity: 0; transform: translateY(15px); 
             transition: all 0.6s var(--ease-fluid);
         }
@@ -108,36 +111,30 @@
         .floating-tag {
             position: absolute; bottom: 10px; right: 10px; background: var(--gold-gradient); 
             color: #000; padding: 5px 12px; border-radius: 14px; font-size: 11px;
-            font-weight: 900; box-shadow: var(--gold-glow);
+            font-weight: 900;
         }
 
         .p-details { padding: 12px; } 
         .p-name { font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.3; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
-        /* ABOUT SECTION */
+        /* REFINED ABOUT SECTION - MATCHING VIDEO */
         .about-modern {
             margin: 50px 15px 30px;
             padding: 60px 25px;
             background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.05) 100%);
             border-top: 1px solid var(--border);
             text-align: center;
-            position: relative;
-        }
-        .about-modern::before {
-            content: ''; position: absolute; top: -1px; left: 50%;
-            transform: translateX(-50%); width: 40px; height: 1px;
-            background: var(--gold-gradient);
         }
         .headline { font-size: 22px; font-weight: 800; color: var(--text-main); margin: 15px 0; letter-spacing: -0.5px; line-height: 1.2; }
         .subtext { font-size: 14px; color: var(--text-soft); line-height: 1.8; margin-bottom: 40px; padding: 0 10px; }
-        .social-row { display: flex; justify-content: center; gap: 18px; }
+        .social-row { display: flex; justify-content: center; gap: 25px; }
         .social-btn {
-            width: 45px; height: 45px; border-radius: 50%;
-            background: var(--card-bg); display: flex; align-items: center; justify-content: center;
-            color: var(--text-main); border: 1px solid var(--border); transition: all 0.3s ease;
-            text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            font-size: 22px;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+            text-decoration: none;
         }
-        .social-btn:active { transform: scale(0.9); border-color: var(--accent-gold); color: var(--accent-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+        .social-btn:active { transform: scale(0.9); color: var(--accent-gold); }
         .establishment-note { margin-top: 50px; font-size: 9px; letter-spacing: 5px; text-transform: uppercase; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.8; }
 
         /* PREVIEW MODAL */
@@ -145,28 +142,18 @@
             position: fixed; inset: 0; z-index: 10000;
             background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             display: none; align-items: center; justify-content: center; padding: 20px;
-            opacity: 0; transition: opacity 0.3s ease;
+            opacity: 0; transition: opacity 0.4s var(--ease-fluid);
         }
         #item-preview.active { display: flex; opacity: 1; }
         
         .preview-box { 
-            width: 280px; 
-            background: var(--card-bg); 
-            padding: 10px; 
-            border-radius: 38px; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            transform: scale(0.9); opacity: 0;
-            transition: all 0.4s var(--ease-fluid);
+            width: 280px; background: var(--card-bg); padding: 10px; border-radius: 38px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5); transform: scale(0.9);
+            transition: transform 0.4s var(--ease-fluid);
         }
-        #item-preview.active .preview-box { transform: scale(1); opacity: 1; }
+        #item-preview.active .preview-box { transform: scale(1); }
         
-        .preview-img-container { 
-            border-radius: 30px; 
-            overflow: hidden; 
-            background: transparent;
-            height: 380px; 
-        }
-        
+        .preview-img-container { border-radius: 30px; overflow: hidden; background: transparent; height: 380px; }
         .preview-image { width: 100%; height: 100%; object-fit: cover; border-radius: 30px; }
         .preview-content { padding: 15px 10px 10px; text-align: center; }
 
@@ -181,7 +168,9 @@
 
 <div class="app-shell">
     <div id="splash-screen">
-        <button class="btn-launch" onclick="launchApp()">DISCOVER COLLECTION</button>
+        <h1 class="splash-title">WELCOME TO ENIS COLLECTION</h1>
+        <p class="splash-sub">PAMPER YOUR BODY</p>
+        <button class="btn-launch" onclick="launchApp()">ENTER SHOP</button>
     </div>
 
     <div id="shop-content">
@@ -198,11 +187,16 @@
         </div>
         <div class="feed" id="mainFeed" onscroll="handleScroll()">
             <div class="grid" id="productGrid"></div>
+            
             <div class="about-modern">
                 <h3 class="headline">Designed for the <br>Extraordinary Woman.</h3>
+                <p class="subtext">Hand-selected luxury silhouettes curated in Ghana. We blend timeless sophistication with the comfort of modern tailoring.</p>
                 <div class="social-row">
                     <a href="https://wa.me/233546527892" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.tiktok.com/@eniscollection1" class="social-btn"><i class="fab fa-tiktok"></i></a>
+                    <a href="tel:+233546527892" class="social-btn"><i class="fas fa-phone"></i></a>
                 </div>
+                <p class="establishment-note">CAPECOAST, GHANA • EST. 2022</p>
             </div>
         </div>
     </div>
@@ -260,36 +254,21 @@
     function openPreview(name, price, image, size) {
         const modal = document.getElementById('item-preview');
         const previewImg = document.getElementById('preview-img');
-        
-        // 1. Assign the new image source immediately
         previewImg.src = image;
-
-        // 2. Set the text content
         document.getElementById('preview-name').innerText = name;
         document.getElementById('preview-size').innerText = `UK SIZE ${size}`;
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=Order: ${name}`;
 
-        // 3. THE MAGIC FIX: Only show the modal once the browser says the image is ready
-        if (previewImg.complete) {
-            showModal();
-        } else {
-            previewImg.onload = showModal;
-        }
-
-        function showModal() {
-            modal.style.display = 'flex';
-            requestAnimationFrame(() => {
-                modal.classList.add('active');
-            });
-            // Clear the onload so it doesn't trigger again
-            previewImg.onload = null;
-        }
+        modal.style.display = 'flex';
+        requestAnimationFrame(() => {
+            modal.classList.add('active');
+        });
     }
 
     function closePreview() { 
         const modal = document.getElementById('item-preview');
         modal.classList.remove('active');
-        setTimeout(() => modal.style.display = 'none', 300);
+        setTimeout(() => modal.style.display = 'none', 400);
     }
 
     function handleScroll() {
