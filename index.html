@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ENIS COLLECTION</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700;800&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -29,27 +29,42 @@
             }
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
+        /* --- REMOVE SCROLLBARS NATIONWIDE --- */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: 'Montserrat', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE/Edge */
+        }
+        *::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
         body { background: var(--bg); height: 100vh; overflow: hidden; position: fixed; width: 100%; }
         
         .app-shell { width: 100%; max-width: 420px; height: 100vh; margin: 0 auto; background: var(--bg); position: relative; overflow: hidden; }
 
         #shop-content { 
-            display: none; 
-            flex-direction: column; 
-            height: 100%; 
-            opacity: 0; 
-            transform: translateY(30px); 
-            transition: opacity 1.2s var(--ease-luxury), transform 1.2s var(--ease-luxury);
+            display: none; flex-direction: column; height: 100%; opacity: 0; 
+            transform: translateY(30px); transition: opacity 1.2s var(--ease-luxury), transform 1.2s var(--ease-luxury);
         }
         #shop-content.active { opacity: 1; transform: translateY(0); }
 
-        header { padding: calc(env(safe-area-inset-top) + 20px) 0 15px; text-align: center; }
-        .header-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; }
-        .header-slogan { font-size: 9px; text-transform: uppercase; letter-spacing: 5px; font-weight: 700; color: var(--accent-gold); margin-top: 5px; }
+        /* --- THEMED HEADER --- */
+        header { padding: calc(env(safe-area-inset-top) + 20px) 0 20px; text-align: center; }
+        .header-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 24px; font-weight: 900; 
+            text-transform: uppercase; letter-spacing: 5px; 
+            color: var(--text-main);
+            position: relative; display: inline-block;
+        }
+        .header-title::after {
+            content: ""; position: absolute; bottom: -5px; left: 25%; width: 50%; height: 1px; background: var(--accent-gold);
+        }
+        .header-slogan { font-size: 9px; text-transform: uppercase; letter-spacing: 6px; font-weight: 700; color: var(--accent-gold); margin-top: 10px; }
 
-        .catalogue-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 15px; scrollbar-width: none; }
-        .catalogue-scroll::-webkit-scrollbar { display: none; }
+        /* --- CATALOGUE --- */
+        .catalogue-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 15px; }
         .cat-item {
             padding: 10px 22px; border-radius: 50px; border: 1px solid var(--border);
             font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
@@ -57,6 +72,7 @@
         }
         .cat-item.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
 
+        /* --- GRID --- */
         .feed { flex: 1; overflow-y: auto; background: var(--bg); }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 15px; }
         .product-card { background: var(--bg); border-radius: 20px; overflow: hidden; opacity: 0; transform: translateY(20px); transition: 0.8s var(--ease-luxury); }
@@ -65,46 +81,50 @@
         .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
         .price-tag { position: absolute; bottom: 10px; right: 10px; background: var(--accent-gold); color: #000; padding: 7px 14px; border-radius: 12px; font-size: 11px; font-weight: 800; }
 
-        /* --- HARMONIZED ABOUT SECTION --- */
+        /* --- STYLIZED ABOUT SECTION --- */
         .about-modern {
-            margin: 60px 15px 40px; padding: 60px 20px; 
-            background: var(--card-bg); 
-            border-radius: 40px;
-            border: 1px solid var(--border);
-            text-align: center;
+            margin: 80px 15px 40px; padding: 70px 25px; 
+            background: var(--card-bg); border-radius: 40px;
+            border: 1px solid var(--border); text-align: center;
+            position: relative; overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
         }
-        .about-modern h3 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin-bottom: 15px; color: var(--text-main); }
-        .about-modern p { font-size: 13px; color: var(--text-soft); line-height: 1.8; margin-bottom: 35px; }
+        .about-modern::before {
+            content: "E"; position: absolute; top: -20px; right: -10px; 
+            font-family: 'Playfair Display'; font-size: 180px; color: var(--accent-gold); 
+            opacity: 0.05; pointer-events: none;
+        }
+        .about-modern h3 { 
+            font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; 
+            margin-bottom: 20px; color: var(--text-main); letter-spacing: -0.5px;
+        }
+        .about-modern p { font-size: 13px; color: var(--text-soft); line-height: 2; margin-bottom: 40px; font-weight: 400; }
 
         .contact-pill-box { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
         .contact-pill {
-            padding: 12px 20px; border-radius: 100px; background: var(--bg);
+            padding: 14px 24px; border-radius: 100px; background: var(--bg);
             border: 1px solid var(--border); display: flex; align-items: center; gap: 10px;
-            text-decoration: none; color: var(--text-main); font-size: 11px; font-weight: 700;
-            transition: 0.3s;
+            text-decoration: none; color: var(--text-main); font-size: 10px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
         }
         .contact-pill i { font-size: 16px; }
-        .contact-pill:active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
+        .contact-pill:active { transform: scale(0.92); background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
 
-        /* --- RESTORED PREVIEW DESIGN --- */
+        /* --- PREVIEW --- */
         #item-preview { 
             position: fixed; inset: 0; z-index: 10000; 
             background: rgba(0,0,0,0.2); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
-            display: none; align-items: center; justify-content: center; 
-            opacity: 0; transition: opacity 0.5s var(--ease-luxury); 
+            display: none; align-items: center; justify-content: center; opacity: 0; 
         }
         #item-preview.active { display: flex; opacity: 1; }
         .preview-box { 
-            width: 280px; background: var(--card-bg); padding: 8px; border-radius: 42px; 
+            width: 290px; background: var(--card-bg); padding: 8px; border-radius: 42px; 
             transform: scale(0.9) translateY(20px); transition: transform 0.5s var(--ease-luxury); 
             box-shadow: 0 40px 100px rgba(0,0,0,0.15);
         }
         #item-preview.active .preview-box { transform: scale(1) translateY(0); }
-        
-        #item-preview.closing { opacity: 0; }
-        #item-preview.closing .preview-box { transform: scale(0.94) translateY(10px); }
 
-        /* --- SPLASH SCREEN --- */
+        /* --- SPLASH --- */
         #splash-screen { 
             position: absolute; inset: 0; z-index: 9999; 
             background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG') center/cover; 
@@ -114,7 +134,7 @@
         #splash-screen.hidden { opacity: 0; transform: scale(1.1); pointer-events: none; }
         .splash-title { font-family: 'Great Vibes', cursive; color: white; font-size: 64px; }
         .splash-slogan { font-size: 10px; letter-spacing: 6px; text-transform: uppercase; font-weight: 700; color: var(--accent-gold); margin-top: -10px; }
-        .btn-discover { margin-top: 50px; padding: 20px 70px; border-radius: 50px; border: none; font-weight: 800; background: #FFF; color: #000; letter-spacing: 3px; cursor: pointer; }
+        .btn-discover { margin-top: 50px; padding: 20px 75px; border-radius: 50px; border: none; font-weight: 800; background: #FFF; color: #000; letter-spacing: 3px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -143,16 +163,17 @@
             <div class="grid" id="productGrid"></div>
             
             <div class="about-modern">
+                <div style="font-size: 10px; font-weight: 800; color: var(--accent-gold); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 15px;">Est. 2022</div>
                 <h3>The Boutique</h3>
-                <p>Designed in Cape Coast for the woman who demands elegance. Experience high-fashion silhouettes curated just for you.</p>
+                <p>Curating the finest silhouettes for the modern woman. Based in Cape Coast, Enis Collection is where luxury meets comfort in every stitch.</p>
                 
                 <div class="contact-pill-box">
                     <a href="https://wa.me/233546527892" class="contact-pill"><i class="fab fa-whatsapp" style="color:#25D366"></i> WhatsApp</a>
                     <a href="https://www.tiktok.com/@eniscollection1" class="contact-pill"><i class="fab fa-tiktok"></i> TikTok</a>
-                    <a href="tel:+233546527892" class="contact-pill"><i class="fas fa-phone-alt"></i> Call Us</a>
+                    <a href="tel:+233546527892" class="contact-pill"><i class="fas fa-phone-alt"></i> Call</a>
                     <a href="mailto:contact@eniscollection.com" class="contact-pill"><i class="fas fa-envelope"></i> Email</a>
                 </div>
-                <p style="margin-top: 40px; font-size: 9px; letter-spacing: 2px; opacity: 0.5; text-transform: uppercase; font-weight: 700;">© 2026 ENIS COLLECTION</p>
+                <p style="margin-top: 50px; font-size: 8px; letter-spacing: 3px; opacity: 0.3; font-weight: 700;">MADE WITH GRACE • ENIS COLLECTION</p>
             </div>
         </div>
     </div>
@@ -235,17 +256,19 @@
         document.getElementById('preview-price').innerText = `UK ${size} • ₵${price}`;
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
-        modal.classList.remove('closing');
         modal.style.display = 'flex';
-        setTimeout(() => modal.classList.add('active'), 10);
+        setTimeout(() => {
+            modal.style.opacity = '1';
+            modal.classList.add('active');
+        }, 10);
     }
 
     function closePreview() { 
         const modal = document.getElementById('item-preview');
-        modal.classList.add('closing');
+        modal.style.opacity = '0';
         setTimeout(() => {
             modal.style.display = 'none';
-            modal.classList.remove('active', 'closing');
+            modal.classList.remove('active');
         }, 500);
     }
 </script>
