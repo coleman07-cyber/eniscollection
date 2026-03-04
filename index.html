@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ENIS COLLECTION</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -14,7 +14,8 @@
             --text-main: #000000;
             --text-soft: #636366;
             /* Premium Champagne Palette */
-            --champagne-premium: #F3E5AB; /* Lighter, more elegant champagne */
+            --champagne-glow: #F9E076; 
+            --champagne-deep: #F3E5AB;
             --accent-gold: #C5A028;
             --wa-green: #25D366;
             --border: rgba(0, 0, 0, 0.05);
@@ -31,103 +32,110 @@
             }
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); height: 100vh; overflow: hidden; position: fixed; width: 100%; }
         .app-shell { width: 100%; max-width: 420px; height: 100vh; margin: 0 auto; background: var(--bg); position: relative; display: flex; flex-direction: column; }
 
-        /* --- HEADER --- */
-        header { padding: calc(env(safe-area-inset-top) + 20px) 0 10px; background: var(--bg); text-align: center; }
-        .header-title { font-family: 'Great Vibes', cursive; font-size: 42px; color: var(--text-main); }
-        .header-slogan { font-size: 10px; text-transform: uppercase; letter-spacing: 5px; font-weight: 700; color: var(--accent-gold); margin-top: -5px; }
+        /* --- PREMIUM SERIF HEADER --- */
+        header { padding: calc(env(safe-area-inset-top) + 20px) 0 15px; background: var(--bg); text-align: center; border-bottom: 0.5px solid var(--border); }
+        .header-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 26px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            color: var(--text-main); 
+        }
+        .header-slogan { 
+            font-size: 9px; 
+            text-transform: uppercase; 
+            letter-spacing: 6px; 
+            font-weight: 400; 
+            color: var(--accent-gold); 
+            margin-top: 4px;
+        }
 
         /* --- LUXE CATALOGUE --- */
-        .catalogue-container { padding: 20px 0; background: var(--bg); }
-        .catalogue-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 0 15px; scrollbar-width: none; }
+        .catalogue-container { padding: 15px 0; background: var(--bg); }
+        .catalogue-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 15px; scrollbar-width: none; }
         .catalogue-scroll::-webkit-scrollbar { display: none; }
         
         .cat-item {
-            padding: 10px 22px; border-radius: 50px; 
+            padding: 10px 20px; border-radius: 50px; 
             background: transparent;
             border: 1px solid var(--border);
-            font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+            font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
             white-space: nowrap; color: var(--text-soft); transition: 0.4s var(--ease-luxury);
         }
         .cat-item.active { 
             background: var(--text-main); 
             color: var(--bg); 
             border-color: var(--text-main);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
         }
 
-        /* --- PRODUCT FEED --- */
-        .feed { flex: 1; overflow-y: auto; background: var(--bg); }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 15px; }
-        .product-card { background: var(--card-bg); border-radius: 24px; overflow: hidden; opacity: 0; transform: translateY(25px); transition: all 1s var(--ease-luxury); }
+        /* --- PRODUCT GRID --- */
+        .feed { flex: 1; overflow-y: auto; background: var(--bg); padding-bottom: 40px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 15px; }
+        .product-card { background: var(--card-bg); border-radius: 20px; overflow: hidden; opacity: 0; transform: translateY(20px); transition: all 0.8s var(--ease-luxury); }
         .product-card.visible { opacity: 1; transform: translateY(0); }
         
-        .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.35; overflow: hidden; border-radius: 24px; border: 0.5px solid var(--border); }
+        .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.3; overflow: hidden; border-radius: 18px; }
         .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Premium Champagne Price Tag */
+        /* CHAMPAGNE YELLOW PRICE TAG */
         .price-tag { 
-            position: absolute; bottom: 12px; right: 12px; 
-            background: var(--champagne-premium); color: #000; 
-            padding: 7px 14px; border-radius: 14px; font-size: 11px; font-weight: 800; 
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.15);
+            position: absolute; bottom: 10px; right: 10px; 
+            background: var(--champagne-glow); color: #000; 
+            padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; 
+            box-shadow: 0 4px 15px rgba(249, 224, 118, 0.4);
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
-        /* --- PREMIUM ABOUT AREA --- */
+        /* --- PREMIUM ABOUT --- */
         .about-premium {
-            margin: 60px 15px 80px; padding: 60px 20px;
-            background: var(--card-bg); border-radius: 35px;
-            border: 0.5px solid var(--border); text-align: center;
+            margin: 40px 15px; padding: 50px 20px;
+            background: var(--card-bg); border-radius: 30px;
+            border: 1px solid var(--border); text-align: center;
         }
-        .about-premium h3 { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 400; color: var(--text-main); margin-bottom: 20px; }
-        .about-premium p { font-size: 13px; color: var(--text-soft); line-height: 2; letter-spacing: 0.3px; max-width: 260px; margin: 0 auto 35px; }
-        
-        .social-row { display: flex; justify-content: center; gap: 20px; }
-        .social-link { font-size: 18px; color: var(--text-main); text-decoration: none; opacity: 0.7; transition: 0.3s; }
-        .social-link:active { opacity: 1; transform: translateY(-2px); }
+        .about-premium h3 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--text-main); margin-bottom: 15px; }
+        .about-premium p { font-size: 13px; color: var(--text-soft); line-height: 1.8; max-width: 270px; margin: 0 auto 30px; }
 
         /* --- SMOOTH PREVIEW --- */
         #item-preview {
             position: fixed; inset: 0; z-index: 10000;
-            background: rgba(0,0,0,0.15); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            background: rgba(0,0,0,0.2); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             display: none; align-items: center; justify-content: center;
-            opacity: 0; transition: opacity 0.6s var(--ease-luxury);
+            opacity: 0; transition: opacity 0.5s var(--ease-luxury);
         }
         #item-preview.active { display: flex; opacity: 1; }
         
         .preview-box { 
-            width: 270px; background: var(--card-bg); padding: 8px; border-radius: 44px; 
-            box-shadow: 0 40px 100px rgba(0,0,0,0.15);
-            transform: scale(0.9) translateY(40px); transition: transform 0.6s var(--ease-luxury);
+            width: 270px; background: var(--card-bg); padding: 8px; border-radius: 40px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+            transform: scale(0.9); transition: transform 0.5s var(--ease-luxury);
         }
-        #item-preview.active .preview-box { transform: scale(1) translateY(0); }
-        
-        /* Smooth Exit */
+        #item-preview.active .preview-box { transform: scale(1); }
         #item-preview.closing { opacity: 0; }
-        #item-preview.closing .preview-box { transform: scale(0.92) translateY(20px); }
+        #item-preview.closing .preview-box { transform: scale(0.95); opacity: 0; }
 
         .btn-wa { 
-            background: var(--wa-green); color: white; padding: 18px; border-radius: 24px; 
+            background: var(--wa-green); color: white; padding: 18px; border-radius: 20px; 
             text-decoration: none; font-weight: 800; display: flex; align-items: center; 
-            gap: 12px; font-size: 13px; justify-content: center; margin-top: 15px;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+            gap: 10px; font-size: 12px; justify-content: center; margin-top: 15px;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
         }
 
         /* --- SPLASH (Discover White) --- */
         #splash-screen { 
             position: absolute; inset: 0; z-index: 9999; 
-            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.7)), url('images/Splash-Dress.PNG') center/cover; 
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url('images/Splash-Dress.PNG') center/cover; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            transition: 0.9s var(--ease-luxury); 
+            transition: 0.8s var(--ease-luxury); 
         }
-        #splash-screen.hidden { opacity: 0; visibility: hidden; transform: scale(1.08); }
+        #splash-screen.hidden { opacity: 0; visibility: hidden; }
         .btn-discover { 
             margin-top: 50px; padding: 18px 60px; border-radius: 50px; border: none; 
-            font-weight: 800; background: #FFF; color: #000; letter-spacing: 3px; cursor: pointer;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2); transition: 0.3s;
+            font-weight: 800; background: #FFF; color: #000; letter-spacing: 2px; cursor: pointer;
         }
     </style>
 </head>
@@ -135,8 +143,8 @@
 
 <div class="app-shell">
     <div id="splash-screen">
-        <h1 class="header-title" style="color: white; font-size: 68px;">Enis Collection</h1>
-        <p class="header-slogan" style="color: var(--champagne-premium);">Pamper Your Body</p>
+        <h1 style="font-family: 'Playfair Display', serif; color: white; font-size: 42px; text-transform: uppercase; letter-spacing: 4px;">Enis Collection</h1>
+        <p class="header-slogan" style="color: var(--champagne-glow); font-weight: 700;">Pamper Your Body</p>
         <button class="btn-discover" onclick="launchApp()">DISCOVER</button>
     </div>
 
@@ -148,7 +156,7 @@
 
         <div class="catalogue-container">
             <div class="catalogue-scroll">
-                <div class="cat-item active" onclick="filterCat('All', this)">All Items</div>
+                <div class="cat-item active" onclick="filterCat('All', this)">All Collections</div>
                 <div class="cat-item" onclick="filterCat('Dress', this)">Dresses</div>
                 <div class="cat-item" onclick="filterCat('Set', this)">Sets</div>
                 <div class="cat-item" onclick="filterCat('Work', this)">Work Wear</div>
@@ -159,13 +167,11 @@
             <div class="grid" id="productGrid"></div>
             
             <div class="about-premium">
-                <span style="font-size: 9px; letter-spacing: 5px; color: var(--accent-gold); text-transform: uppercase; font-weight: 800;">Our Story</span>
-                <h3>Timeless Grace</h3>
-                <p>Expertly curated luxury wear based in Cape Coast, designed for the woman who speaks through her elegance.</p>
-                <div class="social-row">
-                    <a href="https://wa.me/233546527892" class="social-link"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://www.tiktok.com/@eniscollection1" class="social-link"><i class="fab fa-tiktok"></i></a>
-                    <a href="tel:+233546527892" class="social-link"><i class="fas fa-phone"></i></a>
+                <h3>Our Philosophy</h3>
+                <p>Curating exceptional silhouettes for the modern woman. Based in Cape Coast, dedicated to luxury.</p>
+                <div style="display: flex; justify-content: center; gap: 20px;">
+                    <a href="#" style="color: var(--text-main); font-size: 20px;"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" style="color: var(--text-main); font-size: 20px;"><i class="fab fa-tiktok"></i></a>
                 </div>
             </div>
         </div>
@@ -173,12 +179,12 @@
 
     <div id="item-preview" onclick="closePreview()">
         <div class="preview-box" onclick="event.stopPropagation()">
-            <div style="border-radius: 36px; overflow: hidden; height: 380px;">
+            <div style="border-radius: 32px; overflow: hidden; height: 380px;">
                 <img id="preview-img" src="" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
-            <div style="padding: 22px 10px; text-align: center;">
-                <h2 id="preview-name" style="font-family: 'Playfair Display', serif; font-size: 24px; color: var(--text-main);"></h2>
-                <p id="preview-price" style="color: var(--accent-gold); font-size: 13px; font-weight: 800; margin-top: 6px;"></p>
+            <div style="padding: 20px 10px; text-align: center;">
+                <h2 id="preview-name" style="font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text-main);"></h2>
+                <p id="preview-price" style="color: var(--accent-gold); font-size: 13px; font-weight: 700; margin-top: 5px;"></p>
                 <a id="wa-btn" href="#" class="btn-wa"><i class="fab fa-whatsapp"></i> ORDER VIA WHATSAPP</a>
             </div>
         </div>
@@ -208,9 +214,9 @@
                     <img src="${item.image}" loading="lazy" onload="this.parentElement.parentElement.classList.add('visible')">
                     <div class="price-tag">₵${item.price}</div>
                 </div>
-                <div style="padding:15px 5px;">
-                    <span style="font-size:9px; color:var(--accent-gold); font-weight:800; letter-spacing:1px;">SIZE ${item.size}</span>
-                    <h3 style="font-size:12px; color:var(--text-main); margin-top:4px; font-weight:600; letter-spacing: -0.2px;">${item.name}</h3>
+                <div style="padding:12px 5px;">
+                    <span style="font-size:8px; color:var(--accent-gold); font-weight:700; letter-spacing:1px;">SIZE ${item.size}</span>
+                    <h3 style="font-size:11px; color:var(--text-main); margin-top:3px; font-weight:700;">${item.name}</h3>
                 </div>
             </div>
         `).join('');
@@ -255,7 +261,7 @@
         setTimeout(() => {
             modal.style.display = 'none';
             modal.classList.remove('active', 'closing');
-        }, 600);
+        }, 500);
     }
 </script>
 
