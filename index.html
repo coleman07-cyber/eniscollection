@@ -85,13 +85,17 @@ header{padding:calc(env(safe-area-inset-top) + 20px) 0 20px;text-align:center;ba
 .preview-icon-btn.cart-active{background:var(--accent);}
 .preview-icon-btn.cart-active i{color:#fff;}
 .preview-icon-btn:active{transform:scale(0.85);}
-#splash-screen{position:absolute;inset:0;z-index:9999;background:linear-gradient(rgba(44,26,26,0.2),rgba(44,26,26,0.88)),url('images/Splash-Dress.PNG') center/cover;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:transform 1.2s var(--ease-luxury),opacity 0.8s ease;}
+#splash-screen{position:absolute;inset:0;z-index:9999;background:linear-gradient(160deg,rgba(44,20,20,0.18) 0%,rgba(44,16,24,0.72) 60%,rgba(28,8,16,0.92) 100%),url('images/Splash-Dress.PNG') center/cover;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:transform 1.2s var(--ease-luxury),opacity 0.8s ease;}
 #splash-screen.hidden{opacity:0;transform:scale(1.1);pointer-events:none;}
-.splash-title{font-family:'Great Vibes',cursive;color:#FDF0EE;font-size:64px;}
-.splash-slogan{font-size:10px;letter-spacing:6px;text-transform:uppercase;font-weight:700;color:#E8B4BC;margin-top:-10px;}
-.btn-discover{margin-top:50px;padding:20px 75px;border-radius:50px;border:none;font-weight:800;background:#FDF8F5;color:var(--text-main);letter-spacing:3px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:13px;}
-.fab-group{position:fixed;right:14px;bottom:40px;z-index:9000;display:none;flex-direction:column;gap:4px;align-items:center;}
-.fab-group.visible{display:flex;}
+.splash-title{font-family:'Great Vibes',cursive;color:#FFF5F0;font-size:72px;text-shadow:0 4px 30px rgba(180,80,100,0.5),0 2px 8px rgba(0,0,0,0.4);line-height:1.1;}
+.splash-tagline{font-size:13px;color:rgba(255,220,225,0.92);font-weight:400;margin-top:10px;letter-spacing:2px;font-family:'Playfair Display',serif;font-style:italic;text-shadow:0 2px 12px rgba(0,0,0,0.4);}
+.splash-slogan{font-size:9px;letter-spacing:8px;text-transform:uppercase;font-weight:700;color:rgba(240,185,200,0.85);margin-top:14px;text-shadow:0 2px 8px rgba(0,0,0,0.3);}
+.splash-divider{width:40px;height:1px;background:rgba(240,185,200,0.5);margin:18px auto 0;}
+.btn-discover{margin-top:44px;padding:18px 70px;border-radius:50px;border:1.5px solid rgba(255,220,225,0.5);font-weight:700;background:rgba(253,248,245,0.12);color:#FFF5F0;letter-spacing:4px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:11px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:background 0.3s,border-color 0.3s;text-shadow:0 1px 4px rgba(0,0,0,0.3);}
+.btn-discover:active{background:rgba(253,248,245,0.25);border-color:rgba(255,220,225,0.9);}
+.fab-group{position:fixed;right:14px;bottom:40px;z-index:9000;display:flex;flex-direction:column;gap:4px;align-items:center;opacity:0;pointer-events:none;transform:translateY(10px) scale(0.9);transition:opacity 0.35s var(--ease-luxury),transform 0.35s var(--ease-luxury);}
+.fab-group.visible{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
+.fab-group.scrolling{opacity:0;pointer-events:none;transform:translateY(8px) scale(0.92);}
 .fab{width:40px;height:40px;border-radius:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;font-size:18px;border:none;transition:transform 0.2s var(--ease-luxury);box-shadow:0 8px 24px rgba(0,0,0,0.15);}
 .fab:active{transform:scale(0.88);}
 .fab-wish{background:#FDF8F5;color:#C04060;border:1px solid var(--border-strong);}
@@ -140,6 +144,8 @@ header{padding:calc(env(safe-area-inset-top) + 20px) 0 20px;text-align:center;ba
 
 <div id="splash-screen">
     <h1 class="splash-title">Enis Collection</h1>
+    <p class="splash-tagline">Elegance for every woman</p>
+    <div class="splash-divider"></div>
     <p class="splash-slogan">Pamper Your Body</p>
     <button class="btn-discover" onclick="launchApp()">SHOP NOW</button>
 </div>
@@ -256,6 +262,16 @@ window.launchApp = function() {
         document.getElementById('fab-group').classList.add('visible');
         renderProducts('All');
     }, 100);
+
+    var fabGroup = document.getElementById('fab-group');
+    var scrollTimer = null;
+    document.getElementById('mainFeed').addEventListener('scroll', function() {
+        fabGroup.classList.add('scrolling');
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(function() {
+            fabGroup.classList.remove('scrolling');
+        }, 800);
+    }, {passive:true});
 };
 
 function renderProducts(filter) {
