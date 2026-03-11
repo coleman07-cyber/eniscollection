@@ -5,393 +5,514 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>ENIS COLLECTION</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #F8F5F0;
-  --card: #FFFFFF;
-  --text: #1A1208;
-  --soft: #7A6F62;
-  --gold: #C5A028;
-  --border: rgba(0,0,0,0.08);
-  --ease: cubic-bezier(0.25,1,0.5,1);
+  --bg:#FFFFFF; --card-bg:#FFFFFF; --text-main:#000000;
+  --text-soft:#757575; --gold:#C5A028; --border:rgba(0,0,0,0.07);
+  --ease:cubic-bezier(0.25,1,0.5,1);
 }
-*,*::before,*::after {
-  margin:0; padding:0; box-sizing:border-box;
-  font-family:'Montserrat',sans-serif;
-  -webkit-tap-highlight-color:transparent;
-  scrollbar-width:none; -ms-overflow-style:none;
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0A0A0A;--card-bg:#141414;--text-main:#FFFFFF;--text-soft:#999;--border:rgba(255,255,255,0.08);}
 }
-*::-webkit-scrollbar { display:none; }
-html,body { height:100%; overflow:hidden; overscroll-behavior:none; background:var(--bg); }
-body { position:fixed; width:100%; height:100dvh; }
-.shell { width:100%; height:100dvh; background:var(--bg); position:relative; overflow:hidden; }
-
-/* SHOP */
-#shop { display:none; flex-direction:column; height:100dvh; opacity:0; transform:translateY(28px); transition:opacity 1.2s var(–ease),transform 1.2s var(–ease); }
-#shop.on { opacity:1; transform:translateY(0); }
-
-header { padding:calc(env(safe-area-inset-top,0px) + 22px) 20px 18px; text-align:center; flex-shrink:0; background:var(–bg); }
-.h-title { font-family:‘Playfair Display’,serif; font-size:clamp(18px,5.5vw,26px); font-weight:900; text-transform:uppercase; letter-spacing:4px; color:var(–text); position:relative; display:inline-block; }
-.h-title::after { content:’’; position:absolute; bottom:-5px; left:25%; width:50%; height:1px; background:var(–gold); }
-.h-sub { font-size:9px; text-transform:uppercase; letter-spacing:5px; font-weight:700; color:var(–gold); margin-top:11px; }
-
-.cats-wrap { flex-shrink:0; overflow:hidden; background:var(–bg); }
-.cats { display:flex; flex-direction:row; flex-wrap:nowrap; gap:8px; overflow-x:scroll; -webkit-overflow-scrolling:touch; padding:12px 16px; }
-.cat { flex:0 0 auto; padding:10px 20px; border-radius:55px; border:1.5px solid var(–border); font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:1px; white-space:nowrap; color:var(–soft); cursor:pointer; background:var(–card); transition:background .35s,color .35s,border-color .35s; }
-.cat.on { background:var(–gold); color:#000; border-color:var(–gold); }
-
-.feed { flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; background:var(–bg); -webkit-overflow-scrolling:touch; overscroll-behavior-y:contain; }
-.grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:12px 14px 20px; }
-
-.card { background:var(–card); border-radius:22px; overflow:hidden; opacity:0; transform:translateY(20px); transition:opacity .65s var(–ease),transform .65s var(–ease); box-shadow:0 2px 12px rgba(0,0,0,0.07); }
-.card.show { opacity:1; transform:translateY(0); }
-.card:nth-child(even) { transition-delay:.08s; }
-
-.img-wrap { position:relative; width:100%; aspect-ratio:3/4; overflow:hidden; border-radius:18px 18px 0 0; cursor:pointer; background:#E8E0D4; }
-.img-wrap img { width:100%; height:100%; object-fit:cover; display:block; position:relative; z-index:1; }
-.img-wrap::before { content:’’; position:absolute; inset:0; background:linear-gradient(135deg,#EDE6DA,#D9CFBF); z-index:0; }
-
-.ptag { position:absolute; bottom:10px; left:10px; background:var(–gold); color:#000; padding:6px 12px; border-radius:10px; font-size:11px; font-weight:800; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.15); }
-
-.hbtn { position:absolute; top:10px; right:10px; width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.92); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:3; padding:0; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
-.hbtn svg { width:16px; height:16px; fill:rgba(0,0,0,0.2); stroke:rgba(0,0,0,0.3); stroke-width:1.5; pointer-events:none; transition:fill .25s,stroke .25s; }
-.hbtn.liked svg { fill:#E8335D; stroke:#E8335D; }
-.hbtn.pop svg { animation:hpop .4s var(–ease); }
-@keyframes hpop { 0%{transform:scale(1)} 40%{transform:scale(1.5)} 70%{transform:scale(0.85)} 100%{transform:scale(1)} }
-
-.fheart { position:absolute; top:10px; right:10px; font-size:18px; color:#E8335D; pointer-events:none; z-index:5; animation:fup .7s var(–ease) forwards; }
-@keyframes fup { 0%{opacity:1;transform:translateY(0) scale(1)} 100%{opacity:0;transform:translateY(-38px) scale(0.5)} }
-
-.cinfo { padding:10px 12px 14px; background:var(–card); }
-.csize { font-size:8px; color:var(–gold); font-weight:700; letter-spacing:1px; text-transform:uppercase; }
-.cname { font-size:11px; color:var(–text); margin-top:3px; font-weight:700; line-height:1.35; }
-
-/* ABOUT */
-.about { margin:60px 14px 50px; padding:50px 22px; background:var(–card); border-radius:32px; border:1.5px solid var(–border); text-align:center; position:relative; overflow:hidden; box-shadow:0 12px 36px rgba(0,0,0,0.05); }
-.about::before { content:‘E’; position:absolute; top:-20px; right:-10px; font-family:‘Playfair Display’; font-size:160px; color:var(–gold); opacity:.05; pointer-events:none; }
-.about h3 { font-family:‘Playfair Display’,serif; font-size:26px; font-weight:700; margin-bottom:16px; color:var(–text); }
-.about p { font-size:12px; color:var(–soft); line-height:2; margin-bottom:32px; font-weight:400; }
-.pills { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
-.pill { padding:13px 20px; border-radius:100px; background:var(–bg); border:1.5px solid var(–border); display:flex; align-items:center; gap:8px; text-decoration:none; color:var(–text); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1px; transition:transform .15s,background .3s; }
-.pill svg { width:17px; height:17px; flex-shrink:0; }
-.pill:active { transform:scale(.93); background:var(–gold); color:#000; }
-
-/* MODAL */
-#modal { position:fixed; inset:0; z-index:10000; background:rgba(0,0,0,0.3); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:opacity .4s var(–ease),visibility .4s; }
-#modal.on { opacity:1; visibility:visible; }
-.mbox { width:min(280px,85vw); background:var(–card); padding:8px; border-radius:38px; transform:scale(.88) translateY(24px); transition:transform .5s var(–ease); box-shadow:0 30px 80px rgba(0,0,0,0.2); }
-#modal.on .mbox { transform:scale(1) translateY(0); }
-.mimg { border-radius:30px; overflow:hidden; height:min(360px,55vh); position:relative; background:#EDE6DA; }
-.mhbtn { position:absolute; top:14px; right:14px; width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,.92); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:3; padding:0; }
-.mhbtn svg { width:20px; height:20px; fill:rgba(0,0,0,.2); stroke:rgba(0,0,0,.3); stroke-width:1.5; pointer-events:none; transition:fill .25s,stroke .25s; }
-.mhbtn.liked svg { fill:#E8335D; stroke:#E8335D; }
-.mhbtn.pop svg { animation:hpop .4s var(–ease); }
-.wabtn { background:#25D366; color:white; padding:16px; border-radius:18px; text-decoration:none; font-weight:800; display:flex; align-items:center; gap:10px; font-size:12px; justify-content:center; margin-top:14px; box-shadow:0 6px 18px rgba(37,211,102,.35); }
-.wabtn svg { width:22px; height:22px; flex-shrink:0; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;-webkit-tap-highlight-color:transparent;scrollbar-width:none;}
+*::-webkit-scrollbar{display:none;}
+body{background:var(--bg);height:100dvh;overflow:hidden;position:fixed;width:100%;}
+.shell{width:100%;max-width:420px;height:100dvh;margin:0 auto;position:relative;overflow:hidden;background:var(--bg);}
 
 /* SPLASH */
-#splash { position:absolute; inset:0; z-index:9999; background:#0a0804; display:flex; flex-direction:column; justify-content:center; align-items:center; overflow:hidden; transition:opacity 1.4s var(–ease); }
-#splash.off { opacity:0; pointer-events:none; }
-.sbg { position:absolute; inset:0; background:url(‘images/Splash-Dress.PNG’) center/cover no-repeat,url(‘images/Splash-Dress.png’) center/cover no-repeat,linear-gradient(160deg,#1a0e05 0%,#2c1a08 40%,#0e0804 100%); animation:sbgIn 2s var(–ease) forwards; }
-@keyframes sbgIn { from{transform:scale(1.15);opacity:0} to{transform:scale(1.04);opacity:1} }
-.sover { position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(0,0,0,.05) 0%,rgba(0,0,0,.70) 100%),linear-gradient(to bottom,rgba(0,0,0,.5) 0%,rgba(0,0,0,.15) 40%,rgba(0,0,0,.15) 60%,rgba(0,0,0,.80) 100%); }
-.scont { position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; }
+#splash{position:absolute;inset:0;z-index:9999;background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.88)),url(‘images/Splash-Dress.PNG’) center/cover no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .9s var(–ease),transform 1.1s var(–ease);}
+#splash.out{opacity:0;transform:scale(1.08);pointer-events:none;}
+.splash-title{font-family:‘Great Vibes’,cursive;color:#fff;font-size:66px;line-height:1;}
+.splash-tag{font-size:10px;letter-spacing:6px;text-transform:uppercase;font-weight:700;color:var(–gold);margin-top:4px;}
+.btn-shop{margin-top:52px;padding:18px 72px;border-radius:50px;border:none;font-family:‘Montserrat’,sans-serif;font-weight:800;font-size:12px;letter-spacing:3px;background:#fff;color:#000;cursor:pointer;}
+.btn-shop:active{transform:scale(.94);}
 
-.sorn { display:flex; align-items:center; gap:14px; margin-bottom:22px; }
-.ol { width:48px; height:1px; background:var(–gold); opacity:.7; }
-.od { width:6px; height:6px; background:var(–gold); transform:rotate(45deg); }
-.ot { width:3px; height:3px; border-radius:50%; background:var(–gold); opacity:.6; }
-.sest { font-size:8px; letter-spacing:7px; text-transform:uppercase; font-weight:700; color:var(–gold); margin-bottom:10px; }
-.stitle { font-family:‘Great Vibes’,cursive; color:white; font-size:clamp(50px,16vw,72px); line-height:1; text-shadow:0 2px 40px rgba(197,160,40,.3); max-width:90vw; text-align:center; }
-.sword { font-family:‘Playfair Display’,serif; font-size:10px; font-weight:700; letter-spacing:10px; text-transform:uppercase; color:rgba(255,255,255,.4); margin-top:6px; }
-.srule { width:60px; height:1px; background:linear-gradient(90deg,transparent,var(–gold),transparent); margin:18px auto 16px; }
-.slog { font-size:8.5px; text-transform:uppercase; letter-spacing:5px; font-weight:600; color:rgba(255,255,255,.45); }
-.sorn2 { display:flex; align-items:center; gap:14px; margin-top:18px; margin-bottom:28px; }
+/* MAIN APP */
+#app{display:none;flex-direction:column;height:100dvh;opacity:0;transform:translateY(28px);transition:opacity 1.1s var(–ease),transform 1.1s var(–ease);}
+#app.on{opacity:1;transform:translateY(0);}
 
-/* JS animates these — safe on all iOS Safari versions */
-.sfade { opacity:0; transform:translateY(14px); transition:opacity .7s var(–ease), transform .7s var(–ease); }
-.sfade.in { opacity:1; transform:translateY(0); }
+/* HEADER */
+header{padding:calc(env(safe-area-inset-top) + 16px) 0 14px;text-align:center;}
+.h-title{font-family:‘Playfair Display’,serif;font-size:23px;font-weight:900;text-transform:uppercase;letter-spacing:5px;color:var(–text-main);position:relative;display:inline-block;}
+.h-title::after{content:’’;position:absolute;bottom:-5px;left:25%;width:50%;height:1px;background:var(–gold);}
+.h-tag{font-size:8px;text-transform:uppercase;letter-spacing:6px;font-weight:700;color:var(–gold);margin-top:11px;}
 
-.sbtn { padding:0; border:none; background:none; cursor:pointer; }
-.sbtn-in { display:flex; align-items:center; gap:16px; padding:20px 44px; border-radius:60px; border:1.5px solid rgba(197,160,40,.7); background:rgba(197,160,40,.10); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); transition:background .3s,transform .15s; box-shadow:0 0 30px rgba(197,160,40,.08); }
-.sbtn:active .sbtn-in { transform:scale(.96); background:rgba(197,160,40,.22); }
-.sbtn-txt { font-size:9px; font-weight:800; letter-spacing:5px; text-transform:uppercase; color:white; }
-.sbtn-arr { width:18px; height:1px; background:var(–gold); position:relative; }
-.sbtn-arr::after { content:’’; position:absolute; right:0; top:-3px; width:6px; height:6px; border-right:1px solid var(–gold); border-top:1px solid var(–gold); transform:rotate(45deg); }
-.swm { position:absolute; bottom:calc(env(safe-area-inset-bottom,0px) + 22px); font-size:7px; letter-spacing:3px; color:rgba(255,255,255,.18); font-weight:700; text-transform:uppercase; z-index:2; opacity:0; transition:opacity 1s ease; }
-.swm.in { opacity:1; }
+/* CATEGORY PILLS */
+.cats{display:flex;gap:8px;overflow-x:auto;padding:12px 15px;}
+.cat{padding:10px 20px;border-radius:50px;border:1px solid var(–border);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;color:var(–text-soft);cursor:pointer;transition:.35s;}
+.cat.on{background:var(–gold);color:#000;border-color:var(–gold);}
+
+/* FEED */
+.feed{flex:1;overflow-y:auto;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 12px 0;}
+
+/* CARD */
+.card{border-radius:28px;overflow:hidden;opacity:0;transform:translateY(18px);transition:.7s var(–ease);}
+.card.show{opacity:1;transform:translateY(0);}
+.img-wrap{position:relative;aspect-ratio:1/1.35;overflow:hidden;border-radius:20px;cursor:pointer;}
+.img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(–ease);display:block;}
+.img-wrap:active img{transform:scale(1.04);}
+.price-pill{position:absolute;bottom:10px;right:10px;background:var(–gold);color:#000;padding:6px 13px;border-radius:11px;font-size:11px;font-weight:800;}
+.heart-btn{position:absolute;top:9px;right:9px;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.82);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;transition:transform .2s var(–ease);}
+.heart-btn i{font-size:14px;color:#bbb;transition:color .2s,transform .25s var(–ease);}
+.heart-btn.liked i{color:#E53E3E;transform:scale(1.3);}
+.heart-btn:active{transform:scale(.84);}
+.card-foot{padding:11px 4px 6px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.card-info span{font-size:9px;color:var(–gold);font-weight:700;letter-spacing:1px;}
+.card-info h3{font-size:11px;color:var(–text-main);margin-top:3px;font-weight:700;line-height:1.3;}
+.bag-btn{width:34px;height:34px;border-radius:11px;border:none;background:var(–gold);color:#000;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s,background .2s;}
+.bag-btn:active{transform:scale(.84);}
+.bag-btn.in{background:#111;color:var(–gold);}
+@media(prefers-color-scheme:dark){.bag-btn.in{background:#fff;}}
+
+/* ABOUT */
+.about{margin:70px 12px 50px;padding:60px 22px;background:var(–card-bg);border-radius:38px;border:1.5px solid var(–border);text-align:center;position:relative;overflow:hidden;}
+.about::before{content:‘E’;position:absolute;top:-18px;right:-8px;font-family:‘Playfair Display’;font-size:170px;color:var(–gold);opacity:.04;pointer-events:none;}
+.about-sub{font-size:9px;font-weight:800;color:var(–gold);letter-spacing:5px;text-transform:uppercase;margin-bottom:14px;}
+.about h3{font-family:‘Playfair Display’,serif;font-size:26px;font-weight:700;color:var(–text-main);margin-bottom:18px;}
+.about p{font-size:13px;color:var(–text-soft);line-height:2;margin-bottom:36px;}
+.pills{display:flex;flex-wrap:wrap;justify-content:center;gap:11px;}
+.pill{padding:13px 22px;border-radius:100px;background:var(–bg);border:1px solid var(–border);display:flex;align-items:center;gap:9px;text-decoration:none;color:var(–text-main);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;transition:.25s;}
+.pill i{font-size:15px;}
+.pill:active{transform:scale(.92);background:var(–gold);color:#000;border-color:var(–gold);}
+.about-foot{margin-top:44px;font-size:8px;letter-spacing:3px;opacity:.25;font-weight:700;color:var(–text-main);}
+
+/* FLOATING BUTTONS */
+.fabs{position:fixed;right:16px;bottom:42px;z-index:8000;display:none;flex-direction:column;gap:13px;align-items:center;}
+.fabs.on{display:flex;}
+.fab{width:54px;height:54px;border-radius:18px;border:1.5px solid var(–border);background:var(–card-bg);box-shadow:0 6px 28px rgba(0,0,0,.13);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;font-size:21px;transition:transform .2s var(–ease);}
+.fab:active{transform:scale(.88);}
+.fab-wish{color:#E53E3E;}
+.fab-cart{background:var(–gold);color:#000;border-color:var(–gold);}
+.bdg{position:absolute;top:-7px;right:-7px;min-width:20px;height:20px;border-radius:10px;padding:0 5px;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2.5px solid var(–bg);transform:scale(0);transition:transform .3s var(–ease);}
+.fab-wish .bdg{background:#E53E3E;color:#fff;}
+.fab-cart .bdg{background:#000;color:var(–gold);}
+.bdg.on{transform:scale(1);}
+
+/* SIDE PANELS */
+.panel{position:fixed;inset:0;z-index:9500;display:flex;flex-direction:column;background:var(–bg);transform:translateX(105%);transition:transform .5s var(–ease);max-width:420px;margin:0 auto;}
+.panel.open{transform:translateX(0);}
+.panel-head{padding:calc(env(safe-area-inset-top)+18px) 18px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(–border);}
+.panel-head h2{font-family:‘Playfair Display’,serif;font-size:22px;color:var(–text-main);}
+.close-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(–border);background:none;cursor:pointer;color:var(–text-main);font-size:16px;display:flex;align-items:center;justify-content:center;}
+.close-btn:active{background:var(–gold);color:#000;border-color:var(–gold);}
+.panel-body{flex:1;overflow-y:auto;padding:14px;}
+.panel-foot{padding:18px;border-top:1px solid var(–border);}
+
+/* panel item */
+.pi{display:flex;gap:13px;align-items:center;padding:13px;border-radius:18px;margin-bottom:9px;background:var(–card-bg);border:1px solid var(–border);animation:slideIn .3s var(–ease);}
+@keyframes slideIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+.pi img{width:66px;height:82px;object-fit:cover;border-radius:13px;flex-shrink:0;}
+.pi-info{flex:1;}
+.pi-info h4{font-size:12px;font-weight:700;color:var(–text-main);line-height:1.4;}
+.pi-info small{font-size:10px;color:var(–text-soft);}
+.pi-price{font-size:13px;color:var(–gold);font-weight:800;margin-top:4px;}
+.qty-row{display:flex;align-items:center;gap:7px;margin-top:7px;}
+.q-btn{width:28px;height:28px;border-radius:8px;border:1px solid var(–border);background:var(–bg);color:var(–text-main);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.q-btn:active{background:var(–gold);color:#000;border-color:var(–gold);}
+.q-val{font-size:13px;font-weight:700;color:var(–text-main);min-width:20px;text-align:center;}
+.rm-btn{margin-left:auto;width:30px;height:30px;border-radius:9px;border:none;background:rgba(229,62,62,.1);color:#E53E3E;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.rm-btn:active{background:#E53E3E;color:#fff;}
+.wish-add{margin-left:auto;align-self:center;padding:8px 13px;border-radius:11px;border:none;background:var(–gold);color:#000;font-size:10px;font-weight:800;cursor:pointer;}
+.wish-add:active{transform:scale(.9);}
+.total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
+.total-row span{font-size:11px;color:var(–text-soft);font-weight:600;text-transform:uppercase;letter-spacing:1px;}
+.total-row strong{font-size:22px;font-weight:800;color:var(–text-main);font-family:‘Playfair Display’,serif;}
+.checkout-btn{width:100%;padding:17px;border-radius:17px;border:none;background:#25D366;color:#fff;font-size:13px;font-weight:800;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;font-family:‘Montserrat’,sans-serif;}
+.checkout-btn:active{background:#1da855;}
+.empty{text-align:center;padding:55px 20px;color:var(–text-soft);}
+.empty i{font-size:44px;opacity:.18;color:var(–gold);display:block;margin-bottom:14px;}
+.empty p{font-size:13px;line-height:1.8;}
+
+/* PREVIEW MODAL */
+#preview{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.22);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .4s;}
+#preview.on{display:flex;opacity:1;}
+.prev-box{width:265px;background:var(–card-bg);padding:8px;border-radius:40px;transform:scale(.9) translateY(18px);transition:transform .45s var(–ease);box-shadow:0 36px 90px rgba(0,0,0,.16);}
+#preview.on .prev-box{transform:scale(1) translateY(0);}
+.prev-img-wrap{border-radius:32px;overflow:hidden;height:315px;position:relative;}
+.prev-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.prev-heart{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.82);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.prev-heart i{font-size:16px;color:#bbb;transition:color .2s;}
+.prev-heart.liked i{color:#E53E3E;}
+.prev-body{padding:17px 10px;text-align:center;}
+.prev-body h2{font-family:‘Playfair Display’,serif;font-size:20px;color:var(–text-main);}
+.prev-body p{color:var(–gold);font-size:13px;font-weight:700;margin-top:5px;}
+.prev-actions{display:flex;gap:9px;margin-top:14px;}
+.prev-cart-btn{flex:1;padding:15px;border-radius:16px;border:1px solid var(–border);background:var(–bg);color:var(–text-main);font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:‘Montserrat’,sans-serif;transition:background .2s,color .2s;}
+.prev-cart-btn.in{background:var(–gold);color:#000;border-color:var(–gold);}
+.prev-wa{flex:1;background:#25D366;color:#fff;padding:15px;border-radius:16px;text-decoration:none;font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 6px 18px rgba(37,211,102,.28);}
+
+/* TOAST */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(14px);background:#111;color:#fff;padding:11px 20px;border-radius:50px;font-size:11px;font-weight:700;letter-spacing:.4px;opacity:0;transition:opacity .3s,transform .3s var(–ease);z-index:99999;white-space:nowrap;pointer-events:none;}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+@media(prefers-color-scheme:dark){#toast{background:#f0f0f0;color:#000;}}
 </style>
 
 </head>
 <body>
-
-<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-  <symbol id="iheart" viewBox="0 0 24 24">
-    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-  </symbol>
-  <symbol id="iwa" viewBox="0 0 24 24">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.847L0 24l6.335-1.652A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.652-.51-5.17-1.395l-.37-.22-3.762.98.998-3.67-.242-.382A9.943 9.943 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
-  </symbol>
-  <symbol id="ittok" viewBox="0 0 24 24">
-    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1-.07z"/>
-  </symbol>
-  <symbol id="iphone" viewBox="0 0 24 24">
-    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.24 1.02l-2.21 2.2z"/>
-  </symbol>
-  <symbol id="imail" viewBox="0 0 24 24">
-    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-  </symbol>
-</svg>
-
 <div class="shell">
 
-  <!-- SPLASH -->
+<!-- SPLASH -->
 
-  <div id="splash">
-    <div class="sbg"></div>
-    <div class="sover"></div>
-    <div class="scont">
-      <div class="sorn sfade" id="sa1">
-        <div class="ot"></div><div class="ol"></div><div class="od"></div><div class="ol"></div><div class="ot"></div>
+<div id="splash">
+  <h1 class="splash-title">Enis Collection</h1>
+  <p class="splash-tag">Pamper Your Body</p>
+  <button class="btn-shop" onclick="launch()">SHOP NOW</button>
+</div>
+
+<!-- APP -->
+
+<div id="app">
+  <header>
+    <h1 class="h-title">Enis Collection</h1>
+    <p class="h-tag">Pamper Your Body</p>
+  </header>
+
+  <div class="cats">
+    <div class="cat on" onclick="filterCat('All',this)">All Items</div>
+    <div class="cat" onclick="filterCat('Dress',this)">Dresses</div>
+    <div class="cat" onclick="filterCat('Set',this)">Sets</div>
+    <div class="cat" onclick="filterCat('Work',this)">Work Wear</div>
+  </div>
+
+  <div class="feed" id="feed" onscroll="onScroll()">
+    <div class="grid" id="grid"></div>
+    <div class="about">
+      <div class="about-sub">Est. 2022</div>
+      <h3>Our Story</h3>
+      <p>Curating the finest silhouettes for the modern woman. Based in Cape Coast, Enis Collection is where luxury meets comfort in every stitch.</p>
+      <div class="pills">
+        <a href="https://wa.me/233546527892" class="pill"><i class="fab fa-whatsapp" style="color:#25D366"></i> WhatsApp</a>
+        <a href="https://www.tiktok.com/@eniscollection1" class="pill"><i class="fab fa-tiktok"></i> TikTok</a>
+        <a href="tel:+233546527892" class="pill"><i class="fas fa-phone"></i> Call</a>
+        <a href="mailto:contact@eniscollection.com" class="pill"><i class="fas fa-envelope"></i> Email</a>
       </div>
-      <p class="sest sfade" id="sa2">Est. 2022 &nbsp;&middot;&nbsp; Cape Coast</p>
-      <h1 class="stitle sfade" id="sa3">Enis Collection</h1>
-      <p class="sword sfade" id="sa4">Luxury Womenswear</p>
-      <div class="srule sfade" id="sa5"></div>
-      <p class="slog sfade" id="sa6">Pamper Your Body</p>
-      <div class="sorn2 sfade" id="sa7">
-        <div class="ot"></div><div class="ol"></div><div class="od"></div><div class="ol"></div><div class="ot"></div>
-      </div>
-      <button class="sbtn sfade" id="sa8" onclick="startApp()">
-        <div class="sbtn-in">
-          <span class="sbtn-txt">Enter The Collection</span>
-          <div class="sbtn-arr"></div>
-        </div>
+      <p class="about-foot">MADE WITH GRACE &bull; ENIS COLLECTION</p>
+    </div>
+  </div>
+</div>
+
+<!-- FLOATING BUTTONS -->
+
+<div class="fabs" id="fabs">
+  <button class="fab fab-wish" onclick="openPanel('wishlist')">
+    <i class="fas fa-heart"></i>
+    <span class="bdg" id="w-bdg">0</span>
+  </button>
+  <button class="fab fab-cart" onclick="openPanel('cart')">
+    <i class="fas fa-shopping-bag"></i>
+    <span class="bdg" id="c-bdg">0</span>
+  </button>
+</div>
+
+<!-- PREVIEW MODAL -->
+
+<div id="preview" onclick="closePreview()">
+  <div class="prev-box" onclick="event.stopPropagation()">
+    <div class="prev-img-wrap">
+      <img id="prev-img" src="" alt="">
+      <button class="prev-heart" id="prev-heart" onclick="toggleWishPreview()">
+        <i class="fas fa-heart"></i>
       </button>
     </div>
-    <p class="swm" id="sa9">Luxury &middot; Elegance &middot; Grace</p>
-  </div>
-
-  <!-- SHOP -->
-
-  <div id="shop">
-    <header>
-      <h1 class="h-title">Enis Collection</h1>
-      <p class="h-sub">Pamper Your Body</p>
-    </header>
-    <div class="cats-wrap">
-      <div class="cats">
-        <div class="cat on" onclick="filterBy('All',this)">All Items</div>
-        <div class="cat" onclick="filterBy('Dress',this)">Dresses</div>
-        <div class="cat" onclick="filterBy('Set',this)">Sets</div>
-        <div class="cat" onclick="filterBy('Work',this)">Work Wear</div>
-      </div>
-    </div>
-    <div class="feed" id="feed">
-      <div class="grid" id="grid"></div>
-      <div class="about">
-        <div style="font-size:10px;font-weight:800;color:var(--gold);letter-spacing:5px;text-transform:uppercase;margin-bottom:14px;">Est. 2022</div>
-        <h3>Our Story</h3>
-        <p>Curating the finest silhouettes for the modern woman. Based in Cape Coast, Enis Collection is where luxury meets comfort in every stitch.</p>
-        <div class="pills">
-          <a href="https://wa.me/233546527892" class="pill"><svg fill="#25D366"><use href="#iwa"/></svg>WhatsApp</a>
-          <a href="https://www.tiktok.com/@eniscollection1" class="pill"><svg fill="#1A1208"><use href="#ittok"/></svg>TikTok</a>
-          <a href="tel:+233546527892" class="pill"><svg fill="#1A1208"><use href="#iphone"/></svg>Call</a>
-          <a href="mailto:contact@eniscollection.com" class="pill"><svg fill="#1A1208"><use href="#imail"/></svg>Email</a>
-        </div>
-        <p style="margin-top:40px;font-size:8px;letter-spacing:3px;opacity:.3;font-weight:700;">MADE WITH GRACE &bull; ENIS COLLECTION</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL -->
-
-  <div id="modal" onclick="closeModal()">
-    <div class="mbox" onclick="event.stopPropagation()">
-      <div class="mimg">
-        <img id="mimg" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
-        <button class="mhbtn" id="mhbtn" onclick="toggleModalHeart(event)">
-          <svg><use href="#iheart"/></svg>
+    <div class="prev-body">
+      <h2 id="prev-name"></h2>
+      <p id="prev-meta"></p>
+      <div class="prev-actions">
+        <button class="prev-cart-btn" id="prev-cart" onclick="toggleCartPreview()">
+          <i class="fas fa-shopping-bag"></i> ADD TO BAG
         </button>
-      </div>
-      <div style="padding:18px 10px;text-align:center;">
-        <h2 id="mname" style="font-family:'Playfair Display',serif;font-size:20px;color:#1A1208;line-height:1.3;"></h2>
-        <p id="mprice" style="color:var(--gold);font-size:12px;font-weight:700;margin-top:5px;"></p>
-        <a id="mwa" href="#" class="wabtn">
-          <svg fill="white"><use href="#iwa"/></svg>ORDER VIA WHATSAPP
+        <a class="prev-wa" id="prev-wa" href="#">
+          <i class="fab fa-whatsapp"></i> ORDER
         </a>
       </div>
     </div>
   </div>
-
 </div>
 
+<!-- CART PANEL -->
+
+<div class="panel" id="cart-panel">
+  <div class="panel-head">
+    <h2>My Bag</h2>
+    <button class="close-btn" onclick="closePanel('cart')"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="panel-body" id="cart-body"></div>
+  <div class="panel-foot" id="cart-foot" style="display:none">
+    <div class="total-row"><span>Total</span><strong id="cart-total">&#8373;0</strong></div>
+    <button class="checkout-btn" onclick="waCheckout()"><i class="fab fa-whatsapp"></i> CHECKOUT VIA WHATSAPP</button>
+  </div>
+</div>
+
+<!-- WISHLIST PANEL -->
+
+<div class="panel" id="wishlist-panel">
+  <div class="panel-head">
+    <h2>Wishlist</h2>
+    <button class="close-btn" onclick="closePanel('wishlist')"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="panel-body" id="wish-body"></div>
+</div>
+
+</div>
+<div id="toast"></div>
+
 <script>
-/* Splash reveal — JS-driven so iOS Safari animates correctly */
-function showSplash() {
-  var delays = [0, 150, 300, 450, 550, 650, 800, 1000];
-  var ids = ["sa1","sa2","sa3","sa4","sa5","sa6","sa7","sa8"];
-  for (var i = 0; i < ids.length; i++) {
-    (function(id, delay) {
-      setTimeout(function() {
-        var el = document.getElementById(id);
-        if (el) el.classList.add("in");
-      }, delay);
-    })(ids[i], delays[i]);
-  }
-  setTimeout(function() {
-    var wm = document.getElementById("sa9");
-    if (wm) wm.classList.add("in");
-  }, 1400);
-}
-window.addEventListener("load", function() {
-  setTimeout(showSplash, 80);
-});
-var products = [
-  {name:"Thick Seamless Dress",    price:50, size:"10",     cat:"Dress", img:"images/item1.jpg"},
-  {name:"Plaited Skirts and Top",  price:50, size:"8/10",   cat:"Set",   img:"images/item2.jpg"},
-  {name:"Short Length Essential",  price:45, size:"8",      cat:"Dress", img:"images/item3.jpg"},
-  {name:"Church and Work",         price:50, size:"8",      cat:"Work",  img:"images/item4.jpg"},
-  {name:"Dinner and Party Elegance",price:45,size:"8/10",   cat:"Dress", img:"images/item5.jpg"},
-  {name:"Lecture and Beach Set",   price:45, size:"6/8/10", cat:"Set",   img:"images/item6.jpg"},
-  {name:"Ruched SHEIN Special",    price:50, size:"8/10",   cat:"Dress", img:"images/item7.jpg"},
-  {name:"Ultimate Work Gown",      price:50, size:"12/14",  cat:"Work",  img:"images/item8.jpg"},
-  {name:"Skirt and Basic Top Duo", price:50, size:"10/12",  cat:"Set",   img:"images/item9.jpg"},
-  {name:"Refined Church Wear",     price:50, size:"10",     cat:"Work",  img:"images/item10.jpg"}
+var PRODUCTS = [
+  {id:1,  name:"Thick Seamless Dress",    price:50, size:"10",     cat:"Dress", img:"images/item1.jpg"},
+  {id:2,  name:"Plaited Skirts & Top",    price:50, size:"8/10",   cat:"Set",   img:"images/item2.jpg"},
+  {id:3,  name:"Short Length Essential",  price:45, size:"8",      cat:"Dress", img:"images/item3.jpg"},
+  {id:4,  name:"Church & Work",           price:50, size:"8",      cat:"Work",  img:"images/item4.jpg"},
+  {id:5,  name:"Dinner & Party Elegance", price:45, size:"8/10",   cat:"Dress", img:"images/item5.jpg"},
+  {id:6,  name:"Lecture & Beach Set",     price:45, size:"6/8/10", cat:"Set",   img:"images/item6.jpg"},
+  {id:7,  name:"Ruched SHEIN Special",    price:50, size:"8/10",   cat:"Dress", img:"images/item7.jpg"},
+  {id:8,  name:"Ultimate Work Gown",      price:50, size:"12/14",  cat:"Work",  img:"images/item8.jpg"},
+  {id:9,  name:"Skirt & Basic Top Duo",   price:50, size:"10/12",  cat:"Set",   img:"images/item9.jpg"},
+  {id:10, name:"Refined Church Wear",     price:50, size:"10",     cat:"Work",  img:"images/item10.jpg"}
 ];
 
-var LKEY = "enis_likes";
-var obs = null;
-var curName = null;
+var cart = [];
+var wishlist = [];
+var activeProd = null;
+var toastTimer = null;
 
-function getLikes() {
-  try { return JSON.parse(localStorage.getItem(LKEY)) || {}; }
-  catch(e) { return {}; }
-}
-function setLikes(l) {
-  try { localStorage.setItem(LKEY, JSON.stringify(l)); }
-  catch(e) {}
-}
-
-var HSVG = '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
-
-function startApp() {
-  document.getElementById("splash").classList.add("off");
-  var s = document.getElementById("shop");
-  s.style.display = "flex";
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() {
-      s.classList.add("on");
-      drawGrid("All");
-    });
-  });
+function launch() {
+  document.getElementById('splash').classList.add('out');
+  var app = document.getElementById('app');
+  app.style.display = 'flex';
+  setTimeout(function() {
+    app.classList.add('on');
+    document.getElementById('fabs').classList.add('on');
+    renderGrid('All');
+  }, 80);
 }
 
-function drawGrid(filter) {
-  var grid = document.getElementById("grid");
-  var likes = getLikes();
-  var list = filter === "All" ? products : products.filter(function(p) { return p.cat === filter; });
-  var h = "";
-  for (var i = 0; i < list.length; i++) {
-    var p = list[i];
-    var lc = likes[p.name] ? " liked" : "";
-    var n64 = btoa(p.name);
-    h += '<div class="card">';
-    h += '<div class="img-wrap" onclick="openModal(\'' + p.name.replace(/'/g, "&#39;") + '\',' + p.price + ',\'' + p.img + '\',\'' + p.size + '\')">';
-    h += '<img src="' + p.img + '" loading="lazy" alt="' + p.name + '">';
-    h += '<div class="ptag">&#8373;' + p.price + '</div>';
-    h += '<button class="hbtn' + lc + '" data-n="' + p.name.replace(/"/g,"&quot;") + '" onclick="toggleHeart(event,this)">' + HSVG + '</button>';
-    h += '</div>';
-    h += '<div class="cinfo"><div class="csize">SIZE ' + p.size + '</div><div class="cname">' + p.name + '</div></div>';
-    h += '</div>';
+function renderGrid(filter) {
+  var items = (filter === 'All') ? PRODUCTS : PRODUCTS.filter(function(p){ return p.cat === filter; });
+  var html = '';
+  for (var i = 0; i < items.length; i++) {
+    var p = items[i];
+    var liked = wishlist.some(function(w){ return w.id === p.id; });
+    var inBag = cart.some(function(c){ return c.p.id === p.id; });
+    html += '<div class="card show" id="card-' + p.id + '">';
+    html += '<div class="img-wrap" onclick="openPreview(' + p.id + ')">';
+    html += '<img src="' + p.img + '" loading="lazy" alt="' + p.name + '">';
+    html += '<div class="price-pill">&#8373;' + p.price + '</div>';
+    html += '<button class="heart-btn' + (liked ? ' liked' : '') + '" id="hrt-' + p.id + '" onclick="event.stopPropagation();toggleWish(' + p.id + ')"><i class="fas fa-heart"></i></button>';
+    html += '</div>';
+    html += '<div class="card-foot">';
+    html += '<div class="card-info"><span>SIZE ' + p.size + '</span><h3>' + p.name + '</h3></div>';
+    html += '<button class="bag-btn' + (inBag ? ' in' : '') + '" id="bag-' + p.id + '" onclick="toggleCart(' + p.id + ')"><i class="fas ' + (inBag ? 'fa-check' : 'fa-shopping-bag') + '"></i></button>';
+    html += '</div></div>';
   }
-  grid.innerHTML = h;
-  setupObs();
+  document.getElementById('grid').innerHTML = html;
 }
 
-function setupObs() {
-  if (obs) obs.disconnect();
-  var feed = document.getElementById("feed");
-  obs = new IntersectionObserver(function(entries) {
-    for (var i = 0; i < entries.length; i++) {
-      if (entries[i].isIntersecting) {
-        entries[i].target.classList.add("show");
-        obs.unobserve(entries[i].target);
-      }
-    }
-  }, {root: feed, threshold: 0.05, rootMargin: "0px 0px -10px 0px"});
-  var cards = document.querySelectorAll(".card");
-  for (var i = 0; i < cards.length; i++) obs.observe(cards[i]);
+function filterCat(cat, el) {
+  var cats = document.querySelectorAll('.cat');
+  for (var i = 0; i < cats.length; i++) cats[i].classList.remove('on');
+  el.classList.add('on');
+  renderGrid(cat);
+  document.getElementById('feed').scrollTo({top:0, behavior:'smooth'});
 }
 
-function toggleHeart(e, btn) {
-  e.stopPropagation();
-  var n = btn.getAttribute("data-n");
-  var l = getLikes();
-  var now = !l[n];
-  if (now) { l[n] = true; } else { delete l[n]; }
-  setLikes(l);
-  btn.classList.toggle("liked", now);
-  pop(btn);
-  if (now) floatHeart(btn);
-  if (curName === n) syncMH(now);
-}
-
-function toggleModalHeart(e) {
-  e.stopPropagation();
-  if (!curName) return;
-  var l = getLikes();
-  var now = !l[curName];
-  if (now) { l[curName] = true; } else { delete l[curName]; }
-  setLikes(l);
-  syncMH(now);
-  pop(document.getElementById("mhbtn"));
-  var btns = document.querySelectorAll(".hbtn");
-  for (var i = 0; i < btns.length; i++) {
-    if (btns[i].getAttribute("data-n") === curName) btns[i].classList.toggle("liked", now);
+function onScroll() {
+  var cards = document.querySelectorAll('.card');
+  for (var i = 0; i < cards.length; i++) {
+    if (cards[i].getBoundingClientRect().top < window.innerHeight * 0.96) cards[i].classList.add('show');
   }
 }
 
-function syncMH(v) { document.getElementById("mhbtn").classList.toggle("liked", v); }
-
-function pop(btn) {
-  btn.classList.remove("pop");
-  void btn.offsetWidth;
-  btn.classList.add("pop");
+function toggleWish(id) {
+  var prod = null;
+  for (var i = 0; i < PRODUCTS.length; i++) { if (PRODUCTS[i].id === id) { prod = PRODUCTS[i]; break; } }
+  var idx = -1;
+  for (var j = 0; j < wishlist.length; j++) { if (wishlist[j].id === id) { idx = j; break; } }
+  if (idx === -1) { wishlist.push(prod); showToast('Saved to Wishlist'); }
+  else { wishlist.splice(idx, 1); showToast('Removed from Wishlist'); }
+  syncBadges();
+  syncHeartBtn(id);
+  if (activeProd && activeProd.id === id) syncPreview();
 }
 
-function floatHeart(btn) {
-  var w = btn.closest(".img-wrap");
-  var el = document.createElement("span");
-  el.className = "fheart";
-  el.textContent = "\u2665";
-  w.appendChild(el);
-  el.addEventListener("animationend", function() { el.remove(); });
+function toggleWishPreview() { if (activeProd) toggleWish(activeProd.id); }
+
+function syncHeartBtn(id) {
+  var liked = wishlist.some(function(w){ return w.id === id; });
+  var btn = document.getElementById('hrt-' + id);
+  if (btn) btn.classList.toggle('liked', liked);
+  var ph = document.getElementById('prev-heart');
+  if (ph && activeProd && activeProd.id === id) ph.classList.toggle('liked', liked);
 }
 
-function filterBy(cat, el) {
-  var cats = document.querySelectorAll(".cat");
-  for (var i = 0; i < cats.length; i++) cats[i].classList.remove("on");
-  el.classList.add("on");
-  drawGrid(cat);
-  document.getElementById("feed").scrollTo({top: 0, behavior: "smooth"});
+function toggleCart(id) {
+  var prod = null;
+  for (var i = 0; i < PRODUCTS.length; i++) { if (PRODUCTS[i].id === id) { prod = PRODUCTS[i]; break; } }
+  var idx = -1;
+  for (var j = 0; j < cart.length; j++) { if (cart[j].p.id === id) { idx = j; break; } }
+  if (idx === -1) { cart.push({p: prod, qty: 1}); showToast('Added to Bag'); }
+  else { cart.splice(idx, 1); showToast('Removed from Bag'); }
+  syncBadges();
+  syncBagBtn(id);
+  if (activeProd && activeProd.id === id) syncPreview();
 }
 
-function openModal(name, price, img, size) {
-  curName = name;
-  document.getElementById("mimg").src = img;
-  document.getElementById("mname").innerText = name;
-  document.getElementById("mprice").innerText = "UK " + size + "  \u2022  \u20B5" + price;
-  document.getElementById("mwa").href = "https://wa.me/233546527892?text=" + encodeURIComponent("Hi Enis! I'd love to order: " + name + " (Size " + size + ")");
-  syncMH(!!getLikes()[name]);
-  document.getElementById("modal").classList.add("on");
+function toggleCartPreview() { if (activeProd) toggleCart(activeProd.id); }
+
+function syncBagBtn(id) {
+  var inBag = cart.some(function(c){ return c.p.id === id; });
+  var btn = document.getElementById('bag-' + id);
+  if (btn) {
+    btn.className = 'bag-btn' + (inBag ? ' in' : '');
+    btn.innerHTML = '<i class="fas ' + (inBag ? 'fa-check' : 'fa-shopping-bag') + '"></i>';
+  }
 }
 
-function closeModal() {
-  document.getElementById("modal").classList.remove("on");
-  curName = null;
+function changeQty(id, delta) {
+  for (var i = 0; i < cart.length; i++) {
+    if (cart[i].p.id === id) { cart[i].qty += delta; if (cart[i].qty <= 0) cart.splice(i, 1); break; }
+  }
+  syncBadges();
+  renderCartPanel();
+}
+
+function removeCart(id) {
+  cart = cart.filter(function(c){ return c.p.id !== id; });
+  syncBadges(); renderCartPanel(); syncBagBtn(id);
+}
+
+function removeWish(id) {
+  wishlist = wishlist.filter(function(w){ return w.id !== id; });
+  syncBadges(); renderWishPanel(); syncHeartBtn(id);
+}
+
+function addWishToBag(id) {
+  var inBag = cart.some(function(c){ return c.p.id === id; });
+  if (inBag) { showToast('Already in your bag!'); return; }
+  var prod = null;
+  for (var i = 0; i < PRODUCTS.length; i++) { if (PRODUCTS[i].id === id) { prod = PRODUCTS[i]; break; } }
+  cart.push({p: prod, qty: 1});
+  syncBadges(); renderWishPanel(); syncBagBtn(id);
+  showToast('Added to Bag');
+}
+
+function syncBadges() {
+  var cc = 0;
+  for (var i = 0; i < cart.length; i++) cc += cart[i].qty;
+  var wc = wishlist.length;
+  var cb = document.getElementById('c-bdg');
+  var wb = document.getElementById('w-bdg');
+  cb.textContent = cc; wb.textContent = wc;
+  cb.classList.toggle('on', cc > 0);
+  wb.classList.toggle('on', wc > 0);
+}
+
+function openPanel(type) {
+  if (type === 'cart') { renderCartPanel(); document.getElementById('cart-panel').classList.add('open'); }
+  else { renderWishPanel(); document.getElementById('wishlist-panel').classList.add('open'); }
+}
+
+function closePanel(type) {
+  document.getElementById(type + '-panel').classList.remove('open');
+}
+
+function renderCartPanel() {
+  var body = document.getElementById('cart-body');
+  var foot = document.getElementById('cart-foot');
+  if (!cart.length) {
+    body.innerHTML = '<div class="empty"><i class="fas fa-shopping-bag"></i><p>Your bag is empty.<br>Add something beautiful!</p></div>';
+    foot.style.display = 'none'; return;
+  }
+  foot.style.display = 'block';
+  var html = '';
+  for (var i = 0; i < cart.length; i++) {
+    var item = cart[i];
+    html += '<div class="pi"><img src="' + item.p.img + '" alt="">';
+    html += '<div class="pi-info"><h4>' + item.p.name + '</h4><small>Size ' + item.p.size + '</small>';
+    html += '<div class="pi-price">&#8373;' + (item.p.price * item.qty) + '</div>';
+    html += '<div class="qty-row"><button class="q-btn" onclick="changeQty(' + item.p.id + ',-1)">&#8722;</button>';
+    html += '<span class="q-val">' + item.qty + '</span>';
+    html += '<button class="q-btn" onclick="changeQty(' + item.p.id + ',1)">+</button></div></div>';
+    html += '<button class="rm-btn" onclick="removeCart(' + item.p.id + ')"><i class="fas fa-trash-alt"></i></button></div>';
+  }
+  body.innerHTML = html;
+  var total = 0;
+  for (var j = 0; j < cart.length; j++) total += cart[j].p.price * cart[j].qty;
+  document.getElementById('cart-total').innerHTML = '&#8373;' + total;
+}
+
+function renderWishPanel() {
+  var body = document.getElementById('wish-body');
+  if (!wishlist.length) {
+    body.innerHTML = '<div class="empty"><i class="fas fa-heart"></i><p>No saved items yet.<br>Tap the heart on any item to save it.</p></div>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < wishlist.length; i++) {
+    var p = wishlist[i];
+    html += '<div class="pi"><img src="' + p.img + '" alt="">';
+    html += '<div class="pi-info"><h4>' + p.name + '</h4><small>Size ' + p.size + '</small>';
+    html += '<div class="pi-price">&#8373;' + p.price + '</div></div>';
+    html += '<div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">';
+    html += '<button class="wish-add" onclick="addWishToBag(' + p.id + ')">+ Bag</button>';
+    html += '<button class="rm-btn" onclick="removeWish(' + p.id + ')"><i class="fas fa-times"></i></button></div></div>';
+  }
+  body.innerHTML = html;
+}
+
+function openPreview(id) {
+  for (var i = 0; i < PRODUCTS.length; i++) { if (PRODUCTS[i].id === id) { activeProd = PRODUCTS[i]; break; } }
+  document.getElementById('prev-img').src = activeProd.img;
+  document.getElementById('prev-name').textContent = activeProd.name;
+  document.getElementById('prev-meta').textContent = 'UK ' + activeProd.size + ' \u2022 \u20B5' + activeProd.price;
+  var msg = encodeURIComponent('Hi Enis! I\'d like to order: ' + activeProd.name + ' (Size ' + activeProd.size + ')');
+  document.getElementById('prev-wa').href = 'https://wa.me/233546527892?text=' + msg;
+  syncPreview();
+  var modal = document.getElementById('preview');
+  modal.style.display = 'flex';
+  setTimeout(function(){ modal.classList.add('on'); }, 20);
+}
+
+function syncPreview() {
+  if (!activeProd) return;
+  var liked = wishlist.some(function(w){ return w.id === activeProd.id; });
+  var inBag = cart.some(function(c){ return c.p.id === activeProd.id; });
+  var h = document.getElementById('prev-heart');
+  var cb = document.getElementById('prev-cart');
+  if (h) h.classList.toggle('liked', liked);
+  if (cb) {
+    cb.className = 'prev-cart-btn' + (inBag ? ' in' : '');
+    cb.innerHTML = '<i class="fas ' + (inBag ? 'fa-check' : 'fa-shopping-bag') + '"></i> ' + (inBag ? 'IN BAG' : 'ADD TO BAG');
+  }
+}
+
+function closePreview() {
+  var modal = document.getElementById('preview');
+  modal.classList.remove('on');
+  setTimeout(function(){ modal.style.display = 'none'; activeProd = null; }, 420);
+}
+
+function waCheckout() {
+  if (!cart.length) return;
+  var lines = '';
+  var total = 0;
+  for (var i = 0; i < cart.length; i++) {
+    var c = cart[i];
+    lines += '\u2022 ' + c.p.name + ' (Size ' + c.p.size + ') x' + c.qty + ' = \u20B5' + (c.p.price * c.qty) + '\n';
+    total += c.p.price * c.qty;
+  }
+  var msg = encodeURIComponent('Hi Enis! I\'d like to order:\n\n' + lines + '\nTotal: \u20B5' + total);
+  window.open('https://wa.me/233546527892?text=' + msg, '_blank');
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove('on'); }, 2200);
 }
 </script>
 
