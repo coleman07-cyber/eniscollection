@@ -251,7 +251,7 @@
       background: rgba(28,16,21,0.55);
       backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
       display: none; align-items: center; justify-content: center;
-      padding: 20px;
+      padding: 0px;
       opacity: 0; transition: opacity 0.4s var(--ease);
     }
     #item-preview.active { display: flex; opacity: 1; }
@@ -270,10 +270,10 @@
     .preview-img-wrap {
       position: relative; width: 100%;
       aspect-ratio: 3 / 4; overflow:20px;
-      border-radius: 0px 0px 0 0;
+      border-radius: 50px 50px 0 0;
     }
     .preview-img-wrap img {
-      width: 95%; height: 95%; object-fit: cover; display: block;
+      width: 100%; height: 100%; object-fit: cover; display: block;
     }
 
     /* Preview icon buttons — same glass style as card */
