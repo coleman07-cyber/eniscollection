@@ -262,15 +262,15 @@
       border-radius: 50px; overflow:50;
       transform: scale(0.92) translateY(24px);
       transition: transform 0.5s var(--ease);
-      box-shadow: 0 0px 0px rgba(0,0,0,0.35);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.35);
     }
     #item-preview.active .preview-box { transform: scale(1) translateY(0); }
 
     /* Image fills full width, fixed tall ratio */
     .preview-img-wrap {
       position: relative; width: 100%;
-      aspect-ratio: 3 / 4; overflow: hidden;
-      border-radius: 50px 50px 0 0;
+      aspect-ratio: 3 / 4; overflow:20px;
+      border-radius: 0px 0px 0 0;
     }
     .preview-img-wrap img {
       width: 95%; height: 95%; object-fit: cover; display: block;
