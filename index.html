@@ -251,16 +251,16 @@
       background: rgba(28,16,21,0.55);
       backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
       display: none; align-items: center; justify-content: center;
-      padding: 50px;
+      padding: 20px;
       opacity: 0; transition: opacity 0.4s var(--ease);
     }
     #item-preview.active { display: flex; opacity: 1; }
 
     .preview-box {
-      width: 100%; max-width: 270px;
+      width: 100%; max-width: 300px;
       background: var(--card-bg);
-      border-radius: 40px; overflow: hidden;
-      transform: scale(0) translateY(24px);
+      border-radius: 36px; overflow: hidden;
+      transform: scale(0.92) translateY(24px);
       transition: transform 0.5s var(--ease);
       box-shadow: 0 32px 80px rgba(0,0,0,0.35);
     }
@@ -269,9 +269,8 @@
     /* Image fills full width, fixed tall ratio */
     .preview-img-wrap {
       position: relative; width: 100%;
-      border-radius: 40px;
       aspect-ratio: 3 / 4; overflow: hidden;
-      
+      border-radius: 36px 36px 0 0;
     }
     .preview-img-wrap img {
       width: 100%; height: 100%; object-fit: cover; display: block;
@@ -302,7 +301,7 @@
        ============================================= */
     .about-modern {
       margin: 40px 15px 60px; padding: 40px 28px;
-      background: var(--card-bg); border-radius: 50px;
+      background: var(--card-bg); border-radius: 36px;
       border: 1px solid var(--border-strong); text-align: center;
       position: relative; overflow: hidden;
       box-shadow: 0 10px 40px rgba(176,107,122,0.08);
@@ -574,7 +573,7 @@
   <p id="preview-price" style="color:var(--accent);font-size:13px;font-weight:700;margin-top:6px;margin-bottom:14px;letter-spacing:0.5px;"></p>
   <a id="wa-btn" href="#"
      style="display:flex;align-items:center;justify-content:center;gap:10px;
-            width:100%;padding:5px;border-radius:20px;
+            width:100%;padding:16px;border-radius:16px;
             background:#25D366;color:white;text-decoration:none;
             font-weight:800;font-size:12px;letter-spacing:1px;
             font-family:'Montserrat',sans-serif;
@@ -852,7 +851,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var product = products.find(function (p) { return p.id === id; });
     var idx     = cart.findIndex(function (c) { return c.product.id === id; });
 
-    if (idx === -1) { cart.push({ product: product, qty: 1 }); showToast('🛍️Added to Bag'); }
+    if (idx === -1) { cart.push({ product: product, qty: 1 }); showToast('Added to Bag'); }
     else            { cart.splice(idx, 1); showToast('Removed from Bag'); }
 
     updateBadges();
