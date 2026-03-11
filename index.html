@@ -31,134 +31,134 @@
         }
     }
 
-    * { 
+    *, *::before, *::after {
         margin: 0; padding: 0; box-sizing: border-box; 
         font-family: 'Montserrat', sans-serif; 
         -webkit-tap-highlight-color: transparent;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+        scrollbar-width: none; -ms-overflow-style: none;
     }
     *::-webkit-scrollbar { display: none; }
 
-    /* FIX 1: Use dvh instead of vh for mobile browser chrome awareness */
     body { 
-        background: var(--bg); 
-        height: 100dvh; 
-        overflow: hidden; 
-        position: fixed; 
-        width: 100%; 
-        /* FIX 2: Prevent iOS bounce scroll interfering with app */
-        overscroll-behavior: none;
+        background: var(--bg); height: 100dvh; overflow: hidden; 
+        position: fixed; width: 100%; overscroll-behavior: none;
     }
     
     .app-shell { 
-        width: 100%; 
-        max-width: 420px; 
-        height: 100dvh; 
-        margin: 0 auto; 
-        background: var(--bg); 
-        position: relative; 
-        overflow: hidden; 
+        width: 100%; max-width: 420px; height: 100dvh; 
+        margin: 0 auto; background: var(--bg); 
+        position: relative; overflow: hidden; 
     }
 
     #shop-content { 
-        display: none; 
-        flex-direction: column; 
-        height: 100dvh;
-        opacity: 0; 
-        transform: translateY(30px); 
+        display: none; flex-direction: column; height: 100dvh;
+        opacity: 0; transform: translateY(30px); 
         transition: opacity 1.2s var(--ease-luxury), transform 1.2s var(--ease-luxury);
     }
     #shop-content.active { opacity: 1; transform: translateY(0); }
 
-    /* --- HEADER --- */
     header { 
         padding: calc(env(safe-area-inset-top) + 20px) 0 20px; 
-        text-align: center;
-        /* FIX 3: Prevent header from being part of scroll, keep it truly fixed */
-        flex-shrink: 0;
+        text-align: center; flex-shrink: 0;
     }
     .header-title { 
-        font-family: 'Playfair Display', serif; 
-        font-size: 24px; font-weight: 900; 
-        text-transform: uppercase; letter-spacing: 5px; 
-        color: var(--text-main);
+        font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; 
+        text-transform: uppercase; letter-spacing: 5px; color: var(--text-main);
         position: relative; display: inline-block;
     }
     .header-title::after {
-        content: ""; position: absolute; bottom: -5px; left: 25%; width: 50%; height: 1px; background: var(--accent-gold);
+        content: ""; position: absolute; bottom: -5px; left: 25%; 
+        width: 50%; height: 1px; background: var(--accent-gold);
     }
-    .header-slogan { font-size: 9px; text-transform: uppercase; letter-spacing: 6px; font-weight: 700; color: var(--accent-gold); margin-top: 10px; }
+    .header-slogan { 
+        font-size: 9px; text-transform: uppercase; letter-spacing: 6px; 
+        font-weight: 700; color: var(--accent-gold); margin-top: 10px; 
+    }
 
-    /* --- CATALOGUE --- */
-    /* FIX 4: flex-shrink: 0 so it never collapses */
     .catalogue-scroll { 
-        display: flex; 
-        gap: 8px; 
-        overflow-x: auto; 
-        padding: 15px;
-        flex-shrink: 0;
-        /* FIX 5: Momentum scrolling on iOS */
-        -webkit-overflow-scrolling: touch;
+        display: flex; gap: 8px; overflow-x: auto; padding: 15px;
+        flex-shrink: 0; -webkit-overflow-scrolling: touch;
     }
     .cat-item {
         padding: 10px 22px; border-radius: 55px; border: 1px solid var(--border);
         font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-        white-space: nowrap; color: var(--text-soft); 
-        cursor: pointer;
+        white-space: nowrap; color: var(--text-soft); cursor: pointer;
         transition: background 0.4s, color 0.4s, border-color 0.4s;
     }
     .cat-item.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
 
-    /* --- FEED / GRID --- */
-    /* FIX 6: feed must be flex: 1 with min-height: 0 to actually scroll inside a flex column */
     .feed { 
-        flex: 1; 
-        min-height: 0; /* CRITICAL — without this, overflow-y: auto has no effect in flex children */
-        overflow-y: auto; 
-        background: var(--bg);
-        /* FIX 7: momentum scrolling on iOS */
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior: contain;
+        flex: 1; min-height: 0; overflow-y: auto; background: var(--bg);
+        -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
     }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
 
-    /* FIX 8: Cards start invisible, JS adds .visible on scroll observe */
     .product-card { 
-        background: var(--bg); 
-        border-radius: 30px; 
-        overflow: hidden; 
-        opacity: 0; 
-        transform: translateY(24px); 
-        /* FIX 9: Use will-change sparingly — only on elements actually animating */
-        will-change: opacity, transform;
+        background: var(--bg); border-radius: 30px; overflow: hidden; 
+        opacity: 0; transform: translateY(24px); will-change: opacity, transform;
         transition: opacity 0.7s var(--ease-luxury), transform 0.7s var(--ease-luxury); 
     }
-    .product-card.visible { 
-        opacity: 1; 
-        transform: translateY(0);
-        will-change: auto; /* Release after animation completes */
-    }
-    /* FIX 10: Stagger via nth-child so cards don't all pop in simultaneously */
+    .product-card.visible { opacity: 1; transform: translateY(0); will-change: auto; }
     .product-card:nth-child(even) { transition-delay: 0.1s; }
 
     .p-image-wrap { 
-        position: relative; width: 100%; aspect-ratio: 1/1.35; overflow: hidden; border-radius: 20px;
-        cursor: pointer;
+        position: relative; width: 100%; aspect-ratio: 1/1.35; 
+        overflow: hidden; border-radius: 20px; cursor: pointer;
     }
     .p-image-wrap img { 
         width: 100%; height: 100%; object-fit: cover;
-        /* FIX 11: GPU-accelerate images to prevent jank during scroll */
-        transform: translateZ(0);
-        display: block;
+        transform: translateZ(0); display: block;
     }
     .price-tag { 
         position: absolute; bottom: 10px; right: 10px; 
         background: var(--accent-gold); color: #000; 
         padding: 7px 14px; border-radius: 12px; 
-        font-size: 11px; font-weight: 800; 
-        /* FIX 12: Keep price tag above image GPU layer */
-        isolation: isolate;
+        font-size: 11px; font-weight: 800; isolation: isolate;
+    }
+
+    /* ── HEART BUTTON ── */
+    .heart-btn {
+        position: absolute;
+        top: 10px; right: 10px;
+        width: 34px; height: 34px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.82);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: none;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        z-index: 2;
+        transition: background 0.25s, transform 0.15s;
+    }
+    .heart-btn i {
+        font-size: 14px;
+        color: rgba(0,0,0,0.22);
+        transition: color 0.25s, transform 0.35s var(--ease-luxury);
+        pointer-events: none;
+    }
+    .heart-btn.liked { background: rgba(255,255,255,0.95); }
+    .heart-btn.liked i { color: #E8335D; }
+    .heart-btn.pop i { animation: heartPop 0.42s var(--ease-luxury); }
+
+    @keyframes heartPop {
+        0%   { transform: scale(1); }
+        40%  { transform: scale(1.55); }
+        70%  { transform: scale(0.82); }
+        100% { transform: scale(1); }
+    }
+
+    /* Floating heart particle */
+    .float-heart {
+        position: absolute;
+        top: 10px; right: 10px;
+        font-size: 18px; color: #E8335D;
+        pointer-events: none; z-index: 5;
+        animation: floatUp 0.72s var(--ease-luxury) forwards;
+    }
+    @keyframes floatUp {
+        0%   { opacity: 1; transform: translateY(0) scale(1); }
+        100% { opacity: 0; transform: translateY(-40px) scale(0.5); }
     }
 
     /* --- ABOUT --- */
@@ -178,8 +178,10 @@
         font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; 
         margin-bottom: 20px; color: var(--text-main); letter-spacing: -0.5px;
     }
-    .about-modern p { font-size: 13px; color: var(--text-soft); line-height: 2; margin-bottom: 40px; font-weight: 400; }
-
+    .about-modern p { 
+        font-size: 13px; color: var(--text-soft); line-height: 2; 
+        margin-bottom: 40px; font-weight: 400; 
+    }
     .contact-pill-box { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
     .contact-pill {
         padding: 14px 24px; border-radius: 100px; background: var(--bg);
@@ -192,24 +194,16 @@
     .contact-pill:active { transform: scale(0.92); background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
 
     /* --- PREVIEW MODAL --- */
-    /* FIX 13: Don't toggle display+opacity in two steps — use visibility+opacity for smooth fade */
     #item-preview { 
         position: fixed; inset: 0; z-index: 10000; 
         background: rgba(0,0,0,0.2); 
-        backdrop-filter: blur(25px); 
-        -webkit-backdrop-filter: blur(25px); 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        opacity: 0;
-        visibility: hidden;
-        /* FIX 14: Transition visibility alongside opacity */
+        backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+        display: flex; align-items: center; justify-content: center; 
+        opacity: 0; visibility: hidden;
         transition: opacity 0.4s var(--ease-luxury), visibility 0.4s;
     }
-    #item-preview.active { 
-        opacity: 1; 
-        visibility: visible; 
-    }
+    #item-preview.active { opacity: 1; visibility: visible; }
+
     .preview-box { 
         width: 260px; background: var(--card-bg); padding: 8px; border-radius: 42px; 
         transform: scale(0.88) translateY(24px); 
@@ -218,6 +212,25 @@
     }
     #item-preview.active .preview-box { transform: scale(1) translateY(0); }
 
+    /* Heart inside modal */
+    .modal-img-wrap { border-radius: 34px; overflow: hidden; height: 370px; position: relative; }
+    .modal-heart-btn {
+        position: absolute; top: 14px; right: 14px;
+        width: 38px; height: 38px; border-radius: 50%;
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        border: none; display: flex; align-items: center; justify-content: center;
+        cursor: pointer; z-index: 3;
+        transition: background 0.25s, transform 0.15s;
+    }
+    .modal-heart-btn i { 
+        font-size: 16px; color: rgba(0,0,0,0.22); 
+        transition: color 0.25s, transform 0.35s var(--ease-luxury);
+        pointer-events: none;
+    }
+    .modal-heart-btn.liked i { color: #E8335D; }
+    .modal-heart-btn.pop i { animation: heartPop 0.42s var(--ease-luxury); }
+
     /* --- SPLASH --- */
     #splash-screen { 
         position: absolute; inset: 0; z-index: 9999; 
@@ -225,11 +238,7 @@
         display: flex; flex-direction: column; justify-content: center; align-items: center; 
         transition: transform 1.2s var(--ease-luxury), opacity 0.8s ease; 
     }
-    #splash-screen.hidden { 
-        opacity: 0; 
-        transform: scale(1.1); 
-        pointer-events: none; 
-    }
+    #splash-screen.hidden { opacity: 0; transform: scale(1.1); pointer-events: none; }
     .splash-title { font-family: 'Great Vibes', cursive; color: white; font-size: 64px; }
     .splash-slogan { font-size: 10px; letter-spacing: 6px; text-transform: uppercase; font-weight: 700; color: var(--accent-gold); margin-top: -10px; }
     .btn-discover { 
@@ -272,7 +281,6 @@
             <div style="font-size: 10px; font-weight: 800; color: var(--accent-gold); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 15px;">Est. 2022</div>
             <h3>OUR STORY</h3>
             <p>Curating the finest silhouettes for the modern woman. Based in Cape Coast, Enis Collection is where luxury meets comfort in every stitch.</p>
-            
             <div class="contact-pill-box">
                 <a href="https://wa.me/233546527892" class="contact-pill"><i class="fab fa-whatsapp" style="color:#25D366"></i> WhatsApp</a>
                 <a href="https://www.tiktok.com/@eniscollection1" class="contact-pill"><i class="fab fa-tiktok"></i> TikTok</a>
@@ -286,13 +294,16 @@
 
 <div id="item-preview" onclick="closePreview()">
     <div class="preview-box" onclick="event.stopPropagation()">
-        <div style="border-radius: 34px; overflow: hidden; height: 370px;">
-            <img id="preview-img" src="" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        <div class="modal-img-wrap">
+            <img id="preview-img" src="" style="width:100%;height:100%;object-fit:cover;display:block;">
+            <button class="modal-heart-btn" id="modal-heart" onclick="toggleModalHeart(event)">
+                <i class="fas fa-heart"></i>
+            </button>
         </div>
         <div style="padding: 22px 10px; text-align: center;">
-            <h2 id="preview-name" style="font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text-main);"></h2>
-            <p id="preview-price" style="color: var(--accent-gold); font-size: 13px; font-weight: 700; margin-top: 6px;"></p>
-            <a id="wa-btn" href="#" style="background:#25D366; color:white; padding:18px; border-radius:20px; text-decoration:none; font-weight:800; display:flex; align-items:center; gap:12px; font-size:13px; justify-content:center; margin-top:15px; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);">
+            <h2 id="preview-name" style="font-family:'Playfair Display',serif;font-size:22px;color:var(--text-main);"></h2>
+            <p id="preview-price" style="color:var(--accent-gold);font-size:13px;font-weight:700;margin-top:6px;"></p>
+            <a id="wa-btn" href="#" style="background:#25D366;color:white;padding:18px;border-radius:20px;text-decoration:none;font-weight:800;display:flex;align-items:center;gap:12px;font-size:13px;justify-content:center;margin-top:15px;box-shadow:0 8px 20px rgba(37,211,102,0.3);">
                 <i class="fab fa-whatsapp"></i> ORDER VIA WHATSAPP
             </a>
         </div>
@@ -304,102 +315,153 @@
 
 <script>
     const myProducts = [
-        { name: "Thick Seamless Dress", price: 50, size: "10", category: "Dress", image: "images/item1.jpg" },
-        { name: "Plaited Skirts & Top", price: 50, size: "8/10", category: "Set", image: "images/item2.jpg" },
-        { name: "Short Length Essential", price: 45, size: "8", category: "Dress", image: "images/item3.jpg" },
-        { name: "Church & Work", price: 50, size: "8", category: "Work", image: "images/item4.jpg" },
-        { name: "Dinner & Party Elegance", price: 45, size: "8/10", category: "Dress", image: "images/item5.jpg" },
-        { name: "Lecture & Beach Set", price: 45, size: "6/8/10", category: "Set", image: "images/item6.jpg" },
-        { name: "Ruched SHEIN Special", price: 50, size: "8/10", category: "Dress", image: "images/item7.jpg" },
-        { name: "Ultimate Work Gown", price: 50, size: "12/14", category: "Work", image: "images/item8.jpg" },
-        { name: "Skirt & Basic Top Duo", price: 50, size: "10/12", category: "Set", image: "images/item9.jpg" },
-        { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
+        { name: "Thick Seamless Dress",    price: 50, size: "10",      category: "Dress", image: "images/item1.jpg" },
+        { name: "Plaited Skirts & Top",    price: 50, size: "8/10",    category: "Set",   image: "images/item2.jpg" },
+        { name: "Short Length Essential",  price: 45, size: "8",        category: "Dress", image: "images/item3.jpg" },
+        { name: "Church & Work",           price: 50, size: "8",        category: "Work",  image: "images/item4.jpg" },
+        { name: "Dinner & Party Elegance", price: 45, size: "8/10",    category: "Dress", image: "images/item5.jpg" },
+        { name: "Lecture & Beach Set",     price: 45, size: "6/8/10",  category: "Set",   image: "images/item6.jpg" },
+        { name: "Ruched SHEIN Special",    price: 50, size: "8/10",    category: "Dress", image: "images/item7.jpg" },
+        { name: "Ultimate Work Gown",      price: 50, size: "12/14",   category: "Work",  image: "images/item8.jpg" },
+        { name: "Skirt & Basic Top Duo",   price: 50, size: "10/12",   category: "Set",   image: "images/item9.jpg" },
+        { name: "Refined Church Wear",     price: 50, size: "10",      category: "Work",  image: "images/item10.jpg" }
     ];
 
-    // FIX 15: Use IntersectionObserver instead of scroll event listener.
-    // The old onscroll+getBoundingClientRect approach fires on every scroll pixel,
-    // causes layout thrashing (forced reflow), and misses elements on filter re-render.
+    // Likes persist across reloads via localStorage
+    const LIKES_KEY = 'enis_likes';
+    function getLikes() {
+        try { return JSON.parse(localStorage.getItem(LIKES_KEY)) || {}; } catch { return {}; }
+    }
+    function saveLikes(l) {
+        try { localStorage.setItem(LIKES_KEY, JSON.stringify(l)); } catch {}
+    }
+
     let observer = null;
+    let currentModalName = null;
 
     function setupObserver() {
-        // Disconnect any previous observer before creating a new one
         if (observer) observer.disconnect();
-
         observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    // FIX 16: Unobserve after animating in — no need to keep watching
                     observer.unobserve(entry.target);
                 }
             });
-        }, {
-            root: document.getElementById('mainFeed'), // FIX 17: Observe within the scrollable feed, not the viewport
-            threshold: 0.08,
-            rootMargin: '0px 0px -20px 0px'
-        });
-
+        }, { root: document.getElementById('mainFeed'), threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
         document.querySelectorAll('.product-card').forEach(card => observer.observe(card));
     }
 
     function launchApp() {
-        const splash = document.getElementById('splash-screen');
+        document.getElementById('splash-screen').classList.add('hidden');
         const content = document.getElementById('shop-content');
-        splash.classList.add('hidden');
         content.style.display = 'flex';
-        // FIX 18: Use requestAnimationFrame to ensure display:flex is painted before adding .active
-        // Previously setTimeout(100) was unreliable — rAF guarantees the next paint cycle
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                content.classList.add('active');
-                renderProducts();
-            });
-        });
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            content.classList.add('active');
+            renderProducts();
+        }));
     }
 
     function renderProducts(filter = 'All') {
-        const grid = document.getElementById('productGrid');
+        const grid  = document.getElementById('productGrid');
         const items = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
-        
-        grid.innerHTML = items.map((item) => `
+        const likes = getLikes();
+
+        grid.innerHTML = items.map(item => {
+            const liked = likes[item.name] ? 'liked' : '';
+            return `
             <div class="product-card">
-                <div class="p-image-wrap" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
+                <div class="p-image-wrap" onclick="openPreview('${item.name.replace(/'/g,"\\'")}',${item.price},'${item.image}','${item.size}')">
                     <img src="${item.image}" loading="lazy" alt="${item.name}">
                     <div class="price-tag">₵${item.price}</div>
+                    <button class="heart-btn ${liked}" data-name="${item.name.replace(/"/g,'&quot;')}" onclick="toggleHeart(event,this)">
+                        <i class="fas fa-heart"></i>
+                    </button>
                 </div>
                 <div style="padding:15px 5px;">
-                    <span style="font-size:9px; color:var(--accent-gold); font-weight:700; letter-spacing:1px;">SIZE ${item.size}</span>
-                    <h3 style="font-size:12px; color:var(--text-main); margin-top:4px; font-weight:700;">${item.name}</h3>
+                    <span style="font-size:9px;color:var(--accent-gold);font-weight:700;letter-spacing:1px;">SIZE ${item.size}</span>
+                    <h3 style="font-size:12px;color:var(--text-main);margin-top:4px;font-weight:700;">${item.name}</h3>
                 </div>
-            </div>
-        `).join('');
+            </div>`;
+        }).join('');
 
-        // FIX 19: Set up the observer AFTER DOM is updated
         setupObserver();
+    }
+
+    function toggleHeart(e, btn) {
+        e.stopPropagation();
+        const name   = btn.dataset.name;
+        const likes  = getLikes();
+        const nowLiked = !likes[name];
+
+        nowLiked ? (likes[name] = true) : delete likes[name];
+        saveLikes(likes);
+
+        btn.classList.toggle('liked', nowLiked);
+        animatePop(btn);
+        if (nowLiked) spawnFloatHeart(btn);
+
+        // Keep modal heart in sync
+        if (currentModalName === name) syncModalHeart(nowLiked);
+    }
+
+    function toggleModalHeart(e) {
+        e.stopPropagation();
+        if (!currentModalName) return;
+        const likes  = getLikes();
+        const nowLiked = !likes[currentModalName];
+
+        nowLiked ? (likes[currentModalName] = true) : delete likes[currentModalName];
+        saveLikes(likes);
+
+        syncModalHeart(nowLiked);
+        animatePop(document.getElementById('modal-heart'));
+
+        // Keep grid card in sync
+        document.querySelectorAll(`.heart-btn`).forEach(b => {
+            if (b.dataset.name === currentModalName) b.classList.toggle('liked', nowLiked);
+        });
+    }
+
+    function syncModalHeart(liked) {
+        document.getElementById('modal-heart').classList.toggle('liked', liked);
+    }
+
+    function animatePop(btn) {
+        btn.classList.remove('pop');
+        void btn.offsetWidth; // restart animation
+        btn.classList.add('pop');
+    }
+
+    function spawnFloatHeart(btn) {
+        const wrap = btn.closest('.p-image-wrap');
+        const el   = document.createElement('span');
+        el.className   = 'float-heart';
+        el.textContent = '♥';
+        wrap.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
     }
 
     function filterCat(cat, el) {
         document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
         el.classList.add('active');
         renderProducts(cat);
-        // FIX 20: Scroll the feed div, not the window
         document.getElementById('mainFeed').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function openPreview(name, price, image, size) {
-        const modal = document.getElementById('item-preview');
-        document.getElementById('preview-img').src = image;
-        document.getElementById('preview-name').innerText = name;
+        currentModalName = name;
+        document.getElementById('preview-img').src         = image;
+        document.getElementById('preview-name').innerText  = name;
         document.getElementById('preview-price').innerText = `UK ${size} • ₵${price}`;
-        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
-        document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
-        // FIX 21: Just add .active — CSS handles visibility+opacity together, no JS opacity hacks needed
-        modal.classList.add('active');
+        document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`)}`;
+        syncModalHeart(!!getLikes()[name]);
+        document.getElementById('item-preview').classList.add('active');
     }
 
-    function closePreview() { 
+    function closePreview() {
         document.getElementById('item-preview').classList.remove('active');
-        // FIX 22: No need for setTimeout to set display:none — visibility:hidden handles it cleanly
+        currentModalName = null;
     }
 </script>
 
