@@ -257,7 +257,7 @@
     #item-preview.active { display: flex; opacity: 1; }
 
     .preview-box {
-      width: 100%; max-width: 270px;
+      width: 0%; max-width: 270px;
       background: var(--card-bg);
       border-radius: 40px; overflow: hidden;
       transform: scale(0) translateY(24px);
@@ -270,7 +270,7 @@
     .preview-img-wrap {
       position: relative; width: 100%;
       border-radius: 40px;
-      aspect-ratio: 3 / 6; overflow: hidden;
+      aspect-ratio: 3 / 4; overflow: hidden;
       
     }
     .preview-img-wrap img {
@@ -852,7 +852,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var product = products.find(function (p) { return p.id === id; });
     var idx     = cart.findIndex(function (c) { return c.product.id === id; });
 
-    if (idx === -1) { cart.push({ product: product, qty: 1 }); showToast('Added to Bag'); }
+    if (idx === -1) { cart.push({ product: product, qty: 1 }); showToast('🛍️Added to Bag'); }
     else            { cart.splice(idx, 1); showToast('Removed from Bag'); }
 
     updateBadges();
