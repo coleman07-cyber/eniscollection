@@ -122,7 +122,8 @@
         opacity: 0; animation: fadeUp 0.6s 0.9s var(--ease) forwards;
     }
     .btn-enter {
-        padding: 18px 64px; border-radius: 100px; border: none;
+        display: inline-block;
+        padding: 20px 64px; border-radius: 100px;
         background: var(--accent); color: #000;
         font-family: 'DM Sans', sans-serif;
         font-size: 16px; font-weight: 700; letter-spacing: 4px;
@@ -533,7 +534,7 @@
         <h1 class="splash-title">Enis Collection</h1>
         <p class="splash-sub">Pamper Your Body</p>
         <div class="splash-divider"></div>
-        <button class="btn-enter" id="shopNowBtn">SHOP NOW</button>
+        <div class="btn-enter" id="shopNowBtn" role="button" tabindex="0">SHOP NOW</div>
     </div>
 </div>
 
@@ -713,16 +714,28 @@ setupObserver();
 document.addEventListener(“DOMContentLoaded”, function() {
 var btn = gid(“shopNowBtn”);
 if (!btn) return;
-// touchend fires before click on iOS - use it as primary
-btn.addEventListener(“touchend”, function(e) {
-e.preventDefault();
-launch();
+
+```
+// Visual feedback on touch
+btn.addEventListener("touchstart", function(e) {
+    btn.style.opacity = "0.75";
+    btn.style.transform = "scale(0.96)";
+}, { passive: true });
+
+// Fire launch on touchend - most reliable for iOS
+btn.addEventListener("touchend", function(e) {
+    e.preventDefault();
+    btn.style.opacity = "1";
+    btn.style.transform = "scale(1)";
+    launch();
 }, { passive: false });
-// click as fallback for desktop / cases where touchend doesn’t fire
-btn.addEventListener(“click”, function(e) {
-e.preventDefault();
-launch();
+
+// Click fallback for desktop
+btn.addEventListener("click", function(e) {
+    launch();
 });
+```
+
 });
 
 function getFiltered() {
