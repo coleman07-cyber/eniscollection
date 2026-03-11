@@ -311,9 +311,9 @@
 
     <div class="catalogue-scroll">
         <div class="cat-item active" onclick="filterCat('All', this)">All Items</div>
-        <div class="cat-item" onclick="filterCat('Dress', this)">Dresses</div>
-        <div class="cat-item" onclick="filterCat('Set', this)">Sets</div>
-        <div class="cat-item" onclick="filterCat('Work', this)">Work Wear</div>
+        <div class="cat-item" onclick="filterCat('Thrift', this)">Thrift</div>
+            <div class="cat-item" onclick="filterCat('Store', this)">Store</div>
+        <div class="cat-item" onclick="filterCat('Hamdmade', this)">Handmade</div>
     </div>
 
     <div class="feed" id="mainFeed" onscroll="handleScroll()">
@@ -407,16 +407,16 @@
 <script>
     /* ── PRODUCT DATA ── */
     const myProducts = [
-        { id:1,  name: "Thick Seamless Dress",    price: 50, size: "10",      category: "Dress", image: "images/item1.jpg" },
-        { id:2,  name: "Plaited Skirts & Top",    price: 50, size: "8/10",    category: "Set",   image: "images/item2.jpg" },
-        { id:3,  name: "Short Length Essential",  price: 45, size: "8",       category: "Dress", image: "images/item3.jpg" },
-        { id:4,  name: "Church & Work",           price: 50, size: "8",       category: "Work",  image: "images/item4.jpg" },
-        { id:5,  name: "Dinner & Party Elegance", price: 45, size: "8/10",    category: "Dress", image: "images/item5.jpg" },
-        { id:6,  name: "Lecture & Beach Set",     price: 45, size: "6/8/10",  category: "Set",   image: "images/item6.jpg" },
-        { id:7,  name: "Ruched SHEIN Special",    price: 50, size: "8/10",    category: "Dress", image: "images/item7.jpg" },
-        { id:8,  name: "Ultimate Work Gown",      price: 50, size: "12/14",   category: "Work",  image: "images/item8.jpg" },
-        { id:9,  name: "Skirt & Basic Top Duo",   price: 50, size: "10/12",   category: "Set",   image: "images/item9.jpg" },
-        { id:10, name: "Refined Church Wear",     price: 50, size: "10",      category: "Work",  image: "images/item10.jpg" }
+        { id:1,  name: "Thick Seamless Dress",    price: 50, size: "10",      category: "Thrift", image: "images/item1.jpg" },
+        { id:2,  name: "Plaited Skirts & Top",    price: 50, size: "8/10",    category: "Thrift",   image: "images/item2.jpg" },
+        { id:3,  name: "Short Length Essential",  price: 45, size: "8",       category: "Thrift", image: "images/item3.jpg" },
+        { id:4,  name: "Church & Work",           price: 50, size: "8",       category: "Store",  image: "images/item4.jpg" },
+        { id:5,  name: "Dinner & Party Elegance", price: 45, size: "8/10",    category: "Store", image: "images/item5.jpg" },
+        { id:6,  name: "Lecture & Beach Set",     price: 45, size: "6/8/10",  category: "Store",   image: "images/item6.jpg" },
+        { id:7,  name: "Ruched SHEIN Special",    price: 50, size: "8/10",    category: "Thrift", image: "images/item7.jpg" },
+        { id:8,  name: "Ultimate Work Gown",      price: 50, size: "12/14",   category: "Thrift",  image: "images/item8.jpg" },
+        { id:9,  name: "Skirt & Basic Top Duo",   price: 50, size: "10/12",   category: "Store",   image: "images/item9.jpg" },
+        { id:10, name: "Refined Church Wear",     price: 50, size: "10",      category: "Store",  image: "images/item10.jpg" }
     ];
 
     let cart = [];
