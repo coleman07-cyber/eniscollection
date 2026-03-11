@@ -143,10 +143,13 @@
         display: flex; flex-direction: column;
         height: 100dvh;
         opacity: 0; transform: translateY(24px);
-        pointer-events: none;
-        transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+        visibility: hidden;
+        transition: opacity 0.9s var(--ease), transform 0.9s var(--ease), visibility 0s 0.9s;
     }
-    #shop.active { opacity: 1; transform: translateY(0); pointer-events: all; }
+    #shop.active {
+        opacity: 1; transform: translateY(0); visibility: visible;
+        transition: opacity 0.9s var(--ease), transform 0.9s var(--ease), visibility 0s 0s;
+    }
 
     /* ── Top Bar ── */
     .top-bar {
@@ -662,10 +665,6 @@
 
 </div>
 <script>
-(function () {
-    'use strict';
-
-```
 var PRODUCTS = [
     { id:1,  name:"Thick Seamless Dress",    price:50, size:"10",     category:"Thrift",   image:"images/item1.jpg",  badge:"" },
     { id:2,  name:"Plaited Skirts & Top",    price:50, size:"8/10",   category:"Handmade", image:"images/item2.jpg",  badge:"New" },
@@ -680,252 +679,255 @@ var PRODUCTS = [
 ];
 
 var wishlist      = new Set();
-var currentFilter = 'All';
-var searchQuery   = '';
+var currentFilter = “All”;
+var searchQuery   = “”;
 var activeProduct = null;
 var cardObserver  = null;
 
-function el(id) { return document.getElementById(id); }
+function gid(id) { return document.getElementById(id); }
 
-/* ── Launch ── */
-window.launch = function () {
-    try {
-        var splash = el('splash');
-        var shop   = el('shop');
-        if (!splash || !shop) return;
-        splash.classList.add('out');
-        setTimeout(function () {
-            shop.classList.add('active');
-            var sw = el('searchWrap');
-            if (sw) sw.classList.add('in');
-            renderGrid();
-            setupObserver();
-        }, 250);
-    } catch(e) { console.error('launch:', e); }
-};
+function launch() {
+var splash = gid(“splash”);
+var shop   = gid(“shop”);
+if (!splash || !shop) { alert(“Error: page elements missing”); return; }
+splash.classList.add(“out”);
+setTimeout(function () {
+shop.classList.add(“active”);
+var sw = gid(“searchWrap”);
+if (sw) sw.classList.add(“in”);
+renderGrid();
+setupObserver();
+}, 250);
+}
 
-/* ── Grid ── */
 function getFiltered() {
-    var q = searchQuery.toLowerCase().trim();
-    return PRODUCTS.filter(function (p) {
-        var catOk    = currentFilter === 'All' || p.category === currentFilter;
-        var searchOk = !q || p.name.toLowerCase().indexOf(q) !== -1 || p.category.toLowerCase().indexOf(q) !== -1;
-        return catOk && searchOk;
-    });
+var q = searchQuery.toLowerCase().trim();
+return PRODUCTS.filter(function(p) {
+var catOk    = currentFilter === “All” || p.category === currentFilter;
+var searchOk = !q || p.name.toLowerCase().indexOf(q) !== -1 || p.category.toLowerCase().indexOf(q) !== -1;
+return catOk && searchOk;
+});
 }
 
 function renderGrid() {
-    var items   = getFiltered();
-    var grid    = el('grid');
-    var counter = el('resultsCount');
-    if (!grid) return;
+var items   = getFiltered();
+var grid    = gid(“grid”);
+var counter = gid(“resultsCount”);
+if (!grid) return;
 
-    if (counter) {
-        counter.textContent = items.length === PRODUCTS.length
-            ? ''
-            : items.length + ' item' + (items.length !== 1 ? 's' : '') + ' found';
-    }
+```
+if (counter) {
+    counter.textContent = items.length === PRODUCTS.length
+        ? ""
+        : items.length + " item" + (items.length !== 1 ? "s" : "") + " found";
+}
 
-    if (items.length === 0) {
-        grid.innerHTML = '<div class="no-results"><i class="far fa-face-sad-tear"></i><p>Nothing found</p><small>Try a different search or category</small></div>';
-        return;
-    }
+if (items.length === 0) {
+    grid.innerHTML = "<div class=\"no-results\"><i class=\"far fa-face-sad-tear\"></i><p>Nothing found</p><small>Try a different search or category</small></div>";
+    return;
+}
 
-    grid.innerHTML = items.map(function (p) {
-        var badgeHtml = p.badge
-            ? '<div class="card-badge ' + (p.badge === 'New' ? 'new-badge' : '') + '">' + p.badge + '</div>'
-            : '';
-        var loved    = wishlist.has(p.id);
-        var heartCls = loved ? 'fas' : 'far';
-        var wishCls  = loved ? 'loved' : '';
-        return '<div class="card" id="card-' + p.id + '" onclick="openModal(' + p.id + ')">'
-             + '<div class="card-img-wrap">'
-             + '<img src="' + p.image + '" loading="lazy" alt="' + p.name + '">'
-             + badgeHtml
-             + '<div class="card-wish ' + wishCls + '" id="wish-' + p.id + '" onclick="event.stopPropagation();toggleWish(' + p.id + ')">'
-             + '<i class="' + heartCls + ' fa-heart"></i></div>'
-             + '<div class="card-price">&#8373;' + p.price + '</div>'
-             + '</div>'
-             + '<div class="card-body">'
-             + '<div class="card-size">UK Size ' + p.size + '</div>'
-             + '<div class="card-name">' + p.name + '</div>'
-             + '<div class="card-cat">' + p.category + '</div>'
-             + '</div></div>';
-    }).join('');
+var html = "";
+for (var i = 0; i < items.length; i++) {
+    var p = items[i];
+    var badgeHtml = p.badge ? "<div class=\"card-badge " + (p.badge === "New" ? "new-badge" : "") + "\">" + p.badge + "</div>" : "";
+    var loved    = wishlist.has(p.id);
+    var heartCls = loved ? "fas" : "far";
+    var wishCls  = loved ? "loved" : "";
+    html += "<div class=\"card\" id=\"card-" + p.id + "\" onclick=\"openModal(" + p.id + ")\">"
+          + "<div class=\"card-img-wrap\">"
+          + "<img src=\"" + p.image + "\" loading=\"lazy\" alt=\"" + p.name + "\">"
+          + badgeHtml
+          + "<div class=\"card-wish " + wishCls + "\" id=\"wish-" + p.id + "\" onclick=\"event.stopPropagation();toggleWish(" + p.id + ")\">"
+          + "<i class=\"" + heartCls + " fa-heart\"></i></div>"
+          + "<div class=\"card-price\">&#8373;" + p.price + "</div>"
+          + "</div>"
+          + "<div class=\"card-body\">"
+          + "<div class=\"card-size\">UK Size " + p.size + "</div>"
+          + "<div class=\"card-name\">" + p.name + "</div>"
+          + "<div class=\"card-cat\">" + p.category + "</div>"
+          + "</div></div>";
+}
+grid.innerHTML = html;
 
-    if (cardObserver) {
-        document.querySelectorAll('.card').forEach(function (c) { cardObserver.observe(c); });
-    }
+if (cardObserver) {
+    var cards = document.querySelectorAll(".card");
+    for (var j = 0; j < cards.length; j++) cardObserver.observe(cards[j]);
+}
+```
+
 }
 
 function setupObserver() {
-    if (!('IntersectionObserver' in window)) {
-        document.querySelectorAll('.card').forEach(function (c) { c.classList.add('vis'); });
-        return;
-    }
-    cardObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('vis'); });
-    }, { threshold: 0.05 });
-    document.querySelectorAll('.card').forEach(function (c) { cardObserver.observe(c); });
+if (!window.IntersectionObserver) {
+var all = document.querySelectorAll(”.card”);
+for (var i = 0; i < all.length; i++) all[i].classList.add(“vis”);
+return;
+}
+cardObserver = new IntersectionObserver(function(entries) {
+for (var i = 0; i < entries.length; i++) {
+if (entries[i].isIntersecting) entries[i].target.classList.add(“vis”);
+}
+}, { threshold: 0.05 });
+var cards = document.querySelectorAll(”.card”);
+for (var j = 0; j < cards.length; j++) cardObserver.observe(cards[j]);
 }
 
-/* ── Filter & Search ── */
-window.filterCat = function (cat, elem) {
-    currentFilter = cat;
-    document.querySelectorAll('.cat').forEach(function (c) { c.classList.remove('on'); });
-    if (elem) elem.classList.add('on');
-    renderGrid();
-    var feed = el('feed');
-    if (feed) feed.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
-window.onSearch = function (val) {
-    searchQuery = val || '';
-    var btn = el('clearBtn');
-    if (btn) btn.classList.toggle('show', searchQuery.length > 0);
-    renderGrid();
-};
-
-window.clearSearch = function () {
-    var inp = el('searchInput');
-    if (inp) { inp.value = ''; inp.focus(); }
-    searchQuery = '';
-    var btn = el('clearBtn');
-    if (btn) btn.classList.remove('show');
-    renderGrid();
-};
-
-window.focusSearch = function () {
-    navTo('search');
-    var feed = el('feed');
-    if (feed) feed.scrollTo({ top: 0, behavior: 'smooth' });
-    setTimeout(function () { var inp = el('searchInput'); if (inp) inp.focus(); }, 200);
-};
-
-/* ── Modal ── */
-window.openModal = function (id) {
-    var p = null;
-    for (var i = 0; i < PRODUCTS.length; i++) {
-        if (PRODUCTS[i].id === id) { p = PRODUCTS[i]; break; }
-    }
-    if (!p) return;
-    activeProduct = p;
-
-    var img = el('modal-img');   if (img)  img.src = p.image;
-    var nm  = el('modal-name');  if (nm)   nm.textContent  = p.name;
-    var pr  = el('modal-price'); if (pr)   pr.textContent  = '\u20B3' + p.price;
-    var sz  = el('modal-size');  if (sz)   sz.textContent  = p.size;
-    var ct  = el('modal-cat');   if (ct)   ct.textContent  = p.category;
-
-    var waLink = el('modal-wa');
-    if (waLink) {
-        var msg = encodeURIComponent('Hi Enis! \u2728 I\'d like to order: ' + p.name + ' (Size UK ' + p.size + ')');
-        waLink.href = 'https://wa.me/233546527892?text=' + msg;
-    }
-    updateModalWishBtn();
-
-    var modal = el('modal');
-    if (!modal) return;
-    modal.style.display = 'flex';
-    requestAnimationFrame(function () {
-        requestAnimationFrame(function () { modal.classList.add('active'); });
-    });
-};
-
-window.closeModal = function () {
-    var modal = el('modal');
-    if (!modal) return;
-    modal.classList.remove('active');
-    setTimeout(function () { modal.style.display = 'none'; activeProduct = null; }, 450);
-};
-
-function updateModalWishBtn() {
-    if (!activeProduct) return;
-    var loved = wishlist.has(activeProduct.id);
-    var btn  = el('modal-wish-btn');
-    var icon = el('modal-wish-icon');
-    if (btn)  btn.classList.toggle('loved', loved);
-    if (icon) icon.className = loved ? 'fas fa-heart' : 'far fa-heart';
+function filterCat(cat, elem) {
+currentFilter = cat;
+var cats = document.querySelectorAll(”.cat”);
+for (var i = 0; i < cats.length; i++) cats[i].classList.remove(“on”);
+if (elem) elem.classList.add(“on”);
+renderGrid();
+var feed = gid(“feed”);
+if (feed) feed.scrollTo({ top: 0, behavior: “smooth” });
 }
 
-/* ── Wishlist ── */
-window.toggleWish = function (id) {
-    if (wishlist.has(id)) { wishlist.delete(id); } else { wishlist.add(id); }
-    var loved = wishlist.has(id);
-    var cardWish = el('wish-' + id);
-    if (cardWish) {
-        cardWish.classList.toggle('loved', loved);
-        var icon = cardWish.querySelector('i');
-        if (icon) icon.className = loved ? 'fas fa-heart' : 'far fa-heart';
-    }
-    if (activeProduct && activeProduct.id === id) updateModalWishBtn();
-    var n = wishlist.size;
-    ['wish-badge', 'nav-wish-badge'].forEach(function (bid) {
-        var b = el(bid);
-        if (!b) return;
-        b.textContent = n;
-        b.classList.toggle('show', n > 0);
-    });
-};
-
-window.toggleWishFromModal = function () {
-    if (activeProduct) window.toggleWish(activeProduct.id);
-};
-
-window.openWishlist = function () {
-    renderWishlist();
-    var panel = el('wishlist-panel');
-    if (panel) panel.classList.add('open');
-    navTo('wish');
-};
-
-window.closeWishlist = function () {
-    var panel = el('wishlist-panel');
-    if (panel) panel.classList.remove('open');
-    navTo('shop');
-};
-
-function renderWishlist() {
-    var container = el('wishlist-grid');
-    if (!container) return;
-    if (wishlist.size === 0) {
-        container.innerHTML = '<div class="wishlist-empty"><i class="far fa-heart"></i><p>No saved items yet</p></div>';
-        return;
-    }
-    container.innerHTML = PRODUCTS.filter(function (p) {
-        return wishlist.has(p.id);
-    }).map(function (p) {
-        return '<div class="card vis" onclick="openModal(' + p.id + ')">'
-             + '<div class="card-img-wrap">'
-             + '<img src="' + p.image + '" alt="' + p.name + '">'
-             + '<div class="card-wish loved" onclick="event.stopPropagation();toggleWish(' + p.id + ');openWishlist();">'
-             + '<i class="fas fa-heart"></i></div>'
-             + '<div class="card-price">&#8373;' + p.price + '</div>'
-             + '</div>'
-             + '<div class="card-body">'
-             + '<div class="card-size">UK ' + p.size + '</div>'
-             + '<div class="card-name">' + p.name + '</div>'
-             + '<div class="card-cat">' + p.category + '</div>'
-             + '</div></div>';
-    }).join('');
+function onSearch(val) {
+searchQuery = val || “”;
+var btn = gid(“clearBtn”);
+if (btn) btn.classList.toggle(“show”, searchQuery.length > 0);
+renderGrid();
 }
 
-/* ── Nav ── */
-function navTo(id) {
-    document.querySelectorAll('.nav-item').forEach(function (n) { n.classList.remove('on'); });
-    var t = el('nav-' + id);
-    if (t) t.classList.add('on');
+function clearSearch() {
+var inp = gid(“searchInput”);
+if (inp) { inp.value = “”; inp.focus(); }
+searchQuery = “”;
+var btn = gid(“clearBtn”);
+if (btn) btn.classList.remove(“show”);
+renderGrid();
 }
-window.navTo = navTo;
 
-window.scrollToAbout = function () {
-    navTo('about');
-    var about = el('aboutSection');
-    if (about) about.scrollIntoView({ behavior: 'smooth', block: 'start' });
-};
+function focusSearch() {
+navTo(“search”);
+var feed = gid(“feed”);
+if (feed) feed.scrollTo({ top: 0, behavior: “smooth” });
+setTimeout(function() { var inp = gid(“searchInput”); if (inp) inp.focus(); }, 200);
+}
+
+function openModal(id) {
+var p = null;
+for (var i = 0; i < PRODUCTS.length; i++) {
+if (PRODUCTS[i].id === id) { p = PRODUCTS[i]; break; }
+}
+if (!p) return;
+activeProduct = p;
+
+```
+var img = gid("modal-img");   if (img)  img.src = p.image;
+var nm  = gid("modal-name");  if (nm)   nm.textContent  = p.name;
+var pr  = gid("modal-price"); if (pr)   pr.textContent  = "\u20B3" + p.price;
+var sz  = gid("modal-size");  if (sz)   sz.textContent  = p.size;
+var ct  = gid("modal-cat");   if (ct)   ct.textContent  = p.category;
+
+var waLink = gid("modal-wa");
+if (waLink) {
+    var msg = encodeURIComponent("Hi Enis! I'd like to order: " + p.name + " (Size UK " + p.size + ")");
+    waLink.href = "https://wa.me/233546527892?text=" + msg;
+}
+updateModalWishBtn();
+
+var modal = gid("modal");
+if (!modal) return;
+modal.style.display = "flex";
+setTimeout(function() { modal.classList.add("active"); }, 20);
 ```
 
-})();
+}
+
+function closeModal() {
+var modal = gid(“modal”);
+if (!modal) return;
+modal.classList.remove(“active”);
+setTimeout(function() { modal.style.display = “none”; activeProduct = null; }, 450);
+}
+
+function updateModalWishBtn() {
+if (!activeProduct) return;
+var loved = wishlist.has(activeProduct.id);
+var btn  = gid(“modal-wish-btn”);
+var icon = gid(“modal-wish-icon”);
+if (btn)  btn.classList.toggle(“loved”, loved);
+if (icon) icon.className = loved ? “fas fa-heart” : “far fa-heart”;
+}
+
+function toggleWish(id) {
+if (wishlist.has(id)) { wishlist.delete(id); } else { wishlist.add(id); }
+var loved = wishlist.has(id);
+var cw = gid(“wish-” + id);
+if (cw) {
+cw.classList.toggle(“loved”, loved);
+var icon = cw.querySelector(“i”);
+if (icon) icon.className = loved ? “fas fa-heart” : “far fa-heart”;
+}
+if (activeProduct && activeProduct.id === id) updateModalWishBtn();
+var n = wishlist.size;
+var ids = [“wish-badge”, “nav-wish-badge”];
+for (var i = 0; i < ids.length; i++) {
+var b = gid(ids[i]);
+if (!b) continue;
+b.textContent = n;
+b.classList.toggle(“show”, n > 0);
+}
+}
+
+function toggleWishFromModal() {
+if (activeProduct) toggleWish(activeProduct.id);
+}
+
+function openWishlist() {
+renderWishlist();
+var panel = gid(“wishlist-panel”);
+if (panel) panel.classList.add(“open”);
+navTo(“wish”);
+}
+
+function closeWishlist() {
+var panel = gid(“wishlist-panel”);
+if (panel) panel.classList.remove(“open”);
+navTo(“shop”);
+}
+
+function renderWishlist() {
+var container = gid(“wishlist-grid”);
+if (!container) return;
+if (wishlist.size === 0) {
+container.innerHTML = “<div class="wishlist-empty"><i class="far fa-heart"></i><p>No saved items yet</p></div>”;
+return;
+}
+var html = “”;
+for (var i = 0; i < PRODUCTS.length; i++) {
+var p = PRODUCTS[i];
+if (!wishlist.has(p.id)) continue;
+html += “<div class="card vis" onclick="openModal(” + p.id + “)">”
++ “<div class="card-img-wrap">”
++ “<img src="” + p.image + “" alt="” + p.name + “">”
++ “<div class="card-wish loved" onclick="event.stopPropagation();toggleWish(” + p.id + “);openWishlist();">”
++ “<i class="fas fa-heart"></i></div>”
++ “<div class="card-price">₵” + p.price + “</div>”
++ “</div>”
++ “<div class="card-body">”
++ “<div class="card-size">UK “ + p.size + “</div>”
++ “<div class="card-name">” + p.name + “</div>”
++ “<div class="card-cat">” + p.category + “</div>”
++ “</div></div>”;
+}
+container.innerHTML = html;
+}
+
+function navTo(id) {
+var items = document.querySelectorAll(”.nav-item”);
+for (var i = 0; i < items.length; i++) items[i].classList.remove(“on”);
+var t = gid(“nav-” + id);
+if (t) t.classList.add(“on”);
+}
+
+function scrollToAbout() {
+navTo(“about”);
+var about = gid(“aboutSection”);
+if (about) about.scrollIntoView({ behavior: “smooth”, block: “start” });
+}
 </script>
 
 </body>
