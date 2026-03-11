@@ -4,559 +4,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Enis Collection – Shop</title>
+    <title>Enis Collection</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@400;500;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            scrollbar-width: none; -ms-overflow-style: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+        *::-webkit-scrollbar { display: none; }
         :root {
-            --bg: #FAF9F6;
-            --card: #FFFFFF;
-            --text: #1A1612;
-            --soft: #8A8480;
-            --muted: #B5B0AA;
-            --accent: #C5A028;
-            --accent-lt: #F0E4B8;
-            --accent-dk: #9A7A1A;
+            --gold: #C5A028;
+            --bg: #FFFFFF; --card: #FFFFFF;
+            --text: #111111; --soft: #757575;
+            --border: rgba(0,0,0,0.07);
             --wa: #25D366;
-            --border: rgba(26,22,18,0.08);
-            --sh1: 0 2px 12px rgba(26,22,18,0.06);
-            --sh2: 0 8px 32px rgba(26,22,18,0.10);
-            --nav: 68px;
         }
         @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #0F0E0C; --card: #1A1814;
-                --text: #F5F0E8; --soft: #9A9590; --muted: #5A5550;
-                --border: rgba(245,240,232,0.08);
-                --sh1: 0 2px 12px rgba(0,0,0,0.3);
-                --sh2: 0 8px 32px rgba(0,0,0,0.4);
-            }
+            :root { --bg: #0A0A0A; --card: #141414; --text: #FFFFFF; --soft: #999; --border: rgba(255,255,255,0.08); }
         }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
 
 ```
-    *, *::before, *::after {
-        margin: 0; padding: 0; box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-        touch-action: manipulation;
-        scrollbar-width: none; -ms-overflow-style: none;
-    }
-    *::-webkit-scrollbar { display: none; }
-
-    html, body {
-        width: 100%; height: 100%;
-        overflow: hidden;
-        background: var(--bg);
-        font-family: 'DM Sans', sans-serif;
-    }
-
-    /* ── Shell ── */
-    .shell {
-        width: 100%; max-width: 430px;
-        height: 100%; margin: 0 auto;
-        background: var(--bg);
+    /* SPLASH */
+    #splash {
+        position: fixed; inset: 0; z-index: 100;
         display: flex; flex-direction: column;
-        position: relative; overflow: hidden;
+        justify-content: flex-end; align-items: center;
+        padding-bottom: 56px; background: #000;
+        transition: opacity 0.5s ease;
+    }
+    #splash.hide { opacity: 0; pointer-events: none; }
+    .splash-bg { position: absolute; inset: 0; background: url('images/Splash-Dress.PNG') center/cover no-repeat; }
+    .splash-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.96) 100%); }
+    .splash-body { position: relative; z-index: 2; text-align: center; padding: 0 24px; width: 100%; }
+    .splash-est { font-size: 10px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 6px; }
+    .splash-title { font-family: 'Great Vibes', cursive; color: #FFFAF0; font-size: 66px; line-height: 1; text-shadow: 0 2px 20px rgba(0,0,0,0.4); }
+    .splash-tag { font-size: 9px; letter-spacing: 8px; text-transform: uppercase; color: rgba(255,250,240,0.45); font-weight: 600; margin-top: 6px; }
+    .splash-line { width: 1px; height: 42px; margin: 26px auto; background: linear-gradient(to bottom, transparent, var(--gold), transparent); }
+    .splash-btn {
+        display: block; width: calc(100% - 48px); max-width: 300px; margin: 0 auto;
+        padding: 19px; background: var(--gold); color: #000;
+        font-size: 12px; font-weight: 800; letter-spacing: 5px;
+        text-transform: uppercase; text-decoration: none; text-align: center;
+        border-radius: 100px; box-shadow: 0 6px 28px rgba(197,160,40,0.45);
     }
 
-    /* ── Header ── */
-    .top-bar {
-        flex-shrink: 0;
-        padding: calc(env(safe-area-inset-top, 20px) + 14px) 18px 0;
-        display: flex; align-items: center; justify-content: space-between;
+    /* SHOP */
+    #shop {
+        position: fixed; inset: 0; z-index: 50;
+        display: flex; flex-direction: column; background: var(--bg);
+        opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
     }
-    .logo { text-align: center; flex: 1; }
-    .logo-name {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 20px; font-weight: 700; letter-spacing: 4px;
-        text-transform: uppercase; color: var(--text); display: block;
-    }
-    .logo-sub {
-        font-size: 7px; letter-spacing: 5px; text-transform: uppercase;
-        font-weight: 700; color: var(--accent); display: block; margin-top: 2px;
-    }
-    .icon-btn {
-        width: 38px; height: 38px; border-radius: 50%;
-        border: 1px solid var(--border); background: var(--card);
-        display: flex; align-items: center; justify-content: center;
-        color: var(--text); font-size: 14px;
-        box-shadow: var(--sh1); position: relative; flex-shrink: 0;
-    }
-    .badge {
-        position: absolute; top: -3px; right: -3px;
-        min-width: 16px; height: 16px; border-radius: 8px;
-        background: var(--accent); color: #000;
-        font-size: 8px; font-weight: 800; padding: 0 3px;
-        display: flex; align-items: center; justify-content: center;
-        border: 2px solid var(--bg);
-        display: none;
-    }
-    .badge.on { display: flex; }
+    #shop.show { opacity: 1; pointer-events: all; }
 
-    /* ── Search ── */
-    .search-wrap { flex-shrink: 0; padding: 12px 18px 0; }
-    .search-inner {
-        display: flex; align-items: center; gap: 8px;
-        background: var(--card); border: 1px solid var(--border);
-        border-radius: 14px; padding: 10px 14px; box-shadow: var(--sh1);
+    .hdr { flex-shrink: 0; padding: calc(env(safe-area-inset-top, 16px) + 16px) 18px 0; text-align: center; }
+    .hdr-title {
+        font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900;
+        text-transform: uppercase; letter-spacing: 5px; color: var(--text);
+        display: inline-block; position: relative;
     }
-    .search-inner i { color: var(--muted); font-size: 13px; flex-shrink: 0; }
-    .search-input {
-        flex: 1; border: none; outline: none;
-        background: transparent; color: var(--text);
-        font-family: 'DM Sans', sans-serif; font-size: 14px;
-    }
-    .search-input::placeholder { color: var(--muted); }
-    .clear-btn { background: none; border: none; color: var(--muted); font-size: 13px; cursor: pointer; display: none; padding: 2px; }
-    .clear-btn.on { display: block; }
+    .hdr-title::after { content: ''; position: absolute; bottom: -4px; left: 25%; width: 50%; height: 1px; background: var(--gold); }
+    .hdr-sub { font-size: 8px; letter-spacing: 6px; font-weight: 700; text-transform: uppercase; color: var(--gold); margin-top: 10px; }
 
-    /* ── Categories ── */
-    .cats { flex-shrink: 0; display: flex; gap: 8px; overflow-x: auto; padding: 12px 18px 4px; }
-    .cat {
-        padding: 8px 18px; border-radius: 100px;
-        border: 1px solid var(--border); background: var(--card);
-        font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
-        text-transform: uppercase; white-space: nowrap;
-        color: var(--soft); box-shadow: var(--sh1);
-    }
-    .cat.on { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .cats { flex-shrink: 0; display: flex; gap: 8px; overflow-x: auto; padding: 16px 16px 4px; }
+    .cat { padding: 9px 20px; border-radius: 100px; border: 1px solid var(--border); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; color: var(--soft); background: var(--card); cursor: pointer; flex-shrink: 0; }
+    .cat.on { background: var(--gold); color: #000; border-color: var(--gold); }
 
-    /* ── Feed ── */
-    .feed { flex: 1; overflow-y: auto; overflow-x: hidden; }
-    .count { font-size: 10px; color: var(--muted); font-weight: 600; padding: 8px 18px 4px; min-height: 26px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 12px; }
+    .feed { flex: 1; overflow-y: auto; background: var(--bg); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px 12px 0; }
 
-    /* ── Cards ── */
-    .card {
-        background: var(--card); border-radius: 20px;
-        overflow: hidden; border: 1px solid var(--border);
-        box-shadow: var(--sh1);
-    }
+    .card { background: var(--card); border-radius: 22px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.05); cursor: pointer; }
     .card-img { position: relative; aspect-ratio: 2/3; overflow: hidden; }
     .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .card-badge {
-        position: absolute; top: 8px; left: 8px;
-        background: rgba(15,14,12,0.75); color: #FFF5E4;
-        padding: 4px 9px; border-radius: 7px;
-        font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-    }
-    .card-badge.new-badge { background: var(--accent); color: #000; }
-    .card-heart {
-        position: absolute; top: 8px; right: 8px;
-        width: 30px; height: 30px; border-radius: 50%;
-        background: rgba(250,249,246,0.92);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 13px; color: var(--muted);
-    }
-    .card-heart.on { color: #E53935; }
-    .card-price {
-        position: absolute; bottom: 8px; right: 8px;
-        background: var(--accent); color: #000;
-        padding: 5px 10px; border-radius: 8px;
-        font-size: 11px; font-weight: 800;
-    }
-    .card-body { padding: 10px 12px 12px; }
-    .card-size { font-size: 8px; color: var(--accent); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
-    .card-name { font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600; color: var(--text); margin-top: 2px; line-height: 1.3; }
-    .card-cat { font-size: 8px; color: var(--muted); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
+    .card-price { position: absolute; bottom: 8px; right: 8px; background: var(--gold); color: #000; padding: 5px 11px; border-radius: 9px; font-size: 11px; font-weight: 800; }
+    .card-body { padding: 11px 13px 13px; }
+    .card-size { font-size: 8px; color: var(--gold); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+    .card-name { font-size: 12px; color: var(--text); font-weight: 700; margin-top: 3px; line-height: 1.3; }
 
-    .no-results { grid-column: 1/-1; text-align: center; padding: 60px 20px; }
-    .no-results i { font-size: 34px; color: var(--muted); }
-    .no-results p { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; color: var(--soft); margin-top: 10px; }
+    .about { margin: 50px 12px 60px; padding: 44px 22px 38px; background: var(--card); border-radius: 30px; border: 1px solid var(--border); text-align: center; position: relative; overflow: hidden; }
+    .about::before { content: 'E'; position: absolute; top: -20px; right: -8px; font-family: 'Playfair Display', serif; font-size: 160px; color: var(--gold); opacity: 0.05; pointer-events: none; line-height: 1; }
+    .about-est { font-size: 9px; letter-spacing: 5px; font-weight: 800; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .about h3 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 14px; }
+    .about p { font-size: 12.5px; color: var(--soft); line-height: 1.9; margin-bottom: 28px; }
+    .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .link-btn { padding: 12px 22px; border-radius: 100px; border: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+    .link-btn i { font-size: 15px; }
+    .about-foot { margin-top: 36px; font-size: 8px; letter-spacing: 3px; color: var(--soft); opacity: 0.4; text-transform: uppercase; font-weight: 700; }
 
-    /* ── About ── */
-    .about {
-        margin: 40px 12px 90px;
-        padding: 40px 22px 36px;
-        background: var(--card); border-radius: 28px;
-        border: 1px solid var(--border); text-align: center;
-        position: relative; overflow: hidden;
-    }
-    .about-deco {
-        position: absolute; top: -30px; right: -10px;
-        font-family: 'Great Vibes', cursive;
-        font-size: 160px; color: var(--accent); opacity: 0.04; pointer-events: none; line-height: 1;
-    }
-    .about-tag {
-        display: inline-block; padding: 4px 12px; border-radius: 100px;
-        background: var(--accent-lt); color: var(--accent-dk);
-        font-size: 8px; font-weight: 700; letter-spacing: 4px;
-        text-transform: uppercase; margin-bottom: 14px;
-    }
-    .about h3 {
-        font-family: 'Cormorant Garamond', serif; font-size: 26px;
-        font-weight: 600; font-style: italic; color: var(--text); margin-bottom: 12px;
-    }
-    .about p { font-size: 12px; color: var(--soft); line-height: 1.9; margin-bottom: 28px; }
-    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 22px; }
-    .c-btn {
-        padding: 12px 8px; border-radius: 14px;
-        border: 1px solid var(--border); background: var(--bg);
-        display: flex; align-items: center; justify-content: center; gap: 7px;
-        text-decoration: none; color: var(--text);
-        font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-    }
-    .c-btn i { font-size: 14px; }
-    .about-foot { font-size: 7px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; font-weight: 600; }
-
-    /* ── Bottom Nav ── */
-    .nav {
-        position: absolute; bottom: 0; left: 0; right: 0;
-        height: calc(var(--nav) + env(safe-area-inset-bottom, 0px));
-        padding-bottom: env(safe-area-inset-bottom, 0px);
-        background: var(--card); border-top: 1px solid var(--border);
-        display: flex; align-items: center; justify-content: space-around;
-        z-index: 100;
-    }
-    .nav-item {
-        display: flex; flex-direction: column; align-items: center; gap: 3px;
-        flex: 1; padding: 10px 0; color: var(--muted); position: relative;
-    }
-    .nav-item i { font-size: 18px; }
-    .nav-item span { font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-    .nav-item.on { color: var(--accent); }
-    .nav-dot {
-        position: absolute; bottom: 2px; width: 4px; height: 4px;
-        border-radius: 50%; background: var(--accent); opacity: 0;
-    }
-    .nav-item.on .nav-dot { opacity: 1; }
-    .nav-badge {
-        position: absolute; top: 4px; right: calc(50% - 20px);
-        min-width: 15px; height: 15px; border-radius: 8px;
-        background: var(--accent); color: #000;
-        font-size: 8px; font-weight: 800; padding: 0 3px;
-        display: none; align-items: center; justify-content: center;
-        border: 2px solid var(--card);
-    }
-    .nav-badge.on { display: flex; }
-
-    /* ── Wishlist Panel ── */
-    .panel {
-        position: absolute; inset: 0; z-index: 200;
-        background: var(--bg);
-        transform: translateX(100%);
-        transition: transform 0.35s ease;
-        display: flex; flex-direction: column;
-        padding-top: calc(env(safe-area-inset-top, 20px) + 16px);
-    }
-    .panel.open { transform: translateX(0); }
-    .panel-hdr {
-        display: flex; align-items: center; gap: 12px;
-        padding: 0 18px 18px;
-    }
-    .back-btn {
-        width: 38px; height: 38px; border-radius: 50%;
-        border: 1px solid var(--border); background: var(--card);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 14px; color: var(--text); box-shadow: var(--sh1); flex-shrink: 0;
-    }
-    .panel-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--text); }
-    .panel-grid { flex: 1; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 12px; align-content: start; }
-    .w-empty { grid-column: 1/-1; text-align: center; padding: 70px 20px; }
-    .w-empty i { font-size: 38px; color: var(--muted); }
-    .w-empty p { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; color: var(--soft); margin-top: 12px; }
-
-    /* ── Modal ── */
-    .modal-overlay {
-        position: fixed; inset: 0; z-index: 300;
-        background: rgba(0,0,0,0.5);
-        display: none; align-items: flex-end; justify-content: center;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal-sheet {
-        width: 100%; max-width: 430px;
-        background: var(--card);
-        border-radius: 28px 28px 0 0;
-        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
-        max-height: 90vh; overflow-y: auto;
-    }
-    .modal-handle { width: 34px; height: 4px; border-radius: 2px; background: var(--border); margin: 12px auto 0; }
-    .modal-img-wrap { margin: 14px 14px 0; border-radius: 18px; overflow: hidden; height: 280px; position: relative; }
-    .modal-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .modal-cat { position: absolute; top: 12px; left: 12px; background: rgba(15,14,12,0.72); color: #FFF5E4; padding: 5px 10px; border-radius: 8px; font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-    .modal-body { padding: 18px 20px 6px; }
+    /* MODAL */
+    #modal { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.5); display: none; align-items: flex-end; justify-content: center; }
+    #modal.open { display: flex; }
+    .modal-box { width: 100%; max-width: 430px; background: var(--card); border-radius: 28px 28px 0 0; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); max-height: 88vh; overflow-y: auto; }
+    .modal-pull { width: 36px; height: 4px; border-radius: 2px; background: var(--border); margin: 14px auto 0; }
+    .modal-img { margin: 14px 14px 0; border-radius: 18px; overflow: hidden; height: 290px; }
+    .modal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .modal-body { padding: 20px 20px 6px; }
     .modal-row { display: flex; justify-content: space-between; align-items: flex-start; }
-    .modal-name { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--text); line-height: 1.2; flex: 1; margin-right: 10px; }
-    .modal-price { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
-    .size-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
-    .size-lbl { font-size: 9px; color: var(--muted); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
-    .size-chip { padding: 5px 12px; border-radius: 8px; background: var(--accent-lt); color: var(--accent-dk); font-size: 10px; font-weight: 800; }
-    .modal-hr { height: 1px; background: var(--border); margin: 16px 0; }
-    .modal-actions { display: flex; gap: 10px; padding: 0 20px 14px; }
-    .heart-btn {
-        width: 50px; height: 50px; border-radius: 14px;
-        border: 1px solid var(--border); background: var(--bg);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 18px; color: var(--muted); flex-shrink: 0;
-    }
-    .heart-btn.on { color: #E53935; border-color: rgba(229,57,53,0.3); background: rgba(229,57,53,0.05); }
-    .wa-btn {
-        flex: 1; padding: 15px; border-radius: 14px;
-        background: var(--wa); color: #fff; border: none;
-        font-family: 'DM Sans', sans-serif;
-        font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-        text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;
-        box-shadow: 0 6px 20px rgba(37,211,102,0.28);
-    }
+    .modal-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.2; flex: 1; margin-right: 10px; }
+    .modal-price { font-size: 20px; font-weight: 800; color: var(--gold); flex-shrink: 0; }
+    .modal-size { margin-top: 10px; font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--soft); }
+    .modal-size span { background: rgba(197,160,40,0.15); color: var(--gold); padding: 4px 12px; border-radius: 8px; margin-left: 6px; }
+    .modal-hr { height: 1px; background: var(--border); margin: 18px 0; }
+    .modal-wa { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0 20px 4px; padding: 17px; border-radius: 16px; background: var(--wa); color: #fff; text-decoration: none; font-size: 13px; font-weight: 800; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
 </style>
 ```
 
 </head>
 <body>
-<div class="shell">
 
-```
-<!-- Top Bar -->
-<div class="top-bar">
-    <div class="icon-btn" id="aboutBtn"><i class="fas fa-info"></i></div>
-    <div class="logo">
-        <span class="logo-name">Enis Collection</span>
-        <span class="logo-sub">Pamper Your Body</span>
-    </div>
-    <div class="icon-btn" id="wishBtn">
-        <i class="far fa-heart"></i>
-        <div class="badge" id="wishBadge">0</div>
+<div id="splash">
+    <div class="splash-bg"></div>
+    <div class="splash-overlay"></div>
+    <div class="splash-body">
+        <p class="splash-est">Est. 2022 &middot; Cape Coast</p>
+        <h1 class="splash-title">Enis Collection</h1>
+        <p class="splash-tag">Pamper Your Body</p>
+        <div class="splash-line"></div>
+        <a class="splash-btn" href="#" id="shopBtn">SHOP NOW</a>
     </div>
 </div>
 
-<!-- Search -->
-<div class="search-wrap">
-    <div class="search-inner">
-        <i class="fas fa-search"></i>
-        <input class="search-input" id="searchInput" type="text" placeholder="Search items…">
-        <button class="clear-btn" id="clearBtn"><i class="fas fa-times"></i></button>
+<div id="shop">
+    <div class="hdr">
+        <div class="hdr-title">Enis Collection</div>
+        <div class="hdr-sub">Pamper Your Body</div>
     </div>
-</div>
-
-<!-- Cats -->
-<div class="cats" id="catsBar">
-    <div class="cat on" data-cat="All">All</div>
-    <div class="cat" data-cat="Thrift">Thrift</div>
-    <div class="cat" data-cat="Handmade">Handmade</div>
-    <div class="cat" data-cat="Store">Store Dresses</div>
-</div>
-
-<!-- Feed -->
-<div class="feed" id="feed">
-    <div class="count" id="countBar"></div>
-    <div class="grid" id="grid"></div>
-
-    <!-- About -->
-    <div class="about" id="aboutSection">
-        <div class="about-deco">E</div>
-        <span class="about-tag">Est. 2022 &middot; Cape Coast</span>
-        <h3>Our Story</h3>
-        <p>Established in 2022 in Cape Coast. Built from a simple dream — to create something meaningful within our community. Every purchase supports a vision that started small but continues to grow through your trust and loyalty. When you shop with us, you are not just buying fashion, you are supporting a local brand. Thank you for being part of our story.</p>
-        <div class="contact-grid">
-            <a href="https://wa.me/233546527892" class="c-btn"><i class="fab fa-whatsapp" style="color:var(--wa)"></i> WhatsApp</a>
-            <a href="https://www.tiktok.com/@eniscollection1" class="c-btn"><i class="fab fa-tiktok"></i> TikTok</a>
-            <a href="tel:+233546527892" class="c-btn"><i class="fas fa-phone-alt" style="color:var(--accent)"></i> Call</a>
-            <a href="mailto:contact@eniscollection.com" class="c-btn"><i class="fas fa-envelope" style="color:var(--accent)"></i> Email</a>
+    <div class="cats" id="catsBar">
+        <div class="cat on" data-cat="All">All Items</div>
+        <div class="cat" data-cat="Thrift">Thrift</div>
+        <div class="cat" data-cat="Handmade">Handmade</div>
+        <div class="cat" data-cat="Store">Store Dresses</div>
+    </div>
+    <div class="feed" id="feed">
+        <div class="grid" id="grid"></div>
+        <div class="about">
+            <div class="about-est">Est. 2022</div>
+            <h3>Our Story</h3>
+            <p>Established in 2022 in Cape Coast. Built from a simple dream — to create something meaningful within our community. Every purchase supports a vision that started small but continues to grow through your trust and loyalty. When you shop with us, you are not just buying fashion, you are supporting a local brand. Thank you for being part of our story.</p>
+            <div class="links">
+                <a href="https://wa.me/233546527892" class="link-btn"><i class="fab fa-whatsapp" style="color:var(--wa)"></i> WhatsApp</a>
+                <a href="https://www.tiktok.com/@eniscollection1" class="link-btn"><i class="fab fa-tiktok"></i> TikTok</a>
+                <a href="tel:+233546527892" class="link-btn"><i class="fas fa-phone-alt" style="color:var(--gold)"></i> Call</a>
+                <a href="mailto:contact@eniscollection.com" class="link-btn"><i class="fas fa-envelope" style="color:var(--gold)"></i> Email</a>
+            </div>
+            <p class="about-foot">Made with Grace &middot; Enis Collection</p>
         </div>
-        <p class="about-foot">Made with Grace &middot; Enis Collection</p>
     </div>
 </div>
 
-<!-- Bottom Nav -->
-<nav class="nav">
-    <div class="nav-item on" id="nav-shop"><i class="fas fa-store"></i><span>Shop</span><div class="nav-dot"></div></div>
-    <div class="nav-item" id="nav-search"><i class="fas fa-search"></i><span>Search</span><div class="nav-dot"></div></div>
-    <div class="nav-item" id="nav-wish"><i class="far fa-heart"></i><span>Saved</span><div class="nav-dot"></div><div class="nav-badge" id="navWishBadge">0</div></div>
-    <div class="nav-item" id="nav-about"><i class="fas fa-info-circle"></i><span>About</span><div class="nav-dot"></div></div>
-</nav>
-
-<!-- Wishlist Panel -->
-<div class="panel" id="wishPanel">
-    <div class="panel-hdr">
-        <div class="back-btn" id="panelBack"><i class="fas fa-arrow-left"></i></div>
-        <span class="panel-title">Saved Items</span>
-    </div>
-    <div class="panel-grid" id="wishGrid"></div>
-</div>
-
-<!-- Modal -->
-<div class="modal-overlay" id="modal">
-    <div class="modal-sheet">
-        <div class="modal-handle"></div>
-        <div class="modal-img-wrap">
-            <img id="mImg" src="" alt="">
-            <div class="modal-cat" id="mCat"></div>
-        </div>
+<div id="modal">
+    <div class="modal-box" id="modalBox">
+        <div class="modal-pull"></div>
+        <div class="modal-img"><img id="mImg" src="" alt=""></div>
         <div class="modal-body">
             <div class="modal-row">
                 <div class="modal-name" id="mName"></div>
                 <div class="modal-price" id="mPrice"></div>
             </div>
-            <div class="size-row">
-                <span class="size-lbl">UK Size</span>
-                <span class="size-chip" id="mSize"></span>
-            </div>
+            <div class="modal-size">UK Size <span id="mSize"></span></div>
         </div>
         <div class="modal-hr"></div>
-        <div class="modal-actions">
-            <div class="heart-btn" id="mHeart"><i class="far fa-heart" id="mHeartIcon"></i></div>
-            <a class="wa-btn" id="mWa" href="#"><i class="fab fa-whatsapp"></i> Order via WhatsApp</a>
-        </div>
+        <a class="modal-wa" id="mWa" href="#"><i class="fab fa-whatsapp"></i> ORDER VIA WHATSAPP</a>
     </div>
-</div>
-```
-
 </div>
 
 <script>
 var PRODUCTS = [
-    { id:1,  name:"Thick Seamless Dress",    price:50, size:"10",     cat:"Thrift",   img:"images/item1.jpg",  badge:"" },
-    { id:2,  name:"Plaited Skirts & Top",    price:50, size:"8/10",   cat:"Handmade", img:"images/item2.jpg",  badge:"New" },
-    { id:3,  name:"Short Length Essential",  price:45, size:"8",      cat:"Store",    img:"images/item3.jpg",  badge:"" },
-    { id:4,  name:"Church & Work",           price:50, size:"8",      cat:"Thrift",   img:"images/item4.jpg",  badge:"" },
-    { id:5,  name:"Dinner & Party Elegance", price:45, size:"8/10",   cat:"Store",    img:"images/item5.jpg",  badge:"Hot" },
-    { id:6,  name:"Lecture & Beach Set",     price:45, size:"6/8/10", cat:"Handmade", img:"images/item6.jpg",  badge:"" },
-    { id:7,  name:"Ruched SHEIN Special",    price:50, size:"8/10",   cat:"Store",    img:"images/item7.jpg",  badge:"" },
-    { id:8,  name:"Ultimate Work Gown",      price:50, size:"12/14",  cat:"Thrift",   img:"images/item8.jpg",  badge:"" },
-    { id:9,  name:"Skirt & Basic Top Duo",   price:50, size:"10/12",  cat:"Handmade", img:"images/item9.jpg",  badge:"" },
-    { id:10, name:"Refined Church Wear",     price:50, size:"10",     cat:"Store",    img:"images/item10.jpg", badge:"" }
+    { id:1,  name:"Thick Seamless Dress",    price:50, size:"10",     cat:"Thrift",   img:"images/item1.jpg"  },
+    { id:2,  name:"Plaited Skirts & Top",    price:50, size:"8/10",   cat:"Handmade", img:"images/item2.jpg"  },
+    { id:3,  name:"Short Length Essential",  price:45, size:"8",      cat:"Store",    img:"images/item3.jpg"  },
+    { id:4,  name:"Church & Work",           price:50, size:"8",      cat:"Thrift",   img:"images/item4.jpg"  },
+    { id:5,  name:"Dinner & Party Elegance", price:45, size:"8/10",   cat:"Store",    img:"images/item5.jpg"  },
+    { id:6,  name:"Lecture & Beach Set",     price:45, size:"6/8/10", cat:"Handmade", img:"images/item6.jpg"  },
+    { id:7,  name:"Ruched SHEIN Special",    price:50, size:"8/10",   cat:"Store",    img:"images/item7.jpg"  },
+    { id:8,  name:"Ultimate Work Gown",      price:50, size:"12/14",  cat:"Thrift",   img:"images/item8.jpg"  },
+    { id:9,  name:"Skirt & Basic Top Duo",   price:50, size:"10/12",  cat:"Handmade", img:"images/item9.jpg"  },
+    { id:10, name:"Refined Church Wear",     price:50, size:"10",     cat:"Store",    img:"images/item10.jpg" }
 ];
 
-var wish = [];
 var curCat = "All";
-var curQ   = "";
-var curP   = null;
-
 function g(id) { return document.getElementById(id); }
 
-/* ── Grid ── */
-function filtered() {
-    var q = curQ.toLowerCase();
-    var out = [];
+function draw() {
+    var h = "";
     for (var i = 0; i < PRODUCTS.length; i++) {
         var p = PRODUCTS[i];
         if (curCat !== "All" && p.cat !== curCat) continue;
-        if (q && p.name.toLowerCase().indexOf(q) === -1 && p.cat.toLowerCase().indexOf(q) === -1) continue;
-        out.push(p);
-    }
-    return out;
-}
-
-function loved(id) {
-    for (var i = 0; i < wish.length; i++) { if (wish[i] === id) return true; }
-    return false;
-}
-
-function draw() {
-    var items = filtered();
-    var cb = g("countBar");
-    if (cb) cb.textContent = items.length < PRODUCTS.length ? items.length + " item" + (items.length !== 1 ? "s" : "") + " found" : "";
-
-    var grid = g("grid");
-    if (!grid) return;
-
-    if (items.length === 0) {
-        grid.innerHTML = "<div class='no-results'><i class='far fa-face-sad-tear'></i><p>Nothing found</p></div>";
-        return;
-    }
-
-    var h = "";
-    for (var i = 0; i < items.length; i++) {
-        var p = items[i];
-        var lv = loved(p.id);
-        var bdg = p.badge ? "<div class='card-badge" + (p.badge === "New" ? " new-badge" : "") + "'>" + p.badge + "</div>" : "";
         h += "<div class='card' data-id='" + p.id + "'>"
-           + "<div class='card-img'>"
-           + "<img src='" + p.img + "' loading='lazy' alt='" + p.name + "'>"
-           + bdg
-           + "<div class='card-heart" + (lv ? " on" : "") + "' data-heart='" + p.id + "'><i class='" + (lv ? "fas" : "far") + " fa-heart'></i></div>"
-           + "<div class='card-price'>&#8373;" + p.price + "</div>"
-           + "</div>"
-           + "<div class='card-body'>"
-           + "<div class='card-size'>UK Size " + p.size + "</div>"
-           + "<div class='card-name'>" + p.name + "</div>"
-           + "<div class='card-cat'>" + p.cat + "</div>"
-           + "</div></div>";
+           + "<div class='card-img'><img src='" + p.img + "' loading='lazy' alt='" + p.name + "'>"
+           + "<div class='card-price'>&#8373;" + p.price + "</div></div>"
+           + "<div class='card-body'><div class='card-size'>SIZE " + p.size + "</div>"
+           + "<div class='card-name'>" + p.name + "</div></div></div>";
     }
-    grid.innerHTML = h;
+    g("grid").innerHTML = h;
 }
 
-function drawWish() {
-    var wg = g("wishGrid");
-    if (!wg) return;
-    if (wish.length === 0) {
-        wg.innerHTML = "<div class='w-empty'><i class='far fa-heart'></i><p>No saved items yet</p></div>";
-        return;
-    }
-    var h = "";
+function openModal(id) {
     for (var i = 0; i < PRODUCTS.length; i++) {
         var p = PRODUCTS[i];
-        if (!loved(p.id)) continue;
-        h += "<div class='card' data-id='" + p.id + "'>"
-           + "<div class='card-img'>"
-           + "<img src='" + p.img + "' alt='" + p.name + "'>"
-           + "<div class='card-heart on' data-heart='" + p.id + "'><i class='fas fa-heart'></i></div>"
-           + "<div class='card-price'>&#8373;" + p.price + "</div>"
-           + "</div>"
-           + "<div class='card-body'>"
-           + "<div class='card-size'>UK " + p.size + "</div>"
-           + "<div class='card-name'>" + p.name + "</div>"
-           + "</div></div>";
+        if (p.id !== id) continue;
+        g("mImg").src = p.img;
+        g("mName").textContent = p.name;
+        g("mPrice").textContent = "\u20B3" + p.price;
+        g("mSize").textContent = p.size;
+        g("mWa").href = "https://wa.me/233546527892?text=" + encodeURIComponent("Hi Enis! I'd like to order: " + p.name + " (Size UK " + p.size + ")");
+        g("modal").classList.add("open");
+        break;
     }
-    wg.innerHTML = h;
 }
 
-/* ── Wish toggle ── */
-function toggleWish(id) {
-    var idx = wish.indexOf(id);
-    if (idx === -1) { wish.push(id); } else { wish.splice(idx, 1); }
-    updateWishBadges();
-    draw();
-    if (g("wishPanel").classList.contains("open")) drawWish();
-    updateModalHeart();
-}
-
-function updateWishBadges() {
-    var n = wish.length;
-    var wb = g("wishBadge"); if (wb) { wb.textContent = n; if (n > 0) wb.classList.add("on"); else wb.classList.remove("on"); }
-    var nb = g("navWishBadge"); if (nb) { nb.textContent = n; if (n > 0) nb.classList.add("on"); else nb.classList.remove("on"); }
-}
-
-function updateModalHeart() {
-    if (!curP) return;
-    var lv = loved(curP.id);
-    var hb = g("mHeart"); if (hb) { if (lv) hb.classList.add("on"); else hb.classList.remove("on"); }
-    var hi = g("mHeartIcon"); if (hi) hi.className = lv ? "fas fa-heart" : "far fa-heart";
-}
-
-/* ── Modal ── */
-function openModal(id) {
-    var p = null;
-    for (var i = 0; i < PRODUCTS.length; i++) { if (PRODUCTS[i].id === id) { p = PRODUCTS[i]; break; } }
-    if (!p) return;
-    curP = p;
-    var im = g("mImg"); if (im) im.src = p.img;
-    var mn = g("mName"); if (mn) mn.textContent = p.name;
-    var mp = g("mPrice"); if (mp) mp.textContent = "\u20B3" + p.price;
-    var ms = g("mSize"); if (ms) ms.textContent = p.size;
-    var mc = g("mCat"); if (mc) mc.textContent = p.cat;
-    var mw = g("mWa");
-    if (mw) { mw.href = "https://wa.me/233546527892?text=" + encodeURIComponent("Hi Enis! I'd like to order: " + p.name + " (Size UK " + p.size + ")"); }
-    updateModalHeart();
-    var mo = g("modal"); if (mo) mo.classList.add("open");
-}
-
-function closeModal() {
-    var mo = g("modal"); if (mo) mo.classList.remove("open");
-    curP = null;
-}
-
-/* ── Nav ── */
-function setNav(id) {
-    var items = document.querySelectorAll(".nav-item");
-    for (var i = 0; i < items.length; i++) items[i].classList.remove("on");
-    var t = g("nav-" + id); if (t) t.classList.add("on");
-}
-
-/* ── Event wiring ── */
-document.addEventListener("DOMContentLoaded", function() {
+window.onload = function() {
     draw();
 
-    // Category clicks
+    // Shop Now — works on every browser
+    g("shopBtn").addEventListener("click", function(e) {
+        e.preventDefault();
+        g("splash").classList.add("hide");
+        g("shop").classList.add("show");
+    });
+
+    // Categories
     var cats = document.querySelectorAll(".cat");
     for (var i = 0; i < cats.length; i++) {
         (function(c) {
@@ -570,80 +241,17 @@ document.addEventListener("DOMContentLoaded", function() {
         })(cats[i]);
     }
 
-    // Search
-    var si = g("searchInput");
-    var cb = g("clearBtn");
-    if (si) {
-        si.addEventListener("input", function() {
-            curQ = si.value;
-            if (cb) { if (curQ.length > 0) cb.classList.add("on"); else cb.classList.remove("on"); }
-            draw();
-        });
-    }
-    if (cb) {
-        cb.addEventListener("click", function() {
-            if (si) { si.value = ""; si.focus(); }
-            curQ = "";
-            cb.classList.remove("on");
-            draw();
-        });
-    }
+    // Open modal via event delegation
+    g("grid").addEventListener("click", function(e) {
+        var card = e.target.closest(".card[data-id]");
+        if (card) openModal(parseInt(card.getAttribute("data-id"), 10));
+    });
 
-    // Grid clicks (cards + hearts) — event delegation
-    var grid = g("grid");
-    if (grid) {
-        grid.addEventListener("click", function(e) {
-            var heart = e.target.closest("[data-heart]");
-            if (heart) { e.stopPropagation(); toggleWish(parseInt(heart.getAttribute("data-heart"))); return; }
-            var card = e.target.closest(".card[data-id]");
-            if (card) openModal(parseInt(card.getAttribute("data-id")));
-        });
-    }
-
-    // Wish panel grid clicks
-    var wg = g("wishGrid");
-    if (wg) {
-        wg.addEventListener("click", function(e) {
-            var heart = e.target.closest("[data-heart]");
-            if (heart) { e.stopPropagation(); toggleWish(parseInt(heart.getAttribute("data-heart"))); return; }
-            var card = e.target.closest(".card[data-id]");
-            if (card) openModal(parseInt(card.getAttribute("data-id")));
-        });
-    }
-
-    // Modal backdrop
-    var modal = g("modal");
-    if (modal) {
-        modal.addEventListener("click", function(e) {
-            if (e.target === modal) closeModal();
-        });
-    }
-
-    // Modal heart
-    var mh = g("mHeart");
-    if (mh) { mh.addEventListener("click", function() { if (curP) toggleWish(curP.id); }); }
-
-    // Wishlist open/close
-    var wishBtn = g("wishBtn");
-    var wishPanel = g("wishPanel");
-    var panelBack = g("panelBack");
-    if (wishBtn) { wishBtn.addEventListener("click", function() { drawWish(); wishPanel.classList.add("open"); setNav("wish"); }); }
-    if (panelBack) { panelBack.addEventListener("click", function() { wishPanel.classList.remove("open"); setNav("shop"); }); }
-
-    // Bottom nav
-    var navShop = g("nav-shop");
-    var navSearch = g("nav-search");
-    var navWish = g("nav-wish");
-    var navAbout = g("nav-about");
-    if (navShop) { navShop.addEventListener("click", function() { setNav("shop"); g("feed").scrollTop = 0; }); }
-    if (navSearch) { navSearch.addEventListener("click", function() { setNav("search"); g("feed").scrollTop = 0; setTimeout(function() { if (si) si.focus(); }, 100); }); }
-    if (navWish) { navWish.addEventListener("click", function() { drawWish(); wishPanel.classList.add("open"); setNav("wish"); }); }
-    if (navAbout) { navAbout.addEventListener("click", function() { setNav("about"); var ab = g("aboutSection"); if (ab) ab.scrollIntoView({ behavior: "smooth" }); }); }
-
-    // Info button
-    var ab = g("aboutBtn");
-    if (ab) { ab.addEventListener("click", function() { setNav("about"); var as = g("aboutSection"); if (as) as.scrollIntoView({ behavior: "smooth" }); }); }
-});
+    // Close modal on backdrop tap
+    g("modal").addEventListener("click", function(e) {
+        if (e.target === g("modal")) g("modal").classList.remove("open");
+    });
+};
 </script>
 
 </body>
