@@ -4,254 +4,403 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Enis Collection</title>
+    <title>ENIS COLLECTION</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-            scrollbar-width: none; -ms-overflow-style: none;
-            font-family: 'Montserrat', sans-serif;
-        }
-        *::-webkit-scrollbar { display: none; }
-        :root {
-            --gold: #C5A028;
-            --bg: #FFFFFF; --card: #FFFFFF;
-            --text: #111111; --soft: #757575;
-            --border: rgba(0,0,0,0.07);
-            --wa: #25D366;
-        }
-        @media (prefers-color-scheme: dark) {
-            :root { --bg: #0A0A0A; --card: #141414; --text: #FFFFFF; --soft: #999; --border: rgba(255,255,255,0.08); }
-        }
-        html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
 
 ```
-    /* SPLASH */
-    #splash {
-        position: fixed; inset: 0; z-index: 100;
-        display: flex; flex-direction: column;
-        justify-content: flex-end; align-items: center;
-        padding-bottom: 56px; background: #000;
-        transition: opacity 0.5s ease;
-    }
-    #splash.hide { opacity: 0; pointer-events: none; }
-    .splash-bg { position: absolute; inset: 0; background: url('images/Splash-Dress.PNG') center/cover no-repeat; }
-    .splash-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.96) 100%); }
-    .splash-body { position: relative; z-index: 2; text-align: center; padding: 0 24px; width: 100%; }
-    .splash-est { font-size: 10px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 6px; }
-    .splash-title { font-family: 'Great Vibes', cursive; color: #FFFAF0; font-size: 66px; line-height: 1; text-shadow: 0 2px 20px rgba(0,0,0,0.4); }
-    .splash-tag { font-size: 9px; letter-spacing: 8px; text-transform: uppercase; color: rgba(255,250,240,0.45); font-weight: 600; margin-top: 6px; }
-    .splash-line { width: 1px; height: 42px; margin: 26px auto; background: linear-gradient(to bottom, transparent, var(--gold), transparent); }
-    .splash-btn {
-        display: block; width: calc(100% - 48px); max-width: 300px; margin: 0 auto;
-        padding: 19px; background: var(--gold); color: #000;
-        font-size: 12px; font-weight: 800; letter-spacing: 5px;
-        text-transform: uppercase; text-decoration: none; text-align: center;
-        border-radius: 100px; box-shadow: 0 6px 28px rgba(197,160,40,0.45);
+<style>
+    :root {
+        --bg: #FFFFFF;
+        --card-bg: #FFFFFF;
+        --text-main: #000000;
+        --text-soft: #757575;
+        --accent-gold: #C5A028; 
+        --wa-green: #25D366;
+        --border: rgba(0, 0, 0, 0.06);
+        --ease-luxury: cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    /* SHOP */
-    #shop {
-        position: fixed; inset: 0; z-index: 50;
-        display: flex; flex-direction: column; background: var(--bg);
-        opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg: #000000;
+            --card-bg: #0D0D0D;
+            --text-main: #FFFFFF;
+            --text-soft: #A1A1A6;
+            --border: rgba(255, 255, 255, 0.1);
+        }
     }
-    #shop.show { opacity: 1; pointer-events: all; }
 
-    .hdr { flex-shrink: 0; padding: calc(env(safe-area-inset-top, 16px) + 16px) 18px 0; text-align: center; }
-    .hdr-title {
-        font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900;
-        text-transform: uppercase; letter-spacing: 5px; color: var(--text);
-        display: inline-block; position: relative;
+    * { 
+        margin: 0; padding: 0; box-sizing: border-box; 
+        font-family: 'Montserrat', sans-serif; 
+        -webkit-tap-highlight-color: transparent;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
-    .hdr-title::after { content: ''; position: absolute; bottom: -4px; left: 25%; width: 50%; height: 1px; background: var(--gold); }
-    .hdr-sub { font-size: 8px; letter-spacing: 6px; font-weight: 700; text-transform: uppercase; color: var(--gold); margin-top: 10px; }
+    *::-webkit-scrollbar { display: none; }
 
-    .cats { flex-shrink: 0; display: flex; gap: 8px; overflow-x: auto; padding: 16px 16px 4px; }
-    .cat { padding: 9px 20px; border-radius: 100px; border: 1px solid var(--border); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; color: var(--soft); background: var(--card); cursor: pointer; flex-shrink: 0; }
-    .cat.on { background: var(--gold); color: #000; border-color: var(--gold); }
+    /* FIX 1: Use dvh instead of vh for mobile browser chrome awareness */
+    body { 
+        background: var(--bg); 
+        height: 100dvh; 
+        overflow: hidden; 
+        position: fixed; 
+        width: 100%; 
+        /* FIX 2: Prevent iOS bounce scroll interfering with app */
+        overscroll-behavior: none;
+    }
+    
+    .app-shell { 
+        width: 100%; 
+        max-width: 420px; 
+        height: 100dvh; 
+        margin: 0 auto; 
+        background: var(--bg); 
+        position: relative; 
+        overflow: hidden; 
+    }
 
-    .feed { flex: 1; overflow-y: auto; background: var(--bg); }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px 12px 0; }
+    #shop-content { 
+        display: none; 
+        flex-direction: column; 
+        height: 100dvh;
+        opacity: 0; 
+        transform: translateY(30px); 
+        transition: opacity 1.2s var(--ease-luxury), transform 1.2s var(--ease-luxury);
+    }
+    #shop-content.active { opacity: 1; transform: translateY(0); }
 
-    .card { background: var(--card); border-radius: 22px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.05); cursor: pointer; }
-    .card-img { position: relative; aspect-ratio: 2/3; overflow: hidden; }
-    .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .card-price { position: absolute; bottom: 8px; right: 8px; background: var(--gold); color: #000; padding: 5px 11px; border-radius: 9px; font-size: 11px; font-weight: 800; }
-    .card-body { padding: 11px 13px 13px; }
-    .card-size { font-size: 8px; color: var(--gold); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
-    .card-name { font-size: 12px; color: var(--text); font-weight: 700; margin-top: 3px; line-height: 1.3; }
+    /* --- HEADER --- */
+    header { 
+        padding: calc(env(safe-area-inset-top) + 20px) 0 20px; 
+        text-align: center;
+        /* FIX 3: Prevent header from being part of scroll, keep it truly fixed */
+        flex-shrink: 0;
+    }
+    .header-title { 
+        font-family: 'Playfair Display', serif; 
+        font-size: 24px; font-weight: 900; 
+        text-transform: uppercase; letter-spacing: 5px; 
+        color: var(--text-main);
+        position: relative; display: inline-block;
+    }
+    .header-title::after {
+        content: ""; position: absolute; bottom: -5px; left: 25%; width: 50%; height: 1px; background: var(--accent-gold);
+    }
+    .header-slogan { font-size: 9px; text-transform: uppercase; letter-spacing: 6px; font-weight: 700; color: var(--accent-gold); margin-top: 10px; }
 
-    .about { margin: 50px 12px 60px; padding: 44px 22px 38px; background: var(--card); border-radius: 30px; border: 1px solid var(--border); text-align: center; position: relative; overflow: hidden; }
-    .about::before { content: 'E'; position: absolute; top: -20px; right: -8px; font-family: 'Playfair Display', serif; font-size: 160px; color: var(--gold); opacity: 0.05; pointer-events: none; line-height: 1; }
-    .about-est { font-size: 9px; letter-spacing: 5px; font-weight: 800; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
-    .about h3 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 14px; }
-    .about p { font-size: 12.5px; color: var(--soft); line-height: 1.9; margin-bottom: 28px; }
-    .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-    .link-btn { padding: 12px 22px; border-radius: 100px; border: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
-    .link-btn i { font-size: 15px; }
-    .about-foot { margin-top: 36px; font-size: 8px; letter-spacing: 3px; color: var(--soft); opacity: 0.4; text-transform: uppercase; font-weight: 700; }
+    /* --- CATALOGUE --- */
+    /* FIX 4: flex-shrink: 0 so it never collapses */
+    .catalogue-scroll { 
+        display: flex; 
+        gap: 8px; 
+        overflow-x: auto; 
+        padding: 15px;
+        flex-shrink: 0;
+        /* FIX 5: Momentum scrolling on iOS */
+        -webkit-overflow-scrolling: touch;
+    }
+    .cat-item {
+        padding: 10px 22px; border-radius: 55px; border: 1px solid var(--border);
+        font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+        white-space: nowrap; color: var(--text-soft); 
+        cursor: pointer;
+        transition: background 0.4s, color 0.4s, border-color 0.4s;
+    }
+    .cat-item.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
 
-    /* MODAL */
-    #modal { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.5); display: none; align-items: flex-end; justify-content: center; }
-    #modal.open { display: flex; }
-    .modal-box { width: 100%; max-width: 430px; background: var(--card); border-radius: 28px 28px 0 0; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); max-height: 88vh; overflow-y: auto; }
-    .modal-pull { width: 36px; height: 4px; border-radius: 2px; background: var(--border); margin: 14px auto 0; }
-    .modal-img { margin: 14px 14px 0; border-radius: 18px; overflow: hidden; height: 290px; }
-    .modal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .modal-body { padding: 20px 20px 6px; }
-    .modal-row { display: flex; justify-content: space-between; align-items: flex-start; }
-    .modal-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.2; flex: 1; margin-right: 10px; }
-    .modal-price { font-size: 20px; font-weight: 800; color: var(--gold); flex-shrink: 0; }
-    .modal-size { margin-top: 10px; font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--soft); }
-    .modal-size span { background: rgba(197,160,40,0.15); color: var(--gold); padding: 4px 12px; border-radius: 8px; margin-left: 6px; }
-    .modal-hr { height: 1px; background: var(--border); margin: 18px 0; }
-    .modal-wa { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0 20px 4px; padding: 17px; border-radius: 16px; background: var(--wa); color: #fff; text-decoration: none; font-size: 13px; font-weight: 800; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
+    /* --- FEED / GRID --- */
+    /* FIX 6: feed must be flex: 1 with min-height: 0 to actually scroll inside a flex column */
+    .feed { 
+        flex: 1; 
+        min-height: 0; /* CRITICAL — without this, overflow-y: auto has no effect in flex children */
+        overflow-y: auto; 
+        background: var(--bg);
+        /* FIX 7: momentum scrolling on iOS */
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
+
+    /* FIX 8: Cards start invisible, JS adds .visible on scroll observe */
+    .product-card { 
+        background: var(--bg); 
+        border-radius: 30px; 
+        overflow: hidden; 
+        opacity: 0; 
+        transform: translateY(24px); 
+        /* FIX 9: Use will-change sparingly — only on elements actually animating */
+        will-change: opacity, transform;
+        transition: opacity 0.7s var(--ease-luxury), transform 0.7s var(--ease-luxury); 
+    }
+    .product-card.visible { 
+        opacity: 1; 
+        transform: translateY(0);
+        will-change: auto; /* Release after animation completes */
+    }
+    /* FIX 10: Stagger via nth-child so cards don't all pop in simultaneously */
+    .product-card:nth-child(even) { transition-delay: 0.1s; }
+
+    .p-image-wrap { 
+        position: relative; width: 100%; aspect-ratio: 1/1.35; overflow: hidden; border-radius: 20px;
+        cursor: pointer;
+    }
+    .p-image-wrap img { 
+        width: 100%; height: 100%; object-fit: cover;
+        /* FIX 11: GPU-accelerate images to prevent jank during scroll */
+        transform: translateZ(0);
+        display: block;
+    }
+    .price-tag { 
+        position: absolute; bottom: 10px; right: 10px; 
+        background: var(--accent-gold); color: #000; 
+        padding: 7px 14px; border-radius: 12px; 
+        font-size: 11px; font-weight: 800; 
+        /* FIX 12: Keep price tag above image GPU layer */
+        isolation: isolate;
+    }
+
+    /* --- ABOUT --- */
+    .about-modern {
+        margin: 80px 15px 40px; padding: 70px 25px; 
+        background: var(--card-bg); border-radius: 40px;
+        border: 2px solid var(--border); text-align: center;
+        position: relative; overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+    }
+    .about-modern::before {
+        content: "E"; position: absolute; top: -20px; right: -10px; 
+        font-family: 'Playfair Display'; font-size: 180px; color: var(--accent-gold); 
+        opacity: 0.05; pointer-events: none;
+    }
+    .about-modern h3 { 
+        font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; 
+        margin-bottom: 20px; color: var(--text-main); letter-spacing: -0.5px;
+    }
+    .about-modern p { font-size: 13px; color: var(--text-soft); line-height: 2; margin-bottom: 40px; font-weight: 400; }
+
+    .contact-pill-box { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+    .contact-pill {
+        padding: 14px 24px; border-radius: 100px; background: var(--bg);
+        border: 1px solid var(--border); display: flex; align-items: center; gap: 10px;
+        text-decoration: none; color: var(--text-main); font-size: 10px; font-weight: 800;
+        text-transform: uppercase; letter-spacing: 1px; 
+        transition: transform 0.15s, background 0.3s, border-color 0.3s, color 0.3s;
+    }
+    .contact-pill i { font-size: 16px; }
+    .contact-pill:active { transform: scale(0.92); background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
+
+    /* --- PREVIEW MODAL --- */
+    /* FIX 13: Don't toggle display+opacity in two steps — use visibility+opacity for smooth fade */
+    #item-preview { 
+        position: fixed; inset: 0; z-index: 10000; 
+        background: rgba(0,0,0,0.2); 
+        backdrop-filter: blur(25px); 
+        -webkit-backdrop-filter: blur(25px); 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        opacity: 0;
+        visibility: hidden;
+        /* FIX 14: Transition visibility alongside opacity */
+        transition: opacity 0.4s var(--ease-luxury), visibility 0.4s;
+    }
+    #item-preview.active { 
+        opacity: 1; 
+        visibility: visible; 
+    }
+    .preview-box { 
+        width: 260px; background: var(--card-bg); padding: 8px; border-radius: 42px; 
+        transform: scale(0.88) translateY(24px); 
+        transition: transform 0.5s var(--ease-luxury); 
+        box-shadow: 0 40px 100px rgba(0,0,0,0.15);
+    }
+    #item-preview.active .preview-box { transform: scale(1) translateY(0); }
+
+    /* --- SPLASH --- */
+    #splash-screen { 
+        position: absolute; inset: 0; z-index: 9999; 
+        background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG') center/cover; 
+        display: flex; flex-direction: column; justify-content: center; align-items: center; 
+        transition: transform 1.2s var(--ease-luxury), opacity 0.8s ease; 
+    }
+    #splash-screen.hidden { 
+        opacity: 0; 
+        transform: scale(1.1); 
+        pointer-events: none; 
+    }
+    .splash-title { font-family: 'Great Vibes', cursive; color: white; font-size: 64px; }
+    .splash-slogan { font-size: 10px; letter-spacing: 6px; text-transform: uppercase; font-weight: 700; color: var(--accent-gold); margin-top: -10px; }
+    .btn-discover { 
+        margin-top: 50px; padding: 20px 75px; border-radius: 50px; border: none; 
+        font-weight: 800; background: #FFF; color: #000; letter-spacing: 3px; cursor: pointer;
+        transition: transform 0.15s;
+    }
+    .btn-discover:active { transform: scale(0.95); }
 </style>
 ```
 
 </head>
 <body>
 
-<div id="splash">
-    <div class="splash-bg"></div>
-    <div class="splash-overlay"></div>
-    <div class="splash-body">
-        <p class="splash-est">Est. 2022 &middot; Cape Coast</p>
+<div class="app-shell">
+    <div id="splash-screen">
         <h1 class="splash-title">Enis Collection</h1>
-        <p class="splash-tag">Pamper Your Body</p>
-        <div class="splash-line"></div>
-        <a class="splash-btn" href="#" id="shopBtn">SHOP NOW</a>
+        <p class="splash-slogan">Pamper Your Body</p>
+        <button class="btn-discover" onclick="launchApp()">SHOP NOW</button>
     </div>
-</div>
 
-<div id="shop">
-    <div class="hdr">
-        <div class="hdr-title">Enis Collection</div>
-        <div class="hdr-sub">Pamper Your Body</div>
+```
+<div id="shop-content">
+    <header>
+        <h1 class="header-title">Enis Collection</h1>
+        <p class="header-slogan">Pamper Your Body</p>
+    </header>
+
+    <div class="catalogue-scroll">
+        <div class="cat-item active" onclick="filterCat('All', this)">All Items</div>
+        <div class="cat-item" onclick="filterCat('Dress', this)">Dresses</div>
+        <div class="cat-item" onclick="filterCat('Set', this)">Sets</div>
+        <div class="cat-item" onclick="filterCat('Work', this)">Work Wear</div>
     </div>
-    <div class="cats" id="catsBar">
-        <div class="cat on" data-cat="All">All Items</div>
-        <div class="cat" data-cat="Thrift">Thrift</div>
-        <div class="cat" data-cat="Handmade">Handmade</div>
-        <div class="cat" data-cat="Store">Store Dresses</div>
-    </div>
-    <div class="feed" id="feed">
-        <div class="grid" id="grid"></div>
-        <div class="about">
-            <div class="about-est">Est. 2022</div>
-            <h3>Our Story</h3>
-            <p>Established in 2022 in Cape Coast. Built from a simple dream — to create something meaningful within our community. Every purchase supports a vision that started small but continues to grow through your trust and loyalty. When you shop with us, you are not just buying fashion, you are supporting a local brand. Thank you for being part of our story.</p>
-            <div class="links">
-                <a href="https://wa.me/233546527892" class="link-btn"><i class="fab fa-whatsapp" style="color:var(--wa)"></i> WhatsApp</a>
-                <a href="https://www.tiktok.com/@eniscollection1" class="link-btn"><i class="fab fa-tiktok"></i> TikTok</a>
-                <a href="tel:+233546527892" class="link-btn"><i class="fas fa-phone-alt" style="color:var(--gold)"></i> Call</a>
-                <a href="mailto:contact@eniscollection.com" class="link-btn"><i class="fas fa-envelope" style="color:var(--gold)"></i> Email</a>
+
+    <div class="feed" id="mainFeed">
+        <div class="grid" id="productGrid"></div>
+        
+        <div class="about-modern">
+            <div style="font-size: 10px; font-weight: 800; color: var(--accent-gold); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 15px;">Est. 2022</div>
+            <h3>OUR STORY</h3>
+            <p>Curating the finest silhouettes for the modern woman. Based in Cape Coast, Enis Collection is where luxury meets comfort in every stitch.</p>
+            
+            <div class="contact-pill-box">
+                <a href="https://wa.me/233546527892" class="contact-pill"><i class="fab fa-whatsapp" style="color:#25D366"></i> WhatsApp</a>
+                <a href="https://www.tiktok.com/@eniscollection1" class="contact-pill"><i class="fab fa-tiktok"></i> TikTok</a>
+                <a href="tel:+233546527892" class="contact-pill"><i class="fas fa-phone-alt"></i> Call</a>
+                <a href="mailto:contact@eniscollection.com" class="contact-pill"><i class="fas fa-envelope"></i> Email</a>
             </div>
-            <p class="about-foot">Made with Grace &middot; Enis Collection</p>
+            <p style="margin-top: 50px; font-size: 8px; letter-spacing: 3px; opacity: 0.3; font-weight: 700;">MADE WITH GRACE • ENIS COLLECTION</p>
         </div>
     </div>
 </div>
 
-<div id="modal">
-    <div class="modal-box" id="modalBox">
-        <div class="modal-pull"></div>
-        <div class="modal-img"><img id="mImg" src="" alt=""></div>
-        <div class="modal-body">
-            <div class="modal-row">
-                <div class="modal-name" id="mName"></div>
-                <div class="modal-price" id="mPrice"></div>
-            </div>
-            <div class="modal-size">UK Size <span id="mSize"></span></div>
+<div id="item-preview" onclick="closePreview()">
+    <div class="preview-box" onclick="event.stopPropagation()">
+        <div style="border-radius: 34px; overflow: hidden; height: 370px;">
+            <img id="preview-img" src="" style="width: 100%; height: 100%; object-fit: cover; display: block;">
         </div>
-        <div class="modal-hr"></div>
-        <a class="modal-wa" id="mWa" href="#"><i class="fab fa-whatsapp"></i> ORDER VIA WHATSAPP</a>
+        <div style="padding: 22px 10px; text-align: center;">
+            <h2 id="preview-name" style="font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text-main);"></h2>
+            <p id="preview-price" style="color: var(--accent-gold); font-size: 13px; font-weight: 700; margin-top: 6px;"></p>
+            <a id="wa-btn" href="#" style="background:#25D366; color:white; padding:18px; border-radius:20px; text-decoration:none; font-weight:800; display:flex; align-items:center; gap:12px; font-size:13px; justify-content:center; margin-top:15px; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);">
+                <i class="fab fa-whatsapp"></i> ORDER VIA WHATSAPP
+            </a>
+        </div>
     </div>
+</div>
+```
+
 </div>
 
 <script>
-var PRODUCTS = [
-    { id:1,  name:"Thick Seamless Dress",    price:50, size:"10",     cat:"Thrift",   img:"images/item1.jpg"  },
-    { id:2,  name:"Plaited Skirts & Top",    price:50, size:"8/10",   cat:"Handmade", img:"images/item2.jpg"  },
-    { id:3,  name:"Short Length Essential",  price:45, size:"8",      cat:"Store",    img:"images/item3.jpg"  },
-    { id:4,  name:"Church & Work",           price:50, size:"8",      cat:"Thrift",   img:"images/item4.jpg"  },
-    { id:5,  name:"Dinner & Party Elegance", price:45, size:"8/10",   cat:"Store",    img:"images/item5.jpg"  },
-    { id:6,  name:"Lecture & Beach Set",     price:45, size:"6/8/10", cat:"Handmade", img:"images/item6.jpg"  },
-    { id:7,  name:"Ruched SHEIN Special",    price:50, size:"8/10",   cat:"Store",    img:"images/item7.jpg"  },
-    { id:8,  name:"Ultimate Work Gown",      price:50, size:"12/14",  cat:"Thrift",   img:"images/item8.jpg"  },
-    { id:9,  name:"Skirt & Basic Top Duo",   price:50, size:"10/12",  cat:"Handmade", img:"images/item9.jpg"  },
-    { id:10, name:"Refined Church Wear",     price:50, size:"10",     cat:"Store",    img:"images/item10.jpg" }
-];
+    const myProducts = [
+        { name: "Thick Seamless Dress", price: 50, size: "10", category: "Dress", image: "images/item1.jpg" },
+        { name: "Plaited Skirts & Top", price: 50, size: "8/10", category: "Set", image: "images/item2.jpg" },
+        { name: "Short Length Essential", price: 45, size: "8", category: "Dress", image: "images/item3.jpg" },
+        { name: "Church & Work", price: 50, size: "8", category: "Work", image: "images/item4.jpg" },
+        { name: "Dinner & Party Elegance", price: 45, size: "8/10", category: "Dress", image: "images/item5.jpg" },
+        { name: "Lecture & Beach Set", price: 45, size: "6/8/10", category: "Set", image: "images/item6.jpg" },
+        { name: "Ruched SHEIN Special", price: 50, size: "8/10", category: "Dress", image: "images/item7.jpg" },
+        { name: "Ultimate Work Gown", price: 50, size: "12/14", category: "Work", image: "images/item8.jpg" },
+        { name: "Skirt & Basic Top Duo", price: 50, size: "10/12", category: "Set", image: "images/item9.jpg" },
+        { name: "Refined Church Wear", price: 50, size: "10", category: "Work", image: "images/item10.jpg" }
+    ];
 
-var curCat = "All";
-function g(id) { return document.getElementById(id); }
+    // FIX 15: Use IntersectionObserver instead of scroll event listener.
+    // The old onscroll+getBoundingClientRect approach fires on every scroll pixel,
+    // causes layout thrashing (forced reflow), and misses elements on filter re-render.
+    let observer = null;
 
-function draw() {
-    var h = "";
-    for (var i = 0; i < PRODUCTS.length; i++) {
-        var p = PRODUCTS[i];
-        if (curCat !== "All" && p.cat !== curCat) continue;
-        h += "<div class='card' data-id='" + p.id + "'>"
-           + "<div class='card-img'><img src='" + p.img + "' loading='lazy' alt='" + p.name + "'>"
-           + "<div class='card-price'>&#8373;" + p.price + "</div></div>"
-           + "<div class='card-body'><div class='card-size'>SIZE " + p.size + "</div>"
-           + "<div class='card-name'>" + p.name + "</div></div></div>";
-    }
-    g("grid").innerHTML = h;
-}
+    function setupObserver() {
+        // Disconnect any previous observer before creating a new one
+        if (observer) observer.disconnect();
 
-function openModal(id) {
-    for (var i = 0; i < PRODUCTS.length; i++) {
-        var p = PRODUCTS[i];
-        if (p.id !== id) continue;
-        g("mImg").src = p.img;
-        g("mName").textContent = p.name;
-        g("mPrice").textContent = "\u20B3" + p.price;
-        g("mSize").textContent = p.size;
-        g("mWa").href = "https://wa.me/233546527892?text=" + encodeURIComponent("Hi Enis! I'd like to order: " + p.name + " (Size UK " + p.size + ")");
-        g("modal").classList.add("open");
-        break;
-    }
-}
-
-window.onload = function() {
-    draw();
-
-    // Shop Now — works on every browser
-    g("shopBtn").addEventListener("click", function(e) {
-        e.preventDefault();
-        g("splash").classList.add("hide");
-        g("shop").classList.add("show");
-    });
-
-    // Categories
-    var cats = document.querySelectorAll(".cat");
-    for (var i = 0; i < cats.length; i++) {
-        (function(c) {
-            c.addEventListener("click", function() {
-                curCat = c.getAttribute("data-cat");
-                for (var j = 0; j < cats.length; j++) cats[j].classList.remove("on");
-                c.classList.add("on");
-                draw();
-                g("feed").scrollTop = 0;
+        observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // FIX 16: Unobserve after animating in — no need to keep watching
+                    observer.unobserve(entry.target);
+                }
             });
-        })(cats[i]);
+        }, {
+            root: document.getElementById('mainFeed'), // FIX 17: Observe within the scrollable feed, not the viewport
+            threshold: 0.08,
+            rootMargin: '0px 0px -20px 0px'
+        });
+
+        document.querySelectorAll('.product-card').forEach(card => observer.observe(card));
     }
 
-    // Open modal via event delegation
-    g("grid").addEventListener("click", function(e) {
-        var card = e.target.closest(".card[data-id]");
-        if (card) openModal(parseInt(card.getAttribute("data-id"), 10));
-    });
+    function launchApp() {
+        const splash = document.getElementById('splash-screen');
+        const content = document.getElementById('shop-content');
+        splash.classList.add('hidden');
+        content.style.display = 'flex';
+        // FIX 18: Use requestAnimationFrame to ensure display:flex is painted before adding .active
+        // Previously setTimeout(100) was unreliable — rAF guarantees the next paint cycle
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                content.classList.add('active');
+                renderProducts();
+            });
+        });
+    }
 
-    // Close modal on backdrop tap
-    g("modal").addEventListener("click", function(e) {
-        if (e.target === g("modal")) g("modal").classList.remove("open");
-    });
-};
+    function renderProducts(filter = 'All') {
+        const grid = document.getElementById('productGrid');
+        const items = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
+        
+        grid.innerHTML = items.map((item) => `
+            <div class="product-card">
+                <div class="p-image-wrap" onclick="openPreview('${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image}', '${item.size}')">
+                    <img src="${item.image}" loading="lazy" alt="${item.name}">
+                    <div class="price-tag">₵${item.price}</div>
+                </div>
+                <div style="padding:15px 5px;">
+                    <span style="font-size:9px; color:var(--accent-gold); font-weight:700; letter-spacing:1px;">SIZE ${item.size}</span>
+                    <h3 style="font-size:12px; color:var(--text-main); margin-top:4px; font-weight:700;">${item.name}</h3>
+                </div>
+            </div>
+        `).join('');
+
+        // FIX 19: Set up the observer AFTER DOM is updated
+        setupObserver();
+    }
+
+    function filterCat(cat, el) {
+        document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        renderProducts(cat);
+        // FIX 20: Scroll the feed div, not the window
+        document.getElementById('mainFeed').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openPreview(name, price, image, size) {
+        const modal = document.getElementById('item-preview');
+        document.getElementById('preview-img').src = image;
+        document.getElementById('preview-name').innerText = name;
+        document.getElementById('preview-price').innerText = `UK ${size} • ₵${price}`;
+        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${name} (Size ${size})`);
+        document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
+        // FIX 21: Just add .active — CSS handles visibility+opacity together, no JS opacity hacks needed
+        modal.classList.add('active');
+    }
+
+    function closePreview() { 
+        document.getElementById('item-preview').classList.remove('active');
+        // FIX 22: No need for setTimeout to set display:none — visibility:hidden handles it cleanly
+    }
 </script>
 
 </body>
