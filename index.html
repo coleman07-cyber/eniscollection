@@ -662,8 +662,11 @@
 
 </div>
 <script>
-// ── Products — updated categories to match your new tabs ──
-const PRODUCTS = [
+(function () {
+    'use strict';
+
+```
+var PRODUCTS = [
     { id:1,  name:"Thick Seamless Dress",    price:50, size:"10",     category:"Thrift",   image:"images/item1.jpg",  badge:"" },
     { id:2,  name:"Plaited Skirts & Top",    price:50, size:"8/10",   category:"Handmade", image:"images/item2.jpg",  badge:"New" },
     { id:3,  name:"Short Length Essential",  price:45, size:"8",      category:"Store",    image:"images/item3.jpg",  badge:"" },
@@ -673,195 +676,257 @@ const PRODUCTS = [
     { id:7,  name:"Ruched SHEIN Special",    price:50, size:"8/10",   category:"Store",    image:"images/item7.jpg",  badge:"" },
     { id:8,  name:"Ultimate Work Gown",      price:50, size:"12/14",  category:"Thrift",   image:"images/item8.jpg",  badge:"" },
     { id:9,  name:"Skirt & Basic Top Duo",   price:50, size:"10/12",  category:"Handmade", image:"images/item9.jpg",  badge:"" },
-    { id:10, name:"Refined Church Wear",     price:50, size:"10",     category:"Store",    image:"images/item10.jpg", badge:"" },
+    { id:10, name:"Refined Church Wear",     price:50, size:"10",     category:"Store",    image:"images/item10.jpg", badge:"" }
 ];
 
-let wishlist      = new Set();
-let currentFilter = ‘All’;
-let searchQuery   = ‘’;
-let activeProduct = null;
-let observer;
+var wishlist      = new Set();
+var currentFilter = 'All';
+var searchQuery   = '';
+var activeProduct = null;
+var cardObserver  = null;
 
-// ── Launch ──
-function launch() {
-const splash = document.getElementById(‘splash’);
-const shop   = document.getElementById(‘shop’);
-splash.classList.add(‘out’);
-// Small delay so splash fade starts first, then shop fades in
-setTimeout(() => {
-shop.classList.add(‘active’);
-document.getElementById(‘searchWrap’).classList.add(‘in’);
-renderGrid();
-setupObserver();
-}, 200);
-}
+function el(id) { return document.getElementById(id); }
 
-// ── Render ──
+/* ── Launch ── */
+window.launch = function () {
+    try {
+        var splash = el('splash');
+        var shop   = el('shop');
+        if (!splash || !shop) return;
+        splash.classList.add('out');
+        setTimeout(function () {
+            shop.classList.add('active');
+            var sw = el('searchWrap');
+            if (sw) sw.classList.add('in');
+            renderGrid();
+            setupObserver();
+        }, 250);
+    } catch(e) { console.error('launch:', e); }
+};
+
+/* ── Grid ── */
 function getFiltered() {
-const q = searchQuery.toLowerCase().trim();
-return PRODUCTS.filter(p => {
-const catOk    = currentFilter === ‘All’ || p.category === currentFilter;
-const searchOk = !q || p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
-return catOk && searchOk;
-});
+    var q = searchQuery.toLowerCase().trim();
+    return PRODUCTS.filter(function (p) {
+        var catOk    = currentFilter === 'All' || p.category === currentFilter;
+        var searchOk = !q || p.name.toLowerCase().indexOf(q) !== -1 || p.category.toLowerCase().indexOf(q) !== -1;
+        return catOk && searchOk;
+    });
 }
 
 function renderGrid() {
-const items = getFiltered();
-const grid  = document.getElementById(‘grid’);
-const count = document.getElementById(‘resultsCount’);
+    var items   = getFiltered();
+    var grid    = el('grid');
+    var counter = el('resultsCount');
+    if (!grid) return;
 
-```
-count.textContent = items.length === PRODUCTS.length
-    ? ''
-    : `${items.length} item${items.length !== 1 ? 's' : ''} found`;
+    if (counter) {
+        counter.textContent = items.length === PRODUCTS.length
+            ? ''
+            : items.length + ' item' + (items.length !== 1 ? 's' : '') + ' found';
+    }
 
-if (items.length === 0) {
-    grid.innerHTML = `<div class="no-results">
-        <i class="far fa-face-sad-tear"></i>
-        <p>Nothing found</p>
-        <small>Try a different search or category</small>
-    </div>`;
-    return;
-}
+    if (items.length === 0) {
+        grid.innerHTML = '<div class="no-results"><i class="far fa-face-sad-tear"></i><p>Nothing found</p><small>Try a different search or category</small></div>';
+        return;
+    }
 
-grid.innerHTML = items.map(p => `
-    <div class="card" id="card-${p.id}" onclick="openModal(${p.id})">
-        <div class="card-img-wrap">
-            <img src="${p.image}" loading="lazy" alt="${p.name}">
-            ${p.badge ? `<div class="card-badge ${p.badge === 'New' ? 'new-badge' : ''}">${p.badge}</div>` : ''}
-            <div class="card-wish ${wishlist.has(p.id) ? 'loved' : ''}"
-                 onclick="event.stopPropagation(); toggleWish(${p.id})" id="wish-${p.id}">
-                <i class="${wishlist.has(p.id) ? 'fas' : 'far'} fa-heart"></i>
-            </div>
-            <div class="card-price">₵${p.price}</div>
-        </div>
-        <div class="card-body">
-            <div class="card-size">UK Size ${p.size}</div>
-            <div class="card-name">${p.name}</div>
-            <div class="card-cat">${p.category}</div>
-        </div>
-    </div>
-`).join('');
+    grid.innerHTML = items.map(function (p) {
+        var badgeHtml = p.badge
+            ? '<div class="card-badge ' + (p.badge === 'New' ? 'new-badge' : '') + '">' + p.badge + '</div>'
+            : '';
+        var loved    = wishlist.has(p.id);
+        var heartCls = loved ? 'fas' : 'far';
+        var wishCls  = loved ? 'loved' : '';
+        return '<div class="card" id="card-' + p.id + '" onclick="openModal(' + p.id + ')">'
+             + '<div class="card-img-wrap">'
+             + '<img src="' + p.image + '" loading="lazy" alt="' + p.name + '">'
+             + badgeHtml
+             + '<div class="card-wish ' + wishCls + '" id="wish-' + p.id + '" onclick="event.stopPropagation();toggleWish(' + p.id + ')">'
+             + '<i class="' + heartCls + ' fa-heart"></i></div>'
+             + '<div class="card-price">&#8373;' + p.price + '</div>'
+             + '</div>'
+             + '<div class="card-body">'
+             + '<div class="card-size">UK Size ' + p.size + '</div>'
+             + '<div class="card-name">' + p.name + '</div>'
+             + '<div class="card-cat">' + p.category + '</div>'
+             + '</div></div>';
+    }).join('');
 
-if (observer) document.querySelectorAll('.card').forEach(c => observer.observe(c));
-```
-
+    if (cardObserver) {
+        document.querySelectorAll('.card').forEach(function (c) { cardObserver.observe(c); });
+    }
 }
 
 function setupObserver() {
-observer = new IntersectionObserver(entries => {
-entries.forEach(e => { if (e.isIntersecting) e.target.classList.add(‘vis’); });
-}, { threshold: 0.08, rootMargin: ‘0px 0px -40px 0px’ });
-document.querySelectorAll(’.card’).forEach(c => observer.observe(c));
+    if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.card').forEach(function (c) { c.classList.add('vis'); });
+        return;
+    }
+    cardObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('vis'); });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.card').forEach(function (c) { cardObserver.observe(c); });
 }
 
-// ── Filter & Search ──
-function filterCat(cat, el) {
-currentFilter = cat;
-document.querySelectorAll(’.cat’).forEach(c => c.classList.remove(‘on’));
-el.classList.add(‘on’);
-renderGrid();
-document.getElementById(‘feed’).scrollTo({ top: 0, behavior: ‘smooth’ });
-}
+/* ── Filter & Search ── */
+window.filterCat = function (cat, elem) {
+    currentFilter = cat;
+    document.querySelectorAll('.cat').forEach(function (c) { c.classList.remove('on'); });
+    if (elem) elem.classList.add('on');
+    renderGrid();
+    var feed = el('feed');
+    if (feed) feed.scrollTo({ top: 0, behavior: 'smooth' });
+};
 
-function onSearch(val) {
-searchQuery = val;
-document.getElementById(‘clearBtn’).classList.toggle(‘show’, val.length > 0);
-renderGrid();
-}
+window.onSearch = function (val) {
+    searchQuery = val || '';
+    var btn = el('clearBtn');
+    if (btn) btn.classList.toggle('show', searchQuery.length > 0);
+    renderGrid();
+};
 
-function clearSearch() {
-const inp = document.getElementById(‘searchInput’);
-inp.value = ‘’; searchQuery = ‘’;
-document.getElementById(‘clearBtn’).classList.remove(‘show’);
-renderGrid(); inp.focus();
-}
+window.clearSearch = function () {
+    var inp = el('searchInput');
+    if (inp) { inp.value = ''; inp.focus(); }
+    searchQuery = '';
+    var btn = el('clearBtn');
+    if (btn) btn.classList.remove('show');
+    renderGrid();
+};
 
-function focusSearch() {
-navTo(‘search’);
-document.getElementById(‘feed’).scrollTo({ top: 0, behavior: ‘smooth’ });
-setTimeout(() => document.getElementById(‘searchInput’).focus(), 200);
-}
+window.focusSearch = function () {
+    navTo('search');
+    var feed = el('feed');
+    if (feed) feed.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(function () { var inp = el('searchInput'); if (inp) inp.focus(); }, 200);
+};
 
-// ── Modal ──
-function openModal(id) {
-const p = PRODUCTS.find(x => x.id === id);
-activeProduct = p;
-document.getElementById(‘modal-img’).src      = p.image;
-document.getElementById(‘modal-name’).textContent  = p.name;
-document.getElementById(‘modal-price’).textContent = `₵${p.price}`;
-document.getElementById(‘modal-size’).textContent  = p.size;
-document.getElementById(‘modal-cat’).textContent   = p.category;
-const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${p.name} (Size UK ${p.size})`);
-document.getElementById(‘modal-wa’).href = `https://wa.me/233546527892?text=${msg}`;
-updateModalWishBtn();
-const modal = document.getElementById(‘modal’);
-modal.style.display = ‘flex’;
-requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add(‘active’)));
-}
+/* ── Modal ── */
+window.openModal = function (id) {
+    var p = null;
+    for (var i = 0; i < PRODUCTS.length; i++) {
+        if (PRODUCTS[i].id === id) { p = PRODUCTS[i]; break; }
+    }
+    if (!p) return;
+    activeProduct = p;
 
-function closeModal() {
-const modal = document.getElementById(‘modal’);
-modal.classList.remove(‘active’);
-setTimeout(() => { modal.style.display = ‘none’; activeProduct = null; }, 450);
-}
+    var img = el('modal-img');   if (img)  img.src = p.image;
+    var nm  = el('modal-name');  if (nm)   nm.textContent  = p.name;
+    var pr  = el('modal-price'); if (pr)   pr.textContent  = '\u20B3' + p.price;
+    var sz  = el('modal-size');  if (sz)   sz.textContent  = p.size;
+    var ct  = el('modal-cat');   if (ct)   ct.textContent  = p.category;
+
+    var waLink = el('modal-wa');
+    if (waLink) {
+        var msg = encodeURIComponent('Hi Enis! \u2728 I\'d like to order: ' + p.name + ' (Size UK ' + p.size + ')');
+        waLink.href = 'https://wa.me/233546527892?text=' + msg;
+    }
+    updateModalWishBtn();
+
+    var modal = el('modal');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    requestAnimationFrame(function () {
+        requestAnimationFrame(function () { modal.classList.add('active'); });
+    });
+};
+
+window.closeModal = function () {
+    var modal = el('modal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    setTimeout(function () { modal.style.display = 'none'; activeProduct = null; }, 450);
+};
 
 function updateModalWishBtn() {
-if (!activeProduct) return;
-const loved = wishlist.has(activeProduct.id);
-document.getElementById(‘modal-wish-btn’).classList.toggle(‘loved’, loved);
-document.getElementById(‘modal-wish-icon’).className = loved ? ‘fas fa-heart’ : ‘far fa-heart’;
+    if (!activeProduct) return;
+    var loved = wishlist.has(activeProduct.id);
+    var btn  = el('modal-wish-btn');
+    var icon = el('modal-wish-icon');
+    if (btn)  btn.classList.toggle('loved', loved);
+    if (icon) icon.className = loved ? 'fas fa-heart' : 'far fa-heart';
 }
 
-// ── Wishlist ──
-function toggleWish(id) {
-wishlist.has(id) ? wishlist.delete(id) : wishlist.add(id);
-const loved = wishlist.has(id);
-const el = document.getElementById(`wish-${id}`);
-if (el) {
-el.classList.toggle(‘loved’, loved);
-el.querySelector(‘i’).className = loved ? ‘fas fa-heart’ : ‘far fa-heart’;
-}
-if (activeProduct && activeProduct.id === id) updateModalWishBtn();
-const n = wishlist.size;
-[‘wish-badge’, ‘nav-wish-badge’].forEach(bid => {
-const b = document.getElementById(bid);
-b.textContent = n;
-b.classList.toggle(‘show’, n > 0);
-});
-}
+/* ── Wishlist ── */
+window.toggleWish = function (id) {
+    if (wishlist.has(id)) { wishlist.delete(id); } else { wishlist.add(id); }
+    var loved = wishlist.has(id);
+    var cardWish = el('wish-' + id);
+    if (cardWish) {
+        cardWish.classList.toggle('loved', loved);
+        var icon = cardWish.querySelector('i');
+        if (icon) icon.className = loved ? 'fas fa-heart' : 'far fa-heart';
+    }
+    if (activeProduct && activeProduct.id === id) updateModalWishBtn();
+    var n = wishlist.size;
+    ['wish-badge', 'nav-wish-badge'].forEach(function (bid) {
+        var b = el(bid);
+        if (!b) return;
+        b.textContent = n;
+        b.classList.toggle('show', n > 0);
+    });
+};
 
-function toggleWishFromModal() {
-if (activeProduct) toggleWish(activeProduct.id);
-}
+window.toggleWishFromModal = function () {
+    if (activeProduct) window.toggleWish(activeProduct.id);
+};
 
-function openWishlist() {
-renderWishlist();
-document.getElementById(‘wishlist-panel’).classList.add(‘open’);
-navTo(‘wish’);
-}
+window.openWishlist = function () {
+    renderWishlist();
+    var panel = el('wishlist-panel');
+    if (panel) panel.classList.add('open');
+    navTo('wish');
+};
 
-function closeWishlist() {
-document.getElementById(‘wishlist-panel’).classList.remove(‘open’);
-navTo(‘shop’);
-}
+window.closeWishlist = function () {
+    var panel = el('wishlist-panel');
+    if (panel) panel.classList.remove('open');
+    navTo('shop');
+};
 
 function renderWishlist() {
-const container = document.getElementById(‘wishlist-grid’);
-if (wishlist.size === 0) {
-container.innerHTML = `<div class="wishlist-empty"> <i class="far fa-heart"></i> <p>No saved items yet</p> </div>`;
-return;
-}
-const items = PRODUCTS.filter(p => wishlist.has(p.id));
-container.innerHTML = items.map(p => `<div class="card vis" onclick="openModal(${p.id})"> <div class="card-img-wrap"> <img src="${p.image}" alt="${p.name}"> <div class="card-wish loved" onclick="event.stopPropagation(); toggleWish(${p.id}); renderWishlist();"> <i class="fas fa-heart"></i> </div> <div class="card-price">₵${p.price}</div> </div> <div class="card-body"> <div class="card-size">UK ${p.size}</div> <div class="card-name">${p.name}</div> <div class="card-cat">${p.category}</div> </div> </div>`).join(’’);
+    var container = el('wishlist-grid');
+    if (!container) return;
+    if (wishlist.size === 0) {
+        container.innerHTML = '<div class="wishlist-empty"><i class="far fa-heart"></i><p>No saved items yet</p></div>';
+        return;
+    }
+    container.innerHTML = PRODUCTS.filter(function (p) {
+        return wishlist.has(p.id);
+    }).map(function (p) {
+        return '<div class="card vis" onclick="openModal(' + p.id + ')">'
+             + '<div class="card-img-wrap">'
+             + '<img src="' + p.image + '" alt="' + p.name + '">'
+             + '<div class="card-wish loved" onclick="event.stopPropagation();toggleWish(' + p.id + ');openWishlist();">'
+             + '<i class="fas fa-heart"></i></div>'
+             + '<div class="card-price">&#8373;' + p.price + '</div>'
+             + '</div>'
+             + '<div class="card-body">'
+             + '<div class="card-size">UK ' + p.size + '</div>'
+             + '<div class="card-name">' + p.name + '</div>'
+             + '<div class="card-cat">' + p.category + '</div>'
+             + '</div></div>';
+    }).join('');
 }
 
-// ── Nav ──
+/* ── Nav ── */
 function navTo(id) {
-document.querySelectorAll(’.nav-item’).forEach(n => n.classList.remove(‘on’));
-const t = document.getElementById(`nav-${id}`);
-if (t) t.classList.add(‘on’);
+    document.querySelectorAll('.nav-item').forEach(function (n) { n.classList.remove('on'); });
+    var t = el('nav-' + id);
+    if (t) t.classList.add('on');
 }
+window.navTo = navTo;
 
-function scrollToA
+window.scrollToAbout = function () {
+    navTo('about');
+    var about = el('aboutSection');
+    if (about) about.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+```
+
+})();
+</script>
+
+</body>
+</html>
