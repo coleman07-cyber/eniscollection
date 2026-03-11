@@ -248,21 +248,32 @@
        ============================================= */
     #item-preview {
       position: fixed; inset: 0; z-index: 10000;
-      background: rgba(0,0,0,0.2);
-      backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      background: rgba(28,16,21,0.55);
+      backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
       display: none; align-items: center; justify-content: center;
-      opacity: 0;
+      padding: 20px;
+      opacity: 0; transition: opacity 0.4s var(--ease);
     }
     #item-preview.active { display: flex; opacity: 1; }
 
     .preview-box {
-      width: 260px; background: var(--card-bg);
-      border-radius: 50px; padding: 20;
-      transform: scale(0.9) translateY(20px);
+      width: 100%; max-width: 300px;
+      background: var(--card-bg);
+      border-radius: 36px; overflow: hidden;
+      transform: scale(0.92) translateY(24px);
       transition: transform 0.5s var(--ease);
-      box-shadow: 0 40px 100px rgba(0,0,0,0.15);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.35);
     }
     #item-preview.active .preview-box { transform: scale(1) translateY(0); }
+
+    /* Image fills full width, fixed tall ratio */
+    .preview-img-wrap {
+      position: relative; width: 100%;
+      aspect-ratio: 3 / 4; overflow: hidden;
+    }
+    .preview-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
 
     /* Preview icon buttons — same glass style as card */
     .preview-icon-btn {
@@ -375,7 +386,6 @@
       background: var(--bg);
       transform: translateX(100%);
       transition: transform 0.5s var(--ease);
-      max-width: 420px; margin: 0 auto;
     }
     .side-panel.open { transform: translateX(0); }
 
@@ -535,96 +545,93 @@
 
   </div><!-- end #shop-content -->
 
-  <!-- =============================================
-       ITEM PREVIEW MODAL
-       ============================================= -->
+</div><!-- end .app-shell -->
 
-  <div id="item-preview" onclick="closePreview()">
-    <div class="preview-box" onclick="event.stopPropagation()">
+<!-- =============================================
+     ITEM PREVIEW MODAL (outside app-shell — never clipped)
+     ============================================= -->
+
+<div id="item-preview" onclick="closePreview()">
+  <div class="preview-box" onclick="event.stopPropagation()">
 
 ```
-  <!-- Image + stacked icon buttons -->
-  <div style="border-radius:34px;overflow:hidden;height:370px;position:relative;">
-    <img id="preview-img" src="" style="width:100%;height:100%;object-fit:cover;">
-    <div style="position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:8px;z-index:2;">
-      <button id="preview-wish-btn" class="preview-icon-btn" onclick="toggleWishFromPreview()">
-        <i class="fas fa-heart"></i>
-      </button>
-      <button id="preview-cart-btn" class="preview-icon-btn" onclick="addToCartFromPreview()">
-        <i class="fas fa-shopping-bag"></i>
-      </button>
-    </div>
+<div class="preview-img-wrap">
+  <img id="preview-img" src="">
+  <div style="position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:8px;z-index:2;">
+    <button id="preview-wish-btn" class="preview-icon-btn" onclick="toggleWishFromPreview()">
+      <i class="fas fa-heart"></i>
+    </button>
+    <button id="preview-cart-btn" class="preview-icon-btn" onclick="addToCartFromPreview()">
+      <i class="fas fa-shopping-bag"></i>
+    </button>
   </div>
+</div>
 
-  <!-- Name, price & WhatsApp CTA -->
-  <div style="padding:22px 14px 18px;text-align:center;">
-    <h2 id="preview-name" style="font-family:'Playfair Display',serif;font-size:22px;color:var(--text-main);"></h2>
-    <p id="preview-price" style="color:var(--accent);font-size:13px;font-weight:700;margin-top:6px;margin-bottom:14px;"></p>
-    <a id="wa-btn" href="#"
-       style="display:flex;align-items:center;justify-content:center;gap:10px;
-              width:100%;padding:16px;border-radius:20px;
-              background:#25D366;color:white;text-decoration:none;
-              font-weight:800;font-size:12px;letter-spacing:1px;
-              font-family:'Montserrat',sans-serif;
-              box-shadow:0 8px 20px rgba(37,211,102,0.3);">
-      <i class="fab fa-whatsapp" style="font-size:16px;"></i> ORDER VIA WHATSAPP
-    </a>
-  </div>
-
+<div style="padding:20px 16px 18px;text-align:center;">
+  <h2 id="preview-name" style="font-family:'Playfair Display',serif;font-size:21px;color:var(--text-main);line-height:1.3;"></h2>
+  <p id="preview-price" style="color:var(--accent);font-size:13px;font-weight:700;margin-top:6px;margin-bottom:14px;letter-spacing:0.5px;"></p>
+  <a id="wa-btn" href="#"
+     style="display:flex;align-items:center;justify-content:center;gap:10px;
+            width:100%;padding:16px;border-radius:16px;
+            background:#25D366;color:white;text-decoration:none;
+            font-weight:800;font-size:12px;letter-spacing:1px;
+            font-family:'Montserrat',sans-serif;
+            box-shadow:0 6px 18px rgba(37,211,102,0.35);">
+    <i class="fab fa-whatsapp" style="font-size:16px;"></i> ORDER VIA WHATSAPP
+  </a>
 </div>
 ```
 
-  </div><!-- end #item-preview -->
+  </div>
+</div>
 
-  <!-- =============================================
-       FLOATING ACTION BUTTONS
-       ============================================= -->
+<!-- =============================================
+     FLOATING ACTION BUTTONS
+     ============================================= -->
 
-  <div class="fab-group" id="fab-group">
-    <button class="fab fab-wish" onclick="openPanel('wishlist')">
-      <i class="fas fa-heart"></i>
-      <span class="fab-badge" id="wish-badge">0</span>
+<div class="fab-group" id="fab-group">
+  <button class="fab fab-wish" onclick="openPanel('wishlist')">
+    <i class="fas fa-heart"></i>
+    <span class="fab-badge" id="wish-badge">0</span>
+  </button>
+  <button class="fab fab-cart" onclick="openPanel('cart')">
+    <i class="fas fa-shopping-bag"></i>
+    <span class="fab-badge" id="cart-badge">0</span>
+  </button>
+</div>
+
+<!-- =============================================
+     CART PANEL
+     ============================================= -->
+
+<div class="side-panel" id="cart-panel">
+  <div class="panel-header">
+    <h2>My Bag</h2>
+    <button class="panel-close" onclick="closePanel('cart')"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="panel-body" id="cart-body"></div>
+  <div class="panel-footer" id="cart-footer" style="display:none;">
+    <div class="total-row">
+      <span>Total</span>
+      <strong id="cart-total">&#8373;0</strong>
+    </div>
+    <button class="checkout-btn" onclick="checkoutViaWA()">
+      <i class="fab fa-whatsapp"></i> CHECKOUT VIA WHATSAPP
     </button>
-    <button class="fab fab-cart" onclick="openPanel('cart')">
-      <i class="fas fa-shopping-bag"></i>
-      <span class="fab-badge" id="cart-badge">0</span>
-    </button>
   </div>
+</div>
 
-  <!-- =============================================
-       CART PANEL
-       ============================================= -->
+<!-- =============================================
+     WISHLIST PANEL
+     ============================================= -->
 
-  <div class="side-panel" id="cart-panel">
-    <div class="panel-header">
-      <h2>My Bag</h2>
-      <button class="panel-close" onclick="closePanel('cart')"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="panel-body" id="cart-body"></div>
-    <div class="panel-footer" id="cart-footer" style="display:none;">
-      <div class="total-row">
-        <span>Total</span>
-        <strong id="cart-total">&#8373;0</strong>
-      </div>
-      <button class="checkout-btn" onclick="checkoutViaWA()">
-        <i class="fab fa-whatsapp"></i> CHECKOUT VIA WHATSAPP
-      </button>
-    </div>
+<div class="side-panel" id="wishlist-panel">
+  <div class="panel-header">
+    <h2>Wishlist</h2>
+    <button class="panel-close" onclick="closePanel('wishlist')"><i class="fas fa-times"></i></button>
   </div>
-
-  <!-- =============================================
-       WISHLIST PANEL
-       ============================================= -->
-
-  <div class="side-panel" id="wishlist-panel">
-    <div class="panel-header">
-      <h2>Wishlist</h2>
-      <button class="panel-close" onclick="closePanel('wishlist')"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="panel-body" id="wishlist-body"></div>
-  </div>
-
-</div><!-- end .app-shell -->
+  <div class="panel-body" id="wishlist-body"></div>
+</div>
 
 <div id="toast"></div>
 
