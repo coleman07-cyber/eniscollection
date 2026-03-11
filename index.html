@@ -2,368 +2,181 @@
 
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ENIS COLLECTION</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-```
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>ENIS COLLECTION</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
 <style>
-    :root {
-        --bg: #FFFFFF;
-        --card-bg: #FFFFFF;
-        --text-main: #000000;
-        --text-soft: #757575;
-        --accent-gold: #C5A028; 
-        --wa-green: #25D366;
-        --border: rgba(0, 0, 0, 0.06);
-        --ease-luxury: cubic-bezier(0.25, 1, 0.5, 1);
-    }
-
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --bg: #000000;
-            --card-bg: #0D0D0D;
-            --text-main: #FFFFFF;
-            --text-soft: #A1A1A6;
-            --border: rgba(255, 255, 255, 0.1);
-        }
-    }
-
-    /* --- REMOVE SCROLLBARS NATIONWIDE --- */
-    * { 
-        margin: 0; padding: 0; box-sizing: border-box; 
-        font-family: 'Montserrat', sans-serif; 
-        -webkit-tap-highlight-color: transparent;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-    *::-webkit-scrollbar { display: none; }
-
-    body { background: var(--bg); height: 100vh; overflow: hidden; position: fixed; width: 100%; }
-    
-    .app-shell { width: 100%; max-width: 420px; height: 100vh; margin: 0 auto; background: var(--bg); position: relative; overflow: hidden; }
-
-    #shop-content { 
-        display: none; flex-direction: column; height: 100%; opacity: 0; 
-        transform: translateY(30px); transition: opacity 1.2s var(--ease-luxury), transform 1.2s var(--ease-luxury);
-    }
-    #shop-content.active { opacity: 1; transform: translateY(0); }
-
-    /* --- THEMED HEADER --- */
-    header { padding: calc(env(safe-area-inset-top) + 20px) 0 20px; text-align: center; }
-    .header-title { 
-        font-family: 'Playfair Display', serif; 
-        font-size: 30px; font-weight: 900; 
-        text-transform: uppercase; letter-spacing: 5px; 
-        color: var(--text-main);
-        position: relative; display: inline-block;
-    }
-    .header-title::after {
-        content: ""; position: absolute; bottom: -5px; left: 25%; width: 50%; height: 1px; background: var(--accent-gold);
-    }
-    .header-slogan { font-size: 9px; text-transform: uppercase; letter-spacing: 6px; font-weight: 600; color: var(--accent-gold); margin-top: 10px; }
-
-    /* --- CATALOGUE --- */
-    .catalogue-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 15px; }
-    .cat-item {
-        padding: 10px 22px; border-radius: 55px; border: 1px solid var(--border);
-        font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-        white-space: nowrap; color: var(--text-soft); transition: 0.4s; cursor: pointer;
-    }
-    .cat-item.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
-
-    /* --- GRID --- */
-    .feed { flex: 1; overflow-y: auto; background: var(--bg); }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
-    .product-card { background: var(--bg); border-radius: 30px; overflow: hidden; opacity: 0; transform: translateY(20px); transition: 0.8s var(--ease-luxury); }
-    .product-card.visible { opacity: 1; transform: translateY(0); }
-    .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.35; overflow: hidden; border-radius: 20px; cursor: pointer; }
-    .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
-    .price-tag { position: absolute; bottom: 10px; right: 10px; background: var(--accent-gold); color: #000; padding: 7px 14px; border-radius: 12px; font-size: 11px; font-weight: 800; }
-
-    /* --- WISHLIST HEART ON CARD (NEW) --- */
-    .wish-btn {
-        position: absolute; top: 10px; right: 10px;
-        width: 34px; height: 34px; border-radius: 60%;
-        background: rgba(255,255,255,0.85); backdrop-filter: blur(6px);
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer; border: none; z-index: 2;
-        transition: transform 0.25s var(--ease-luxury);
-    }
-    .wish-btn i { font-size: 14px; color: #ccc; transition: color 0.25s, transform 0.3s var(--ease-luxury); }
-    .wish-btn.wishlisted i { color: #E53E3E; transform: scale(1.25); }
-    .wish-btn:active { transform: scale(0.85); }
-
-    /* --- CARD FOOTER WITH ADD-TO-CART (NEW) --- */
-    .card-footer { padding: 15px 5px 5px; display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-    .card-info { flex: 1; }
-    .card-info span { font-size: 9px; color: var(--accent-gold); font-weight: 700; letter-spacing: 1px; }
-    .card-info h3 { font-size: 12px; color: var(--text-main); margin-top: 4px; font-weight: 700; }
-    .add-cart-btn {
-        width: 34px; height: 34px; border-radius: 30px; border: none;
-        background: var(--accent-gold); color: #000; cursor: pointer;
-        display: flex; align-items: center; justify-content: center; font-size: 13px;
-        flex-shrink: 0; transition: transform 0.2s, background 0.2s;
-    }
-    .add-cart-btn:active { transform: scale(0.85); }
-    .add-cart-btn.added { background: #000; color: var(--accent-gold); }
-    @media (prefers-color-scheme: dark) { .add-cart-btn.added { background: #fff; } }
-
-    /* --- STYLIZED ABOUT SECTION --- */
-    .about-modern {
-        margin: 80px 15px 40px; padding: 50px 70px; 
-        background: var(--card-bg); border-radius: 50px;
-        border: 2px solid var(--border); text-align: center;
-        position: relative; overflow: hidden;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.03);
-    }
-    .about-modern::before {
-        content: "E"; position: absolute; top: -20px; right: -10px; 
-        font-family: 'Playfair Display'; font-size: 180px; color: var(--accent-gold); 
-        opacity: 0.05; pointer-events: none;
-    }
-    .about-modern h3 { 
-        font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; 
-        margin-bottom: 20px; color: var(--text-main); letter-spacing: -0.5px;
-    }
-    .about-modern p { font-size: 13px; color: var(--text-soft); line-height: 2; margin-bottom: 40px; font-weight: 400; }
-
-    .contact-pill-box { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-    .contact-pill {
-        padding: 5px 1px; border-radius: 50px; background: var(--bg);
-        border: 1px solid var(--border); display: flex; align-items: center; gap: 10px;
-        text-decoration: none; color: var(--text-main); font-size: 10px; font-weight: 800;
-        text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
-    }
-    .contact-pill i { font-size: 10px; }
-    .contact-pill:active { transform: scale(0.92); background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
-
-    /* --- PREVIEW --- */
-    #item-preview { 
-        position: fixed; inset: 0; z-index: 10000; 
-        background: rgba(0,0,0,0.2); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
-        display: none; align-items: center; justify-content: center; opacity: 0; 
-    }
-    #item-preview.active { display: flex; opacity: 1; }
-    .preview-box { 
-        width: 260px; background: var(--card-bg); padding: 0px; border-radius: 50px; 
-        transform: scale(0.9) translateY(20px); transition: transform 0.5s var(--ease-luxury); 
-        box-shadow: 0 40px 100px rgba(0,0,0,0.15);
-    }
-    #item-preview.active .preview-box { transform: scale(1) translateY(0); }
-
-    /* --- SPLASH --- */
-    #splash-screen { 
-        position: absolute; inset: 0; z-index: 9999; 
-        background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG') center/cover; 
-        display: flex; flex-direction: column; justify-content: center; align-items: center; 
-        transition: transform 1.2s var(--ease-luxury), opacity 0.8s ease; 
-    }
-    #splash-screen.hidden { opacity: 0; transform: scale(1.1); pointer-events: none; }
-    .splash-title { font-family: 'Great Vibes', cursive; color: white; font-size: 64px; }
-    .splash-slogan { font-size: 10px; letter-spacing: 6px; text-transform: uppercase; font-weight: 700; color: var(--accent-gold); margin-top: -10px; }
-    .btn-discover { margin-top: 50px; padding: 20px 75px; border-radius: 50px; border: none; font-weight: 800; background: #FFF; color: #000; letter-spacing: 3px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 13px; }
-
-    /* ============================
-       NEW: FLOATING ACTION BUTTONS
-       ============================ */
-    .fab-group {
-        position: fixed; right: 14px; bottom: 40px; z-index: 9000;
-        display: none; flex-direction: column; gap: 4px; align-items: center;
-    }
-    .fab-group.visible { display: flex; }
-    .fab {
-        width: 40px; height: 40px; border-radius: 40px;
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer; position: relative; font-size: 18px;
-        border: none; transition: transform 0.2s var(--ease-luxury);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    }
-    .fab:active { transform: scale(0.88); }
-    .fab-wish { background: #fff; color: #E53E3E; }
-    .fab-cart { background: var(--accent-gold); color: #000; }
-    @media (prefers-color-scheme: dark) { .fab-wish { background: #1a1a1a; } }
-    .fab-badge {
-        position: absolute; top: -6px; right: -6px;
-        min-width: 18px; height: 18px; border-radius: 9px; padding: 0 4px;
-        font-size: 9px; font-weight: 800;
-        display: flex; align-items: center; justify-content: center;
-        border: 2px solid var(--bg);
-        transform: scale(0); transition: transform 0.3s var(--ease-luxury);
-    }
-    .fab-wish .fab-badge { background: #E53E3E; color: #fff; }
-    .fab-cart .fab-badge { background: #000; color: var(--accent-gold); }
-    .fab-badge.show { transform: scale(1); }
-
-    /* ============================
-       NEW: SIDE PANELS (CART / WISHLIST)
-       ============================ */
-    .side-panel {
-        position: fixed; inset: 0; z-index: 9998;
-        display: flex; flex-direction: column;
-        background: var(--bg);
-        transform: translateX(100%); transition: transform 0.5s var(--ease-luxury);
-        max-width: 420px; margin: 0 auto;
-    }
-    .side-panel.open { transform: translateX(0); }
-
-    .panel-header {
-        padding: calc(env(safe-area-inset-top) + 20px) 20px 20px;
-        display: flex; align-items: center; justify-content: space-between;
-        border-bottom: 1px solid var(--border);
-    }
-    .panel-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text-main); }
-    .panel-close {
-        width: 40px; height: 40px; border-radius: 12px;
-        border: 1px solid var(--border); background: none;
-        cursor: pointer; color: var(--text-main); font-size: 16px;
-        display: flex; align-items: center; justify-content: center;
-    }
-    .panel-close:active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
-    .panel-body { flex: 1; overflow-y: auto; padding: 15px; }
-    .panel-footer { padding: 20px; border-top: 1px solid var(--border); }
-
-    .panel-item {
-        display: flex; gap: 14px; align-items: center;
-        padding: 14px; border-radius: 20px; margin-bottom: 10px;
-        background: var(--card-bg); border: 1px solid var(--border);
-    }
-    .panel-item img { width: 68px; height: 85px; object-fit: cover; border-radius: 14px; flex-shrink: 0; }
-    .panel-item-info { flex: 1; }
-    .panel-item-info h4 { font-size: 12px; font-weight: 700; color: var(--text-main); line-height: 1.4; }
-    .panel-item-info p { font-size: 10px; color: var(--text-soft); margin-top: 3px; }
-    .panel-item-price { font-size: 13px; color: var(--accent-gold); font-weight: 800; margin-top: 5px; }
-
-    .qty-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
-    .qty-btn {
-        width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border);
-        background: var(--bg); color: var(--text-main); font-size: 14px; font-weight: 700;
-        cursor: pointer; display: flex; align-items: center; justify-content: center;
-    }
-    .qty-btn:active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
-    .qty-val { font-size: 13px; font-weight: 700; color: var(--text-main); min-width: 20px; text-align: center; }
-    .remove-btn {
-        margin-left: auto; width: 30px; height: 30px; border-radius: 10px;
-        border: none; background: rgba(229,62,62,0.1); color: #E53E3E;
-        cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center;
-    }
-    .remove-btn:active { background: #E53E3E; color: white; }
-
-    .wish-move-btn {
-        margin-left: auto; padding: 8px 14px; border-radius: 12px;
-        border: none; background: var(--accent-gold); color: #000;
-        font-size: 10px; font-weight: 800; cursor: pointer;
-    }
-    .wish-move-btn:active { transform: scale(0.9); }
-
-    .total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .total-row span { font-size: 12px; color: var(--text-soft); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-    .total-row strong { font-size: 22px; font-weight: 800; color: var(--text-main); font-family: 'Playfair Display', serif; }
-    .checkout-btn {
-        width: 100%; padding: 18px; border-radius: 18px; border: none;
-        background: #25D366; color: white; font-size: 13px; font-weight: 800;
-        letter-spacing: 1px; cursor: pointer;
-        display: flex; align-items: center; justify-content: center; gap: 10px;
-        font-family: 'Montserrat', sans-serif;
-    }
-    .checkout-btn:active { background: #1da855; }
-
-    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-soft); }
-    .empty-state i { font-size: 48px; opacity: 0.15; color: var(--accent-gold); display: block; margin-bottom: 16px; }
-    .empty-state p { font-size: 13px; line-height: 1.8; }
-
-    /* Toast */
-    #toast {
-        position: fixed; bottom: 30px; left: 50%;
-        transform: translateX(-50%) translateY(16px);
-        background: #000; color: #fff;
-        padding: 12px 22px; border-radius: 50px;
-        font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
-        opacity: 0; transition: opacity 0.3s, transform 0.3s var(--ease-luxury);
-        z-index: 99999; white-space: nowrap; pointer-events: none;
-    }
-    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-    @media (prefers-color-scheme: dark) { #toast { background: #fff; color: #000; } }
+:root {
+    --bg:#FFFFFF;--card-bg:#FFFFFF;--text-main:#000000;--text-soft:#757575;
+    --accent-gold:#C5A028;--border:rgba(0,0,0,0.06);
+    --ease-luxury:cubic-bezier(0.25,1,0.5,1);
+}
+@media(prefers-color-scheme:dark){
+    :root{--bg:#000000;--card-bg:#0D0D0D;--text-main:#FFFFFF;--text-soft:#A1A1A6;--border:rgba(255,255,255,0.1);}
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;-webkit-tap-highlight-color:transparent;scrollbar-width:none;-ms-overflow-style:none;}
+*::-webkit-scrollbar{display:none;}
+body{background:var(--bg);height:100vh;overflow:hidden;position:fixed;width:100%;}
+.app-shell{width:100%;max-width:420px;height:100vh;margin:0 auto;background:var(--bg);position:relative;overflow:hidden;}
+#shop-content{display:none;flex-direction:column;height:100%;opacity:0;transform:translateY(30px);transition:opacity 1.2s var(--ease-luxury),transform 1.2s var(--ease-luxury);}
+#shop-content.active{opacity:1;transform:translateY(0);}
+header{padding:calc(env(safe-area-inset-top) + 20px) 0 20px;text-align:center;}
+.header-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:900;text-transform:uppercase;letter-spacing:5px;color:var(--text-main);position:relative;display:inline-block;}
+.header-title::after{content:"";position:absolute;bottom:-5px;left:25%;width:50%;height:1px;background:var(--accent-gold);}
+.header-slogan{font-size:9px;text-transform:uppercase;letter-spacing:6px;font-weight:600;color:var(--accent-gold);margin-top:10px;}
+.catalogue-scroll{display:flex;gap:8px;overflow-x:auto;padding:15px;}
+.cat-item{padding:10px 22px;border-radius:55px;border:1px solid var(--border);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;color:var(--text-soft);transition:0.4s;cursor:pointer;}
+.cat-item.active{background:var(--accent-gold);color:#000;border-color:var(--accent-gold);}
+.feed{flex:1;overflow-y:auto;background:var(--bg);}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:15px;}
+.product-card{background:var(--bg);border-radius:30px;overflow:hidden;opacity:0;transform:translateY(20px);transition:0.8s var(--ease-luxury);}
+.product-card.visible{opacity:1;transform:translateY(0);}
+.p-image-wrap{position:relative;width:100%;aspect-ratio:1/1.35;overflow:hidden;border-radius:20px;cursor:pointer;}
+.p-image-wrap img{width:100%;height:100%;object-fit:cover;}
+.price-tag{position:absolute;bottom:10px;right:10px;background:var(--accent-gold);color:#000;padding:7px 14px;border-radius:12px;font-size:11px;font-weight:800;}
+.wish-btn{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.85);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;z-index:2;transition:transform 0.25s var(--ease-luxury);}
+.wish-btn i{font-size:14px;color:#ccc;transition:color 0.25s,transform 0.3s var(--ease-luxury);}
+.wish-btn.wishlisted i{color:#E53E3E;transform:scale(1.25);}
+.wish-btn:active{transform:scale(0.85);}
+.card-footer{padding:15px 5px 5px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.card-info{flex:1;}
+.card-info span{font-size:9px;color:var(--accent-gold);font-weight:700;letter-spacing:1px;}
+.card-info h3{font-size:12px;color:var(--text-main);margin-top:4px;font-weight:700;}
+.add-cart-btn{width:34px;height:34px;border-radius:30px;border:none;background:var(--accent-gold);color:#000;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:transform 0.2s,background 0.2s;}
+.add-cart-btn:active{transform:scale(0.85);}
+.add-cart-btn.added{background:#000;color:var(--accent-gold);}
+@media(prefers-color-scheme:dark){.add-cart-btn.added{background:#fff;}}
+.about-modern{margin:40px 15px 60px;padding:40px 28px;background:var(--card-bg);border-radius:36px;border:1px solid var(--border);text-align:center;position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.04);}
+.about-modern::before{content:"E";position:absolute;top:-30px;right:-5px;font-family:'Playfair Display';font-size:160px;color:var(--accent-gold);opacity:0.05;pointer-events:none;line-height:1;}
+.about-modern h3{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:16px;color:var(--text-main);letter-spacing:-0.5px;}
+.about-modern p{font-size:12.5px;color:var(--text-soft);line-height:1.9;margin-bottom:28px;font-weight:400;}
+.contact-pill-box{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.contact-pill{padding:14px 12px;border-radius:16px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;color:var(--text-main);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;transition:0.3s;}
+.contact-pill i{font-size:13px;flex-shrink:0;}
+.contact-pill:active{transform:scale(0.92);background:var(--accent-gold);color:#000;border-color:var(--accent-gold);}
+#item-preview{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.2);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);display:none;align-items:center;justify-content:center;opacity:0;}
+#item-preview.active{display:flex;opacity:1;}
+.preview-box{width:260px;background:var(--card-bg);padding:0;border-radius:50px;transform:scale(0.9) translateY(20px);transition:transform 0.5s var(--ease-luxury);box-shadow:0 40px 100px rgba(0,0,0,0.15);}
+#item-preview.active .preview-box{transform:scale(1) translateY(0);}
+.preview-icon-btn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.85);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:transform 0.25s var(--ease-luxury);}
+.preview-icon-btn i{font-size:15px;color:#ccc;transition:color 0.25s;}
+.preview-icon-btn.wishlisted i{color:#E53E3E;}
+.preview-icon-btn.cart-active{background:var(--accent-gold);}
+.preview-icon-btn.cart-active i{color:#000;}
+.preview-icon-btn:active{transform:scale(0.85);}
+#splash-screen{position:absolute;inset:0;z-index:9999;background:linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.9)),url('images/Splash-Dress.PNG') center/cover;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:transform 1.2s var(--ease-luxury),opacity 0.8s ease;}
+#splash-screen.hidden{opacity:0;transform:scale(1.1);pointer-events:none;}
+.splash-title{font-family:'Great Vibes',cursive;color:white;font-size:64px;}
+.splash-slogan{font-size:10px;letter-spacing:6px;text-transform:uppercase;font-weight:700;color:var(--accent-gold);margin-top:-10px;}
+.btn-discover{margin-top:50px;padding:20px 75px;border-radius:50px;border:none;font-weight:800;background:#FFF;color:#000;letter-spacing:3px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:13px;}
+.fab-group{position:fixed;right:14px;bottom:40px;z-index:9000;display:none;flex-direction:column;gap:4px;align-items:center;}
+.fab-group.visible{display:flex;}
+.fab{width:40px;height:40px;border-radius:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;font-size:18px;border:none;transition:transform 0.2s var(--ease-luxury);box-shadow:0 8px 24px rgba(0,0,0,0.15);}
+.fab:active{transform:scale(0.88);}
+.fab-wish{background:#fff;color:#E53E3E;}
+.fab-cart{background:var(--accent-gold);color:#000;}
+@media(prefers-color-scheme:dark){.fab-wish{background:#1a1a1a;}}
+.fab-badge{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:9px;padding:0 4px;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);transform:scale(0);transition:transform 0.3s var(--ease-luxury);}
+.fab-wish .fab-badge{background:#E53E3E;color:#fff;}
+.fab-cart .fab-badge{background:#000;color:var(--accent-gold);}
+.fab-badge.show{transform:scale(1);}
+.side-panel{position:fixed;inset:0;z-index:9998;display:flex;flex-direction:column;background:var(--bg);transform:translateX(100%);transition:transform 0.5s var(--ease-luxury);max-width:420px;margin:0 auto;}
+.side-panel.open{transform:translateX(0);}
+.panel-header{padding:calc(env(safe-area-inset-top) + 20px) 20px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.panel-header h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--text-main);}
+.panel-close{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:none;cursor:pointer;color:var(--text-main);font-size:16px;display:flex;align-items:center;justify-content:center;}
+.panel-close:active{background:var(--accent-gold);color:#000;border-color:var(--accent-gold);}
+.panel-body{flex:1;overflow-y:auto;padding:15px;}
+.panel-footer{padding:20px;border-top:1px solid var(--border);}
+.panel-item{display:flex;gap:14px;align-items:center;padding:14px;border-radius:20px;margin-bottom:10px;background:var(--card-bg);border:1px solid var(--border);}
+.panel-item img{width:68px;height:85px;object-fit:cover;border-radius:14px;flex-shrink:0;}
+.panel-item-info{flex:1;}
+.panel-item-info h4{font-size:12px;font-weight:700;color:var(--text-main);line-height:1.4;}
+.panel-item-info p{font-size:10px;color:var(--text-soft);margin-top:3px;}
+.panel-item-price{font-size:13px;color:var(--accent-gold);font-weight:800;margin-top:5px;}
+.qty-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.qty-btn{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text-main);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.qty-btn:active{background:var(--accent-gold);color:#000;border-color:var(--accent-gold);}
+.qty-val{font-size:13px;font-weight:700;color:var(--text-main);min-width:20px;text-align:center;}
+.remove-btn{margin-left:auto;width:30px;height:30px;border-radius:10px;border:none;background:rgba(229,62,62,0.1);color:#E53E3E;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.remove-btn:active{background:#E53E3E;color:white;}
+.wish-move-btn{margin-left:auto;padding:8px 14px;border-radius:12px;border:none;background:var(--accent-gold);color:#000;font-size:10px;font-weight:800;cursor:pointer;}
+.wish-move-btn:active{transform:scale(0.9);}
+.total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.total-row span{font-size:12px;color:var(--text-soft);font-weight:600;text-transform:uppercase;letter-spacing:1px;}
+.total-row strong{font-size:22px;font-weight:800;color:var(--text-main);font-family:'Playfair Display',serif;}
+.checkout-btn{width:100%;padding:18px;border-radius:18px;border:none;background:#25D366;color:white;font-size:13px;font-weight:800;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'Montserrat',sans-serif;}
+.checkout-btn:active{background:#1da855;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-soft);}
+.empty-state i{font-size:48px;opacity:0.15;color:var(--accent-gold);display:block;margin-bottom:16px;}
+.empty-state p{font-size:13px;line-height:1.8;}
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(16px);background:#000;color:#fff;padding:12px 22px;border-radius:50px;font-size:11px;font-weight:700;letter-spacing:0.5px;opacity:0;transition:opacity 0.3s,transform 0.3s var(--ease-luxury);z-index:99999;white-space:nowrap;pointer-events:none;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+@media(prefers-color-scheme:dark){#toast{background:#fff;color:#000;}}
 </style>
-```
-
 </head>
 <body>
-
 <div class="app-shell">
 
-```
-<!-- ═══════════ ORIGINAL SPLASH ═══════════ -->
 <div id="splash-screen">
     <h1 class="splash-title">Enis Collection</h1>
     <p class="splash-slogan">Pamper Your Body</p>
     <button class="btn-discover" onclick="launchApp()">SHOP NOW</button>
 </div>
 
-<!-- ═══════════ ORIGINAL SHOP CONTENT ═══════════ -->
 <div id="shop-content">
     <header>
         <h1 class="header-title">Enis Collection</h1>
         <p class="header-slogan">Pamper Your Body</p>
     </header>
-
     <div class="catalogue-scroll">
-        <div class="cat-item active" onclick="filterCat('All', this)">All Items</div>
-        <div class="cat-item" onclick="filterCat('Thrift', this)">Thrift</div>
-            <div class="cat-item" onclick="filterCat('Store', this)">Store</div>
-        <div class="cat-item" onclick="filterCat('Hamdmade', this)">Handmade</div>
+        <div class="cat-item active" onclick="filterCat('All',this)">All Items</div>
+        <div class="cat-item" onclick="filterCat('Thrift',this)">Thrift</div>
+        <div class="cat-item" onclick="filterCat('Store',this)">Store</div>
+        <div class="cat-item" onclick="filterCat('Hamdmade',this)">Handmade</div>
     </div>
-
     <div class="feed" id="mainFeed" onscroll="handleScroll()">
         <div class="grid" id="productGrid"></div>
-        
         <div class="about-modern">
-            <div style="font-size: 10px; font-weight: 800; color: var(--accent-gold); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 15px;">Est. 2022</div>
+            <div style="font-size:10px;font-weight:800;color:var(--accent-gold);letter-spacing:5px;text-transform:uppercase;margin-bottom:15px;">Est. 2022</div>
             <h3>OUR STORY</h3>
-            <p>Enis Collection started in 2022 in Cape Coast with a simple goal. Help women feel confident and comfortable in what they wear.
-The brand began on a small scale with carefully selected thrift pieces and handmade outfits. Each piece was chosen with attention to style and quality.
-As more women discovered the brand, customers shared their experience with others and the community around Enis Collection grew.
-Today, Enis Collection continues to offer stylish thrift pieces and handmade outfits for the modern woman, with a focus on comfort, style, and confidence..</p>
+            <p>Enis Collection started in 2022 in Cape Coast with a simple goal. Help women feel confident and comfortable in what they wear. The brand began on a small scale with carefully selected thrift pieces and handmade outfits. Each piece was chosen with attention to style and quality. As more women discovered the brand, customers shared their experience with others and the community around Enis Collection grew. Today, Enis Collection continues to offer stylish thrift pieces and handmade outfits for the modern woman, with a focus on comfort, style, and confidence.</p>
             <div class="contact-pill-box">
                 <a href="https://wa.me/233546527892" class="contact-pill"><i class="fab fa-whatsapp" style="color:#25D366"></i> WhatsApp</a>
                 <a href="https://www.tiktok.com/@eniscollection1" class="contact-pill"><i class="fab fa-tiktok"></i> TikTok</a>
                 <a href="tel:+233546527892" class="contact-pill"><i class="fas fa-phone-alt"></i> Call</a>
                 <a href="mailto:contact@eniscollection.com" class="contact-pill"><i class="fas fa-envelope"></i> Email</a>
             </div>
-            <p style="margin-top: 50px; font-size: 8px; letter-spacing: 3px; opacity: 0.3; font-weight: 700;">MADE WITH GRACE • ENIS COLLECTION</p>
+            <p style="margin-top:50px;font-size:8px;letter-spacing:3px;opacity:0.3;font-weight:700;">MADE WITH GRACE &bull; ENIS COLLECTION</p>
         </div>
     </div>
 </div>
 
-<!-- ═══════════ ORIGINAL PREVIEW MODAL (+ new cart/wish buttons inside) ═══════════ -->
 <div id="item-preview" onclick="closePreview()">
     <div class="preview-box" onclick="event.stopPropagation()">
-        <div style="border-radius: 34px; overflow: hidden; height: 370px; position: relative;">
-            <img id="preview-img" src="" style="width: 100%; height: 100%; object-fit: cover;">
-            <!-- NEW: heart button inside preview -->
-            <button id="preview-wish-btn" class="wish-btn" style="top:12px;right:12px;width:40px;height:40px;" onclick="toggleWishFromPreview()">
-                <i class="fas fa-heart" style="font-size:16px;"></i>
-            </button>
-        </div>
-        <div style="padding: 22px 10px; text-align: center;">
-            <h2 id="preview-name" style="font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text-main);"></h2>
-            <p id="preview-price" style="color: var(--accent-gold); font-size: 13px; font-weight: 700; margin-top: 6px;"></p>
-            <!-- NEW: two buttons side by side -->
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <button id="preview-cart-btn" onclick="addToCartFromPreview()" style="flex:1; padding:5px; border-radius:25px; border:1px solid var(--border); background:var(--bg); color:var(--text-main); font-size:11px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; font-family:'Montserrat',sans-serif; transition: background 0.2s, color 0.2s;">
-                    <i class="fas fa-shopping-bag"></i> ADD TO BAG
+        <div style="border-radius:34px;overflow:hidden;height:370px;position:relative;">
+            <img id="preview-img" src="" style="width:100%;height:100%;object-fit:cover;">
+            <div style="position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:8px;z-index:2;">
+                <button id="preview-wish-btn" class="preview-icon-btn" onclick="toggleWishFromPreview()">
+                    <i class="fas fa-heart"></i>
                 </button>
-                <a id="wa-btn" href="#" style="flex:1; background:#25D366; color:white; padding:1px; border-radius:25px; text-decoration:none; font-weight:800; display:flex; align-items:center; gap:8px; font-size:11px; justify-content:center; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);">
-                    <i class="fab fa-whatsapp"></i>ORDER  
-                </a>
+                <button id="preview-cart-btn" class="preview-icon-btn" onclick="addToCartFromPreview()">
+                    <i class="fas fa-shopping-bag"></i>
+                </button>
             </div>
+        </div>
+        <div style="padding:22px 14px 18px;text-align:center;">
+            <h2 id="preview-name" style="font-family:'Playfair Display',serif;font-size:22px;color:var(--text-main);"></h2>
+            <p id="preview-price" style="color:var(--accent-gold);font-size:13px;font-weight:700;margin-top:6px;margin-bottom:14px;"></p>
+            <a id="wa-btn" href="#" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;border-radius:20px;background:#25D366;color:white;text-decoration:none;font-weight:800;font-size:12px;letter-spacing:1px;font-family:'Montserrat',sans-serif;box-shadow:0 8px 20px rgba(37,211,102,0.3);">
+                <i class="fab fa-whatsapp" style="font-size:16px;"></i> ORDER VIA WHATSAPP
+            </a>
         </div>
     </div>
 </div>
 
-<!-- ═══════════ NEW: FLOATING ACTION BUTTONS ═══════════ -->
 <div class="fab-group" id="fab-group">
     <button class="fab fab-wish" onclick="openPanel('wishlist')">
         <i class="fas fa-heart"></i>
@@ -375,7 +188,6 @@ Today, Enis Collection continues to offer stylish thrift pieces and handmade out
     </button>
 </div>
 
-<!-- ═══════════ NEW: CART PANEL ═══════════ -->
 <div class="side-panel" id="cart-panel">
     <div class="panel-header">
         <h2>My Bag</h2>
@@ -383,17 +195,11 @@ Today, Enis Collection continues to offer stylish thrift pieces and handmade out
     </div>
     <div class="panel-body" id="cart-body"></div>
     <div class="panel-footer" id="cart-footer" style="display:none;">
-        <div class="total-row">
-            <span>Total</span>
-            <strong id="cart-total">&#8373;0</strong>
-        </div>
-        <button class="checkout-btn" onclick="checkoutViaWA()">
-            <i class="fab fa-whatsapp"></i> CHECKOUT VIA WHATSAPP
-        </button>
+        <div class="total-row"><span>Total</span><strong id="cart-total">&#8373;0</strong></div>
+        <button class="checkout-btn" onclick="checkoutViaWA()"><i class="fab fa-whatsapp"></i> CHECKOUT VIA WHATSAPP</button>
     </div>
 </div>
 
-<!-- ═══════════ NEW: WISHLIST PANEL ═══════════ -->
 <div class="side-panel" id="wishlist-panel">
     <div class="panel-header">
         <h2>Wishlist</h2>
@@ -401,288 +207,242 @@ Today, Enis Collection continues to offer stylish thrift pieces and handmade out
     </div>
     <div class="panel-body" id="wishlist-body"></div>
 </div>
-```
 
 </div>
-
 <div id="toast"></div>
 
 <script>
-    /* ── PRODUCT DATA ── */
-    const myProducts = [
-        { id:1,  name: "Thick Seamless Dress",    price: 50, size: "10",      category: "Thrift", image: "images/item1.jpg" },
-        { id:2,  name: "Plaited Skirts & Top",    price: 50, size: "8/10",    category: "Thrift",   image: "images/item2.jpg" },
-        { id:3,  name: "Short Length Essential",  price: 45, size: "8",       category: "Thrift", image: "images/item3.jpg" },
-        { id:4,  name: "Church & Work",           price: 50, size: "8",       category: "Store",  image: "images/item4.jpg" },
-        { id:5,  name: "Dinner & Party Elegance", price: 45, size: "8/10",    category: "Store", image: "images/item5.jpg" },
-        { id:6,  name: "Lecture & Beach Set",     price: 45, size: "6/8/10",  category: "Store",   image: "images/item6.jpg" },
-        { id:7,  name: "Ruched SHEIN Special",    price: 50, size: "8/10",    category: "Thrift", image: "images/item7.jpg" },
-        { id:8,  name: "Ultimate Work Gown",      price: 50, size: "12/14",   category: "Thrift",  image: "images/item8.jpg" },
-        { id:9,  name: "Skirt & Basic Top Duo",   price: 50, size: "10/12",   category: "Store",   image: "images/item9.jpg" },
-        { id:10, name: "Refined Church Wear",     price: 50, size: "10",      category: "Store",  image: "images/item10.jpg" }
-    ];
+document.addEventListener('DOMContentLoaded', function() {
 
-    let cart = [];
-    let wishlist = [];
-    let previewProduct = null;
-    let toastTimer = null;
+var myProducts = [
+    {id:1, name:"Thick Seamless Dress",    price:50, size:"10",     category:"Thrift", image:"images/item1.jpg"},
+    {id:2, name:"Plaited Skirts & Top",    price:50, size:"8/10",   category:"Thrift", image:"images/item2.jpg"},
+    {id:3, name:"Short Length Essential",  price:45, size:"8",      category:"Thrift", image:"images/item3.jpg"},
+    {id:4, name:"Church & Work",           price:50, size:"8",      category:"Store",  image:"images/item4.jpg"},
+    {id:5, name:"Dinner & Party Elegance", price:45, size:"8/10",   category:"Store",  image:"images/item5.jpg"},
+    {id:6, name:"Lecture & Beach Set",     price:45, size:"6/8/10", category:"Store",  image:"images/item6.jpg"},
+    {id:7, name:"Ruched SHEIN Special",    price:50, size:"8/10",   category:"Thrift", image:"images/item7.jpg"},
+    {id:8, name:"Ultimate Work Gown",      price:50, size:"12/14",  category:"Thrift", image:"images/item8.jpg"},
+    {id:9, name:"Skirt & Basic Top Duo",   price:50, size:"10/12",  category:"Store",  image:"images/item9.jpg"},
+    {id:10,name:"Refined Church Wear",     price:50, size:"10",     category:"Store",  image:"images/item10.jpg"}
+];
 
-    /* ── ORIGINAL LAUNCH ── */
-    function launchApp() {
-        const splash = document.getElementById('splash-screen');
-        const content = document.getElementById('shop-content');
-        splash.classList.add('hidden');
-        content.style.display = 'flex';
-        setTimeout(() => {
-            content.classList.add('active');
-            document.getElementById('fab-group').classList.add('visible');
-            renderProducts();
-        }, 100);
+var cart = [], wishlist = [], previewProduct = null, toastTimer = null;
+
+window.launchApp = function() {
+    document.getElementById('splash-screen').classList.add('hidden');
+    var content = document.getElementById('shop-content');
+    content.style.display = 'flex';
+    setTimeout(function() {
+        content.classList.add('active');
+        document.getElementById('fab-group').classList.add('visible');
+        renderProducts('All');
+    }, 100);
+};
+
+function renderProducts(filter) {
+    var items = filter === 'All' ? myProducts : myProducts.filter(function(p){ return p.category === filter; });
+    document.getElementById('productGrid').innerHTML = items.map(function(item) {
+        var liked = wishlist.some(function(w){ return w.id === item.id; });
+        var inCart = cart.some(function(c){ return c.product.id === item.id; });
+        return '<div class="product-card visible" id="card-'+item.id+'">'
+            + '<div class="p-image-wrap" onclick="openPreview('+item.id+')">'
+            + '<img src="'+item.image+'" loading="lazy">'
+            + '<div class="price-tag">&#8373;'+item.price+'</div>'
+            + '<button class="wish-btn'+(liked?' wishlisted':'')+'" id="wish-'+item.id+'" onclick="event.stopPropagation();toggleWish('+item.id+')"><i class="fas fa-heart"></i></button>'
+            + '</div>'
+            + '<div class="card-footer">'
+            + '<div class="card-info"><span>SIZE '+item.size+'</span><h3>'+item.name+'</h3></div>'
+            + '<button class="add-cart-btn'+(inCart?' added':'')+'" id="cartbtn-'+item.id+'" onclick="toggleCart('+item.id+')">'
+            + '<i class="fas '+(inCart?'fa-check':'fa-shopping-bag')+'"></i></button>'
+            + '</div></div>';
+    }).join('');
+}
+
+window.filterCat = function(cat, el) {
+    document.querySelectorAll('.cat-item').forEach(function(i){ i.classList.remove('active'); });
+    el.classList.add('active');
+    renderProducts(cat);
+    document.getElementById('mainFeed').scrollTo({top:0, behavior:'smooth'});
+};
+
+window.handleScroll = function() {
+    document.querySelectorAll('.product-card').forEach(function(card) {
+        if (card.getBoundingClientRect().top < window.innerHeight * 0.95) card.classList.add('visible');
+    });
+};
+
+window.openPreview = function(id) {
+    previewProduct = myProducts.find(function(p){ return p.id === id; });
+    document.getElementById('preview-img').src = previewProduct.image;
+    document.getElementById('preview-name').innerText = previewProduct.name;
+    document.getElementById('preview-price').innerText = 'UK ' + previewProduct.size + ' \u2022 \u20B5' + previewProduct.price;
+    var msg = encodeURIComponent('Hi Enis! I\'d like to order: ' + previewProduct.name + ' (Size ' + previewProduct.size + ')');
+    document.getElementById('wa-btn').href = 'https://wa.me/233546527892?text=' + msg;
+    syncPreviewState();
+    var modal = document.getElementById('item-preview');
+    modal.style.display = 'flex';
+    setTimeout(function(){ modal.style.opacity = '1'; modal.classList.add('active'); }, 10);
+};
+
+window.closePreview = function() {
+    var modal = document.getElementById('item-preview');
+    modal.style.opacity = '0';
+    setTimeout(function(){ modal.style.display = 'none'; modal.classList.remove('active'); previewProduct = null; }, 500);
+};
+
+function syncPreviewState() {
+    if (!previewProduct) return;
+    var liked = wishlist.some(function(w){ return w.id === previewProduct.id; });
+    var inCart = cart.some(function(c){ return c.product.id === previewProduct.id; });
+    var wb = document.getElementById('preview-wish-btn');
+    var cb = document.getElementById('preview-cart-btn');
+    if (wb) wb.classList.toggle('wishlisted', liked);
+    if (cb) {
+        cb.classList.toggle('cart-active', inCart);
+        cb.innerHTML = '<i class="fas ' + (inCart ? 'fa-check' : 'fa-shopping-bag') + '"></i>';
     }
+}
 
-    /* ── ORIGINAL RENDER (with wish/cart state) ── */
-    function renderProducts(filter) {
-        filter = filter || 'All';
-        const grid = document.getElementById('productGrid');
-        const items = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
-        grid.innerHTML = items.map(item => {
-            const liked = wishlist.some(w => w.id === item.id);
-            const inCart = cart.some(c => c.product.id === item.id);
-            return `
-            <div class="product-card visible" id="card-${item.id}">
-                <div class="p-image-wrap" onclick="openPreview(${item.id})">
-                    <img src="${item.image}" loading="lazy">
-                    <div class="price-tag">&#8373;${item.price}</div>
-                    <button class="wish-btn ${liked ? 'wishlisted' : ''}" id="wish-${item.id}" onclick="event.stopPropagation(); toggleWish(${item.id})">
-                        <i class="fas fa-heart"></i>
-                    </button>
-                </div>
-                <div class="card-footer">
-                    <div class="card-info">
-                        <span>SIZE ${item.size}</span>
-                        <h3>${item.name}</h3>
-                    </div>
-                    <button class="add-cart-btn ${inCart ? 'added' : ''}" id="cartbtn-${item.id}" onclick="toggleCart(${item.id})">
-                        <i class="fas ${inCart ? 'fa-check' : 'fa-shopping-bag'}"></i>
-                    </button>
-                </div>
-            </div>`;
-        }).join('');
-    }
+window.toggleWish = function(id) {
+    var product = myProducts.find(function(p){ return p.id === id; });
+    var idx = wishlist.findIndex(function(w){ return w.id === id; });
+    if (idx === -1) { wishlist.push(product); showToast('Saved to Wishlist'); }
+    else { wishlist.splice(idx, 1); showToast('Removed from Wishlist'); }
+    updateBadges();
+    var btn = document.getElementById('wish-' + id);
+    if (btn) btn.classList.toggle('wishlisted', wishlist.some(function(w){ return w.id === id; }));
+    if (previewProduct && previewProduct.id === id) syncPreviewState();
+};
 
-    /* ── ORIGINAL FILTER ── */
-    function filterCat(cat, el) {
-        document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
-        el.classList.add('active');
-        renderProducts(cat);
-        document.getElementById('mainFeed').scrollTo({ top: 0, behavior: 'smooth' });
-    }
+window.toggleWishFromPreview = function() { if (previewProduct) toggleWish(previewProduct.id); };
 
-    /* ── ORIGINAL SCROLL ── */
-    function handleScroll() {
-        document.querySelectorAll('.product-card').forEach(card => {
-            if (card.getBoundingClientRect().top < window.innerHeight * 0.95) card.classList.add('visible');
-        });
+window.toggleCart = function(id) {
+    var product = myProducts.find(function(p){ return p.id === id; });
+    var idx = cart.findIndex(function(c){ return c.product.id === id; });
+    if (idx === -1) { cart.push({product:product, qty:1}); showToast('Added to Bag'); }
+    else { cart.splice(idx, 1); showToast('Removed from Bag'); }
+    updateBadges();
+    var btn = document.getElementById('cartbtn-' + id);
+    if (btn) {
+        var inCart = cart.some(function(c){ return c.product.id === id; });
+        btn.className = 'add-cart-btn' + (inCart ? ' added' : '');
+        btn.innerHTML = '<i class="fas ' + (inCart ? 'fa-check' : 'fa-shopping-bag') + '"></i>';
     }
+    if (previewProduct && previewProduct.id === id) syncPreviewState();
+};
 
-    /* ── ORIGINAL PREVIEW ── */
-    function openPreview(id) {
-        previewProduct = myProducts.find(p => p.id === id);
-        document.getElementById('preview-img').src = previewProduct.image;
-        document.getElementById('preview-name').innerText = previewProduct.name;
-        document.getElementById('preview-price').innerText = `UK ${previewProduct.size} • ₵${previewProduct.price}`;
-        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${previewProduct.name} (Size ${previewProduct.size})`);
-        document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
-        syncPreviewState();
-        const modal = document.getElementById('item-preview');
-        modal.style.display = 'flex';
-        setTimeout(() => { modal.style.opacity = '1'; modal.classList.add('active'); }, 10);
-    }
+window.addToCartFromPreview = function() { if (previewProduct) toggleCart(previewProduct.id); };
 
-    function closePreview() { 
-        const modal = document.getElementById('item-preview');
-        modal.style.opacity = '0';
-        setTimeout(() => {
-            modal.style.display = 'none';
-            modal.classList.remove('active');
-            previewProduct = null;
-        }, 500);
-    }
+window.updateQty = function(id, delta) {
+    var item = cart.find(function(c){ return c.product.id === id; });
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(function(c){ return c.product.id !== id; });
+    updateBadges(); renderCartPanel();
+};
 
-    function syncPreviewState() {
-        if (!previewProduct) return;
-        const liked = wishlist.some(w => w.id === previewProduct.id);
-        const inCart = cart.some(c => c.product.id === previewProduct.id);
-        const wb = document.getElementById('preview-wish-btn');
-        const cb = document.getElementById('preview-cart-btn');
-        if (wb) wb.classList.toggle('wishlisted', liked);
-        if (cb) {
-            cb.innerHTML = `<i class="fas ${inCart ? 'fa-check' : 'fa-shopping-bag'}"></i> ${inCart ? 'IN BAG' : 'ADD TO BAG'}`;
-            cb.style.background = inCart ? 'var(--accent-gold)' : 'var(--bg)';
-            cb.style.color = inCart ? '#000' : 'var(--text-main)';
-            cb.style.borderColor = inCart ? 'var(--accent-gold)' : 'var(--border)';
-        }
-    }
+window.removeFromCart = function(id) {
+    cart = cart.filter(function(c){ return c.product.id !== id; });
+    updateBadges(); renderCartPanel();
+    var btn = document.getElementById('cartbtn-' + id);
+    if (btn) { btn.className = 'add-cart-btn'; btn.innerHTML = '<i class="fas fa-shopping-bag"></i>'; }
+};
 
-    /* ── WISHLIST ── */
-    function toggleWish(id) {
-        const product = myProducts.find(p => p.id === id);
-        const idx = wishlist.findIndex(w => w.id === id);
-        if (idx === -1) { wishlist.push(product); showToast('✨ Saved to Wishlist'); }
-        else { wishlist.splice(idx, 1); showToast('Removed from Wishlist'); }
-        updateBadges();
-        const btn = document.getElementById('wish-' + id);
-        if (btn) btn.classList.toggle('wishlisted', wishlist.some(w => w.id === id));
-        if (previewProduct && previewProduct.id === id) syncPreviewState();
-    }
+window.removeFromWishlist = function(id) {
+    wishlist = wishlist.filter(function(w){ return w.id !== id; });
+    updateBadges(); renderWishlistPanel();
+    var btn = document.getElementById('wish-' + id);
+    if (btn) btn.classList.remove('wishlisted');
+};
 
-    function toggleWishFromPreview() {
-        if (previewProduct) toggleWish(previewProduct.id);
-    }
+window.addWishlistToBag = function(id) {
+    if (cart.some(function(c){ return c.product.id === id; })) { showToast('Already in your bag!'); return; }
+    var product = myProducts.find(function(p){ return p.id === id; });
+    cart.push({product:product, qty:1});
+    updateBadges(); renderWishlistPanel();
+    var btn = document.getElementById('cartbtn-' + id);
+    if (btn) { btn.className = 'add-cart-btn added'; btn.innerHTML = '<i class="fas fa-check"></i>'; }
+    showToast('Added to Bag');
+};
 
-    /* ── CART ── */
-    function toggleCart(id) {
-        const product = myProducts.find(p => p.id === id);
-        const idx = cart.findIndex(c => c.product.id === id);
-        if (idx === -1) { cart.push({ product, qty: 1 }); showToast('🛍️ Added to Bag'); }
-        else { cart.splice(idx, 1); showToast('Removed from Bag'); }
-        updateBadges();
-        const btn = document.getElementById('cartbtn-' + id);
-        if (btn) {
-            const inCart = cart.some(c => c.product.id === id);
-            btn.className = 'add-cart-btn' + (inCart ? ' added' : '');
-            btn.innerHTML = `<i class="fas ${inCart ? 'fa-check' : 'fa-shopping-bag'}"></i>`;
-        }
-        if (previewProduct && previewProduct.id === id) syncPreviewState();
-    }
+function updateBadges() {
+    var cc = cart.reduce(function(s,c){ return s+c.qty; }, 0);
+    var wc = wishlist.length;
+    var cb = document.getElementById('cart-badge');
+    var wb = document.getElementById('wish-badge');
+    cb.textContent = cc; wb.textContent = wc;
+    cb.classList.toggle('show', cc > 0); wb.classList.toggle('show', wc > 0);
+}
 
-    function addToCartFromPreview() {
-        if (previewProduct) toggleCart(previewProduct.id);
-    }
+window.openPanel = function(type) {
+    if (type === 'cart') { renderCartPanel(); document.getElementById('cart-panel').classList.add('open'); }
+    else { renderWishlistPanel(); document.getElementById('wishlist-panel').classList.add('open'); }
+};
 
-    function updateQty(id, delta) {
-        const item = cart.find(c => c.product.id === id);
-        if (!item) return;
-        item.qty += delta;
-        if (item.qty <= 0) cart = cart.filter(c => c.product.id !== id);
-        updateBadges();
-        renderCartPanel();
-    }
+window.closePanel = function(type) { document.getElementById(type + '-panel').classList.remove('open'); };
 
-    function removeFromCart(id) {
-        cart = cart.filter(c => c.product.id !== id);
-        updateBadges();
-        renderCartPanel();
-        const btn = document.getElementById('cartbtn-' + id);
-        if (btn) { btn.className = 'add-cart-btn'; btn.innerHTML = '<i class="fas fa-shopping-bag"></i>'; }
+function renderCartPanel() {
+    var body = document.getElementById('cart-body');
+    var footer = document.getElementById('cart-footer');
+    if (!cart.length) {
+        body.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-bag"></i><p>Your bag is empty.<br>Add something beautiful!</p></div>';
+        footer.style.display = 'none'; return;
     }
+    footer.style.display = 'block';
+    body.innerHTML = cart.map(function(entry) {
+        var p = entry.product, qty = entry.qty;
+        return '<div class="panel-item">'
+            + '<img src="'+p.image+'" alt="'+p.name+'">'
+            + '<div class="panel-item-info">'
+            + '<h4>'+p.name+'</h4><p>Size '+p.size+'</p>'
+            + '<div class="panel-item-price">&#8373;'+(p.price*qty)+'</div>'
+            + '<div class="qty-row">'
+            + '<button class="qty-btn" onclick="updateQty('+p.id+',-1)">&#8722;</button>'
+            + '<span class="qty-val">'+qty+'</span>'
+            + '<button class="qty-btn" onclick="updateQty('+p.id+',1)">+</button>'
+            + '</div></div>'
+            + '<button class="remove-btn" onclick="removeFromCart('+p.id+')"><i class="fas fa-trash-alt"></i></button>'
+            + '</div>';
+    }).join('');
+    var total = cart.reduce(function(s,c){ return s + c.product.price * c.qty; }, 0);
+    document.getElementById('cart-total').innerHTML = '&#8373;' + total;
+}
 
-    function removeFromWishlist(id) {
-        wishlist = wishlist.filter(w => w.id !== id);
-        updateBadges();
-        renderWishlistPanel();
-        const btn = document.getElementById('wish-' + id);
-        if (btn) btn.classList.remove('wishlisted');
+function renderWishlistPanel() {
+    var body = document.getElementById('wishlist-body');
+    if (!wishlist.length) {
+        body.innerHTML = '<div class="empty-state"><i class="fas fa-heart"></i><p>No saved items yet.<br>Tap the heart on any item to save it!</p></div>';
+        return;
     }
+    body.innerHTML = wishlist.map(function(p) {
+        return '<div class="panel-item">'
+            + '<img src="'+p.image+'" alt="'+p.name+'">'
+            + '<div class="panel-item-info"><h4>'+p.name+'</h4><p>Size '+p.size+'</p>'
+            + '<div class="panel-item-price">&#8373;'+p.price+'</div></div>'
+            + '<div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">'
+            + '<button class="wish-move-btn" onclick="addWishlistToBag('+p.id+')">+ Bag</button>'
+            + '<button class="remove-btn" onclick="removeFromWishlist('+p.id+')"><i class="fas fa-times"></i></button>'
+            + '</div></div>';
+    }).join('');
+}
 
-    function addWishlistToBag(id) {
-        if (cart.some(c => c.product.id === id)) { showToast('Already in your bag!'); return; }
-        const product = myProducts.find(p => p.id === id);
-        cart.push({ product, qty: 1 });
-        updateBadges();
-        renderWishlistPanel();
-        const btn = document.getElementById('cartbtn-' + id);
-        if (btn) { btn.className = 'add-cart-btn added'; btn.innerHTML = '<i class="fas fa-check"></i>'; }
-        showToast('🛍️ Added to Bag');
-    }
+window.checkoutViaWA = function() {
+    if (!cart.length) return;
+    var lines = cart.map(function(c){ return '- ' + c.product.name + ' (Size ' + c.product.size + ') x' + c.qty + ' = GHS' + (c.product.price * c.qty); }).join('\n');
+    var total = cart.reduce(function(s,c){ return s + c.product.price * c.qty; }, 0);
+    var msg = encodeURIComponent('Hi Enis! I\'d like to order:\n\n' + lines + '\n\nTotal: GHS' + total);
+    window.open('https://wa.me/233546527892?text=' + msg, '_blank');
+};
 
-    /* ── BADGES ── */
-    function updateBadges() {
-        const cc = cart.reduce((s, c) => s + c.qty, 0);
-        const wc = wishlist.length;
-        const cb = document.getElementById('cart-badge');
-        const wb = document.getElementById('wish-badge');
-        cb.textContent = cc; wb.textContent = wc;
-        cb.classList.toggle('show', cc > 0);
-        wb.classList.toggle('show', wc > 0);
-    }
+function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
 
-    /* ── PANELS ── */
-    function openPanel(type) {
-        if (type === 'cart') { renderCartPanel(); document.getElementById('cart-panel').classList.add('open'); }
-        else { renderWishlistPanel(); document.getElementById('wishlist-panel').classList.add('open'); }
-    }
-
-    function closePanel(type) {
-        document.getElementById(type + '-panel').classList.remove('open');
-    }
-
-    function renderCartPanel() {
-        const body = document.getElementById('cart-body');
-        const footer = document.getElementById('cart-footer');
-        if (!cart.length) {
-            body.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-bag"></i><p>Your bag is empty.<br>Add something beautiful!</p></div>';
-            footer.style.display = 'none';
-            return;
-        }
-        footer.style.display = 'block';
-        body.innerHTML = cart.map(({ product, qty }) => `
-            <div class="panel-item">
-                <img src="${product.image}" alt="${product.name}">
-                <div class="panel-item-info">
-                    <h4>${product.name}</h4>
-                    <p>Size ${product.size}</p>
-                    <div class="panel-item-price">&#8373;${product.price * qty}</div>
-                    <div class="qty-row">
-                        <button class="qty-btn" onclick="updateQty(${product.id}, -1)">&#8722;</button>
-                        <span class="qty-val">${qty}</span>
-                        <button class="qty-btn" onclick="updateQty(${product.id}, 1)">+</button>
-                    </div>
-                </div>
-                <button class="remove-btn" onclick="removeFromCart(${product.id})"><i class="fas fa-trash-alt"></i></button>
-            </div>`).join('');
-        const total = cart.reduce((s, c) => s + c.product.price * c.qty, 0);
-        document.getElementById('cart-total').innerHTML = '&#8373;' + total;
-    }
-
-    function renderWishlistPanel() {
-        const body = document.getElementById('wishlist-body');
-        if (!wishlist.length) {
-            body.innerHTML = '<div class="empty-state"><i class="fas fa-heart"></i><p>No saved items yet.<br>Tap the heart on any item to save it!</p></div>';
-            return;
-        }
-        body.innerHTML = wishlist.map(product => `
-            <div class="panel-item">
-                <img src="${product.image}" alt="${product.name}">
-                <div class="panel-item-info">
-                    <h4>${product.name}</h4>
-                    <p>Size ${product.size}</p>
-                    <div class="panel-item-price">&#8373;${product.price}</div>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
-                    <button class="wish-move-btn" onclick="addWishlistToBag(${product.id})">+ Bag</button>
-                    <button class="remove-btn" onclick="removeFromWishlist(${product.id})"><i class="fas fa-times"></i></button>
-                </div>
-            </div>`).join('');
-    }
-
-    /* ── WHATSAPP CHECKOUT ── */
-    function checkoutViaWA() {
-        if (!cart.length) return;
-        const lines = cart.map(c => `• ${c.product.name} (Size ${c.product.size}) x${c.qty} = ₵${c.product.price * c.qty}`).join('\n');
-        const total = cart.reduce((s, c) => s + c.product.price * c.qty, 0);
-        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order:\n\n${lines}\n\nTotal: ₵${total}`);
-        window.open(`https://wa.me/233546527892?text=${msg}`, '_blank');
-    }
-
-    /* ── TOAST ── */
-    function showToast(msg) {
-        const t = document.getElementById('toast');
-        t.textContent = msg;
-        t.classList.add('show');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
-    }
+});
 </script>
 
 </body>
