@@ -63,7 +63,7 @@ header{padding:calc(env(safe-area-inset-top) + 20px) 0 20px;text-align:center;ba
 .card-info{flex:1;}
 .card-info span{font-size:9px;color:var(--accent);font-weight:700;letter-spacing:1px;}
 .card-info h3{font-size:12px;color:var(--text-main);margin-top:4px;font-weight:700;}
-.add-cart-btn{width:34px;height:34px;border-radius:30px;border:none;background:var(--accent);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:transform 0.2s,background 0.2s;}
+.add-cart-btn{width:34px;height:34px;border-radius:50%;border:none;background:var(--accent);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:transform 0.2s,background 0.2s;}
 .add-cart-btn:active{transform:scale(0.85);}
 .add-cart-btn.added{background:var(--text-main);color:var(--accent-light);}
 @media(prefers-color-scheme:dark){.add-cart-btn.added{background:var(--accent-light);color:var(--accent);}}
@@ -267,12 +267,13 @@ function renderProducts(filter) {
             + '<div class="p-image-wrap" onclick="openPreview('+item.id+')">'
             + '<img src="'+item.image+'" loading="lazy">'
             + '<div class="price-tag">&#8373;'+item.price+'</div>'
-            + '<button class="wish-btn'+(liked?' wishlisted':'')+'" id="wish-'+item.id+'" onclick="event.stopPropagation();toggleWish('+item.id+')"><i class="fas fa-heart"></i></button>'
+            + '<div style="position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:7px;z-index:2;">'
+            + '<button class="wish-btn'+(liked?' wishlisted':'')+'" id="wish-'+item.id+'" onclick="event.stopPropagation();toggleWish('+item.id+')" style="position:relative;top:auto;right:auto;"><i class="fas fa-heart"></i></button>'
+            + '<button class="add-cart-btn'+(inCart?' added':'')+'" id="cartbtn-'+item.id+'" onclick="event.stopPropagation();toggleCart('+item.id+')" style="width:34px;height:34px;border-radius:50%;"><i class="fas '+(inCart?'fa-check':'fa-shopping-bag')+'"></i></button>'
+            + '</div>'
             + '</div>'
             + '<div class="card-footer">'
             + '<div class="card-info"><span>SIZE '+item.size+'</span><h3>'+item.name+'</h3></div>'
-            + '<button class="add-cart-btn'+(inCart?' added':'')+'" id="cartbtn-'+item.id+'" onclick="toggleCart('+item.id+')">'
-            + '<i class="fas '+(inCart?'fa-check':'fa-shopping-bag')+'"></i></button>'
             + '</div></div>';
     }).join('');
     setTimeout(initCardObserver, 30);
