@@ -140,12 +140,13 @@
 
     /* ═══════════════════════════ SHOP ═══════════════════════════ */
     #shop {
-        display: none; flex-direction: column;
+        display: flex; flex-direction: column;
         height: 100dvh;
         opacity: 0; transform: translateY(24px);
-        transition: opacity 1s 0.1s var(--ease), transform 1s 0.1s var(--ease);
+        pointer-events: none;
+        transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
     }
-    #shop.active { opacity: 1; transform: translateY(0); }
+    #shop.active { opacity: 1; transform: translateY(0); pointer-events: all; }
 
     /* ── Top Bar ── */
     .top-bar {
@@ -584,7 +585,7 @@
                 <a href="tel:+233546527892" class="c-btn">
                     <i class="fas fa-phone-alt" style="color:var(--accent)"></i> Call Us
                 </a>
-                <a href="mailto:contact@eniscollection.com" class="c-btn">
+                <a href="/cdn-cgi/l/email-protection#bad9d5d4cedbd9cefadfd4d3c9d9d5d6d6dfd9ced3d5d494d9d5d7" class="c-btn">
                     <i class="fas fa-envelope" style="color:var(--accent)"></i> Email
                 </a>
             </div>
@@ -686,13 +687,13 @@ function launch() {
 const splash = document.getElementById(‘splash’);
 const shop   = document.getElementById(‘shop’);
 splash.classList.add(‘out’);
-shop.style.display = ‘flex’;
-requestAnimationFrame(() => requestAnimationFrame(() => {
+// Small delay so splash fade starts first, then shop fades in
+setTimeout(() => {
 shop.classList.add(‘active’);
 document.getElementById(‘searchWrap’).classList.add(‘in’);
 renderGrid();
 setupObserver();
-}));
+}, 200);
 }
 
 // ── Render ──
@@ -863,11 +864,4 @@ const t = document.getElementById(`nav-${id}`);
 if (t) t.classList.add(‘on’);
 }
 
-function scrollToAbout() {
-navTo(‘about’);
-document.getElementById(‘aboutSection’).scrollIntoView({ behavior: ‘smooth’, block: ‘start’ });
-}
-</script>
-
-</body>
-</html>
+function scrollToA
