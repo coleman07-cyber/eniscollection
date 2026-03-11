@@ -29,12 +29,14 @@ header{padding:calc(env(safe-area-inset-top) + 20px) 0 20px;text-align:center;}
 .catalogue-scroll{display:flex;gap:8px;overflow-x:auto;padding:15px;}
 .cat-item{padding:10px 22px;border-radius:55px;border:1px solid var(--border);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;color:var(--text-soft);transition:0.4s;cursor:pointer;}
 .cat-item.active{background:var(--accent-gold);color:#000;border-color:var(--accent-gold);}
-.feed{flex:1;overflow-y:auto;background:var(--bg);}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:15px;}
-.product-card{background:var(--bg);border-radius:30px;overflow:hidden;opacity:0;transform:translateY(20px);transition:0.8s var(--ease-luxury);}
-.product-card.visible{opacity:1;transform:translateY(0);}
+.feed{flex:1;overflow-y:auto;background:var(--bg);-webkit-overflow-scrolling:touch;scroll-behavior:smooth;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:15px;}
+.product-card{background:var(--bg);border-radius:30px;overflow:hidden;opacity:0;transform:translateY(32px) scale(0.97);transition:opacity 0.65s var(--ease-luxury),transform 0.65s var(--ease-luxury);will-change:opacity,transform;}
+.product-card.visible{opacity:1;transform:translateY(0) scale(1);}
 .p-image-wrap{position:relative;width:100%;aspect-ratio:1/1.35;overflow:hidden;border-radius:20px;cursor:pointer;}
-.p-image-wrap img{width:100%;height:100%;object-fit:cover;}
+.p-image-wrap img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 0.65s var(--ease-luxury);}
+.product-card.visible .p-image-wrap img{transform:scale(1);}
+.p-image-wrap:active img{transform:scale(1.06);}
 .price-tag{position:absolute;bottom:10px;right:10px;background:var(--accent-gold);color:#000;padding:7px 14px;border-radius:12px;font-size:11px;font-weight:800;}
 .wish-btn{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.85);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;z-index:2;transition:transform 0.25s var(--ease-luxury);}
 .wish-btn i{font-size:14px;color:#ccc;transition:color 0.25s,transform 0.3s var(--ease-luxury);}
@@ -245,7 +247,7 @@ function renderProducts(filter) {
     document.getElementById('productGrid').innerHTML = items.map(function(item) {
         var liked = wishlist.some(function(w){ return w.id === item.id; });
         var inCart = cart.some(function(c){ return c.product.id === item.id; });
-        return '<div class="product-card visible" id="card-'+item.id+'">'
+        return '<div class="product-card" id="card-'+item.id+'">'
             + '<div class="p-image-wrap" onclick="openPreview('+item.id+')">'
             + '<img src="'+item.image+'" loading="lazy">'
             + '<div class="price-tag">&#8373;'+item.price+'</div>'
@@ -257,6 +259,7 @@ function renderProducts(filter) {
             + '<i class="fas '+(inCart?'fa-check':'fa-shopping-bag')+'"></i></button>'
             + '</div></div>';
     }).join('');
+    setTimeout(initCardObserver, 30);
 }
 
 window.filterCat = function(cat, el) {
@@ -266,11 +269,23 @@ window.filterCat = function(cat, el) {
     document.getElementById('mainFeed').scrollTo({top:0, behavior:'smooth'});
 };
 
-window.handleScroll = function() {
-    document.querySelectorAll('.product-card').forEach(function(card) {
-        if (card.getBoundingClientRect().top < window.innerHeight * 0.95) card.classList.add('visible');
+window.handleScroll = function() {};
+
+function initCardObserver() {
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+
+    document.querySelectorAll('.product-card').forEach(function(card, i) {
+        card.style.transitionDelay = (i % 2 === 0 ? 0 : 0.08) + 's';
+        observer.observe(card);
     });
-};
+}
 
 window.openPreview = function(id) {
     previewProduct = myProducts.find(function(p){ return p.id === id; });
