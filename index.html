@@ -1,1049 +1,282 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="color-scheme" content="light" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>ENIS COLLECTION</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Montserrat:wght@300;400;600;700;800&display=swap" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" />
 
   <style>
-
-    /* =====================================================
-       DESIGN TOKENS
-       Change brand colours and sizes here only.
-       ===================================================== */
     :root {
-      --bg:          #FDF8F5;
-      --card-bg:     #FFF9F7;
-      --text:        #2C1A1A;
-      --muted:       #9E7E7E;
-      --accent:      #B06B7A;   /* main rose-pink */
-      --gold:        #C8956A;   /* price / meta   */
-      --green:       #25D366;   /* WhatsApp       */
-      --border:      rgba(176,107,122,0.13);
-      --border-md:   rgba(176,107,122,0.24);
-      --ease:        cubic-bezier(0.25,1,0.5,1);
-      --r-card:      20px;
-      --r-pill:      50px;
+      /* Apple-style Color Palette */
+      --ios-bg: #F2F2F7;
+      --ios-card: #FFFFFF;
+      --ios-accent: #B06B7A;
+      --ios-text: #000000;
+      --ios-secondary: #8E8E93;
+      --ios-glass: rgba(255, 255, 255, 0.7);
+      --blur: blur(20px);
+      --ease-ios: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* =====================================================
-       RESET
-       ===================================================== */
-    *, *::before, *::after {
+    * {
       margin: 0; padding: 0; box-sizing: border-box;
-      font-family: 'Montserrat', sans-serif;
+      -webkit-font-smoothing: antialiased;
       -webkit-tap-highlight-color: transparent;
-      scrollbar-width: none;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
     }
-    *::-webkit-scrollbar { display: none; }
 
-    html, body {
-      height: 100%; width: 100%;
-      background: var(--bg);
+    body {
+      background-color: var(--ios-bg);
+      color: var(--ios-text);
       overflow: hidden;
+      height: 100vh;
     }
-    /* position:fixed stops iOS bounce but keeps content scrollable inside elements */
-    body { position: fixed; width: 100%; }
 
-
-    /* =====================================================
-       SPLASH SCREEN
-       ===================================================== */
+    /* ================= SPLASH ================= */
     #splash {
-      position: fixed; inset: 0;
-      z-index: 200;                       /* highest — always on top */
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-
-      background-color: #2C0F18;
-      background-image:
-        linear-gradient(160deg, rgba(28,8,16,0.88) 0%, rgba(44,16,24,0.55) 50%, rgba(44,20,20,0.18) 100%),
-        url('images/Splash-Dress.PNG');
-      background-size: cover;
-      background-position: center top;
-
-      /* FIX: transition opacity so the element stays in stacking context
-         but pointer-events:none kicks in immediately via JS, not CSS */
-      transition: opacity 0.55s ease;
+      position: fixed; inset: 0; z-index: 2000;
+      background: #000 url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800') center/cover;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 60px 30px;
+      transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1);
     }
-
-    /* Gradient fallback when splash image is missing */
-    #splash.no-image {
-      background-image:
-        radial-gradient(ellipse at 65% 15%, rgba(176,107,122,0.55) 0%, transparent 55%),
-        radial-gradient(ellipse at 20% 85%, rgba(200,149,106,0.30) 0%, transparent 50%),
-        linear-gradient(160deg, #4A1F2C 0%, #2C1018 45%, #18080E 100%);
+    #splash.gone { transform: translateY(-100%); }
+    
+    #splash h1 { 
+        font-family: 'Playfair Display'; font-size: 48px; color: white; margin-bottom: 10px;
     }
+    #splash p { color: rgba(255,255,255,0.8); font-size: 16px; margin-bottom: 30px; }
 
-    /* State: hidden — set by JS immediately on tap, CSS fades */
-    #splash.gone {
-      opacity: 0;
-      pointer-events: none;   /* JS sets this class so touch is disabled instantly */
+    .ios-btn {
+      height: 54px; background: white; color: black;
+      border-radius: 14px; border: none; font-weight: 600; font-size: 17px;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s;
     }
+    .ios-btn:active { transform: scale(0.96); opacity: 0.8; }
 
-    .splash-logo    { font-family: 'Great Vibes', cursive; font-size: 72px; color: #FFF5F0; line-height: 1.1; text-shadow: 0 4px 28px rgba(180,80,100,0.45); }
-    .splash-tagline { font-family: 'Playfair Display', serif; font-style: italic; font-size: 13px; color: rgba(255,220,225,0.9); letter-spacing: 2px; margin-top: 10px; }
-    .splash-divider { width: 40px; height: 1px; background: rgba(240,185,200,0.45); margin: 16px auto 0; }
-    .splash-slogan  { font-size: 9px; letter-spacing: 8px; text-transform: uppercase; font-weight: 700; color: rgba(240,185,200,0.8); margin-top: 14px; }
-
-    #btn-shop-now {
-      margin-top: 48px; padding: 0 68px;
-      height: 56px; border-radius: var(--r-pill);
-      border: 1.5px solid rgba(255,220,225,0.45);
-      background: rgba(255,245,240,0.12);
-      color: #FFF5F0; font-weight: 700; font-size: 11px; letter-spacing: 4px;
-      cursor: pointer; touch-action: manipulation;
-      -webkit-appearance: none; appearance: none;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    #btn-shop-now:active {
-      background: rgba(255,245,240,0.26);
-      border-color: rgba(255,220,225,0.85);
-    }
-
-
-    /* =====================================================
-       SHOP PAGE
-       ===================================================== */
+    /* ================= MAIN SHOP ================= */
     #shop {
-      position: fixed; inset: 0;
-      z-index: 100;                       /* below splash */
-      display: flex; flex-direction: column;
-      background: var(--bg);
-
-      /* FIX: always display:flex so no layout recalc on open.
-         Hidden via opacity + pointer-events only. */
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(20px);
-      transition: opacity 0.42s var(--ease), transform 0.42s var(--ease);
-    }
-    #shop.open {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
+      height: 100vh; display: flex; flex-direction: column;
+      padding-top: env(safe-area-inset-top);
     }
 
-    /* Header */
-    .shop-header {
-      flex-shrink: 0;
-      padding: calc(env(safe-area-inset-top, 20px) + 18px) 0 16px;
-      text-align: center;
-      background: var(--bg);
+    /* Apple-style Navigation Bar */
+    .nav-bar {
+      padding: 20px; background: var(--ios-glass);
+      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: center; align-items: center;
     }
-    .shop-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px; font-weight: 900;
-      text-transform: uppercase; letter-spacing: 5px;
-      color: var(--text);
-      display: inline-block; position: relative;
-    }
-    .shop-title::after {
-      content: '';
-      position: absolute; bottom: -5px; left: 25%; width: 50%; height: 1px;
-      background: var(--accent);
-    }
-    .shop-subtitle {
-      font-size: 9px; text-transform: uppercase;
-      letter-spacing: 6px; font-weight: 600;
-      color: var(--accent); margin-top: 10px;
-    }
+    .nav-bar h1 { font-family: 'Playfair Display'; font-size: 22px; }
 
-    /* Category pills */
-    .cats {
-      flex-shrink: 0;
-      display: flex; gap: 8px; overflow-x: auto;
-      padding: 12px 15px;
+    /* Pill Filter */
+    .cats { 
+        display: flex; gap: 8px; overflow-x: auto; padding: 15px 20px; 
+        scrollbar-width: none;
     }
+    .cats::-webkit-scrollbar { display: none; }
     .cat {
-      padding: 10px 20px; border-radius: var(--r-pill);
-      border: 1px solid var(--border-md);
-      font-size: 9px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1px;
-      white-space: nowrap; color: var(--muted);
-      background: var(--card-bg);
-      cursor: pointer; touch-action: manipulation;
-      transition: background 0.22s, color 0.22s, border-color 0.22s;
+      padding: 8px 18px; border-radius: 10px; border: none;
+      background: #E5E5EA; color: #3A3A3C; font-size: 14px; font-weight: 600;
+      transition: 0.3s; white-space: nowrap;
     }
-    .cat.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .cat.active { background: var(--ios-accent); color: white; }
 
-    /* Scrollable feed */
-    .feed { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    /* Feed & Grid */
+    .feed { flex: 1; overflow-y: auto; padding-bottom: 120px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; }
 
-    /* Product grid */
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 14px; }
-
-    .card { border-radius: 26px; overflow: hidden; opacity: 0; transform: translateY(18px); transition: opacity 0.38s var(--ease), transform 0.38s var(--ease); }
-    .card.show { opacity: 1; transform: translateY(0); }
-
-    .card-img {
-      position: relative; width: 100%;
-      aspect-ratio: 1 / 1.35; overflow: hidden;
-      border-radius: var(--r-card);
-      cursor: pointer; touch-action: manipulation;
+    .card {
+      background: var(--ios-card); border-radius: 18px; overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.3s;
     }
-    .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card:active { transform: scale(0.97); }
+    .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
+    .card-body { padding: 12px; }
+    .card-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; color: #1C1C1E; }
+    .card-price { font-size: 15px; font-weight: 700; color: var(--ios-accent); }
 
-    .card-price {
-      position: absolute; bottom: 10px; right: 10px;
-      background: var(--accent); color: #fff;
-      padding: 6px 12px; border-radius: 11px;
-      font-size: 11px; font-weight: 800; pointer-events: none;
+    /* ================= TAB BAR ================= */
+    .tab-bar {
+      position: fixed; bottom: 0; width: 100%;
+      height: 84px; background: var(--ios-glass);
+      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+      border-top: 0.5px solid rgba(0,0,0,0.1);
+      display: flex; justify-content: space-around;
+      padding-top: 10px; padding-bottom: env(safe-area-inset-bottom);
+      z-index: 500;
     }
-    .card-icons {
-      position: absolute; top: 10px; right: 10px;
-      display: flex; flex-direction: column; gap: 7px; z-index: 2;
+    .tab-item { 
+      display: flex; flex-direction: column; align-items: center; 
+      color: var(--ios-secondary); font-size: 10px; font-weight: 500;
+      text-decoration: none; position: relative;
     }
-
-    /* Small heart / bag buttons on card */
-    .icon-btn {
-      width: 34px; height: 34px; border-radius: 50%;
-      background: rgba(253,248,245,0.92);
+    .tab-item i { font-size: 22px; margin-bottom: 4px; }
+    .tab-item.active { color: var(--ios-accent); }
+    
+    .badge {
+      position: absolute; top: -4px; right: -8px;
+      background: #FF3B30; color: white; font-size: 10px;
+      min-width: 18px; height: 18px; border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
-      border: none; cursor: pointer; touch-action: manipulation;
-      transition: background 0.18s;
-    }
-    .icon-btn i { font-size: 13px; color: #D4A0AA; transition: color 0.18s; pointer-events: none; }
-    .icon-btn.liked  i  { color: #C04060; }
-    .icon-btn.bagged    { background: var(--accent); }
-    .icon-btn.bagged i  { color: #fff; }
-
-    .card-info { padding: 10px 4px 4px; }
-    .card-size { font-size: 9px; color: var(--accent); font-weight: 700; letter-spacing: 1px; }
-    .card-name { font-size: 12px; color: var(--text); margin-top: 3px; font-weight: 700; line-height: 1.35; }
-
-
-    /* =====================================================
-       ITEM PREVIEW MODAL
-       FIX: No backdrop-filter (causes GPU stall on mobile).
-       Plain dark overlay — instant render.
-       FIX: visibility:hidden so it never steals touches.
-       ===================================================== */
-    #preview {
-      position: fixed; inset: 0;
-      z-index: 300;
-      display: flex; align-items: center; justify-content: center;
-      padding: 24px 18px;
-      background: rgba(16, 5, 10, 0.74);
-
-      /* FIX: visibility toggles with 0s delay on open, delay on close */
-      visibility: hidden;
-      opacity: 0;
-      transition: opacity 0.18s ease, visibility 0s linear 0.18s;
-    }
-    #preview.open {
-      visibility: visible;
-      opacity: 1;
-      transition: opacity 0.18s ease, visibility 0s linear 0s;
+      font-weight: bold; border: 2px solid white;
     }
 
-    #preview-card {
-      width: 100%; max-width: 290px;
-      background: #fff; border-radius: 30px; overflow: hidden;
-      box-shadow: 0 28px 65px rgba(0,0,0,0.36);
-      transform: translateY(20px) scale(0.92);
-      transition: transform 0.22s var(--ease);
+    /* ================= PANEL (Sheet) ================= */
+    .sheet {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+      z-index: 1500; display: none; align-items: flex-end;
     }
-    #preview.open #preview-card { transform: translateY(0) scale(1); }
-
-    #preview-img-wrap {
-      position: relative; width: 100%;
-      aspect-ratio: 3 / 3.8; overflow: hidden;
-      border-radius: 30px 30px 0 0;
-    }
-    #preview-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-    .prev-icons {
-      position: absolute; top: 12px; right: 12px;
-      display: flex; flex-direction: column; gap: 8px; z-index: 2;
-    }
-    .prev-icon-btn {
-      width: 42px; height: 42px; border-radius: 50%;
-      background: rgba(255,255,255,0.92);
-      display: flex; align-items: center; justify-content: center;
-      border: none; cursor: pointer; touch-action: manipulation;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      transition: background 0.18s;
-    }
-    .prev-icon-btn i { font-size: 16px; color: #C8C8C8; transition: color 0.18s; pointer-events: none; }
-    .prev-icon-btn.liked  i { color: #C04060; }
-    .prev-icon-btn.bagged   { background: var(--accent); }
-    .prev-icon-btn.bagged i { color: #fff; }
-
-    .preview-info { padding: 20px 20px 22px; text-align: center; }
-    .preview-name { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 900; color: #1A1A1A; line-height: 1.25; margin-bottom: 6px; }
-    .preview-meta { font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 18px; }
-
-    #preview-order {
-      display: flex; align-items: center; justify-content: center; gap: 11px;
-      width: 100%; padding: 17px; border-radius: 16px;
-      background: var(--green); border: none;
-      text-decoration: none; cursor: pointer; touch-action: manipulation;
-      transition: background 0.18s;
-    }
-    #preview-order:active { background: #1bb352; }
-    #preview-order i    { font-size: 21px; color: #fff; pointer-events: none; }
-    #preview-order span { font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; pointer-events: none; }
-
-
-    /* =====================================================
-       FLOATING ACTION BUTTONS
-       FIX: single opacity value controlled by data-visible
-       attribute instead of two conflicting classes.
-       ===================================================== */
-    #fabs {
-      position: fixed; right: 14px; bottom: 38px;
-      z-index: 250;
-      display: flex; flex-direction: column; gap: 5px; align-items: center;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.28s ease;
-    }
-    #fabs.visible { opacity: 1; pointer-events: auto; }
-    /* scrolling fades them out — toggled by JS timeout */
-    #fabs.scrolling { opacity: 0.25; }
-
-    .fab {
-      width: 42px; height: 42px; border-radius: 42px;
-      display: flex; align-items: center; justify-content: center;
-      border: none; cursor: pointer; position: relative;
-      font-size: 17px; touch-action: manipulation;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.14);
-      transition: transform 0.14s, opacity 0.28s;
-    }
-    .fab:active { transform: scale(0.87); }
-    .fab-heart { background: var(--card-bg); color: #C04060; border: 1px solid var(--border-md); }
-    .fab-bag   { background: var(--accent); color: #fff; }
-
-    .fab-badge {
-      position: absolute; top: -5px; right: -5px;
-      min-width: 17px; height: 17px; border-radius: 10px; padding: 0 3px;
-      font-size: 9px; font-weight: 800;
-      display: flex; align-items: center; justify-content: center;
-      border: 2px solid var(--bg);
-      transform: scale(0); transition: transform 0.22s var(--ease);
-      pointer-events: none;
-    }
-    .fab-heart .fab-badge { background: #C04060; color: #fff; }
-    .fab-bag   .fab-badge { background: var(--text); color: #F2D9DE; }
-    .fab-badge.show { transform: scale(1); }
-
-
-    /* =====================================================
-       SIDE PANELS  (cart & wishlist)
-       ===================================================== */
-    .panel {
-      position: fixed; inset: 0;
-      z-index: 400;
+    .sheet.open { display: flex; }
+    .sheet-content {
+      width: 100%; background: var(--ios-bg);
+      border-radius: 20px 20px 0 0; max-height: 90vh;
       display: flex; flex-direction: column;
-      background: var(--bg);
-      transform: translateX(100%);
-      transition: transform 0.36s var(--ease);
+      animation: slideUp 0.4s var(--ease-ios);
     }
-    .panel.open { transform: translateX(0); }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-    .panel-head {
-      flex-shrink: 0;
-      padding: calc(env(safe-area-inset-top, 20px) + 18px) 18px 16px;
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid var(--border);
+    .sheet-handle {
+      width: 36px; height: 5px; background: #C7C7CC;
+      border-radius: 3px; margin: 12px auto;
     }
-    .panel-head h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text); }
-
-    .panel-close {
-      width: 38px; height: 38px; border-radius: 11px;
-      border: 1px solid var(--border-md); background: none;
-      cursor: pointer; color: var(--text); font-size: 15px;
-      display: flex; align-items: center; justify-content: center;
-      touch-action: manipulation; transition: background 0.18s, color 0.18s;
-    }
-    .panel-close:active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-    .panel-body   { flex: 1; overflow-y: auto; padding: 14px; }
-    .panel-footer { flex-shrink: 0; padding: 16px; border-top: 1px solid var(--border); }
-
-    .panel-item {
-      display: flex; gap: 12px; align-items: center;
-      padding: 12px; border-radius: 18px; margin-bottom: 10px;
-      background: var(--card-bg); border: 1px solid var(--border);
-    }
-    .panel-item img { width: 64px; height: 80px; object-fit: cover; border-radius: 12px; flex-shrink: 0; }
-
-    .item-info { flex: 1; min-width: 0; }
-    .item-info h4  { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1.35; }
-    .item-info p   { font-size: 10px; color: var(--muted); margin-top: 2px; }
-    .item-price    { font-size: 13px; color: var(--accent); font-weight: 800; margin-top: 4px; }
-
-    .qty-row { display: flex; align-items: center; gap: 7px; margin-top: 7px; }
-    .qty-btn {
-      width: 27px; height: 27px; border-radius: 8px;
-      border: 1px solid var(--border-md); background: var(--bg);
-      color: var(--text); font-size: 16px; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      touch-action: manipulation; line-height: 1;
-    }
-    .qty-btn:active { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .qty-val { font-size: 13px; font-weight: 700; color: var(--text); min-width: 18px; text-align: center; }
-
-    .del-btn {
-      width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0;
-      border: none; background: rgba(192,64,96,0.1); color: #C04060;
-      cursor: pointer; font-size: 13px;
-      display: flex; align-items: center; justify-content: center;
-      touch-action: manipulation; transition: background 0.18s;
-    }
-    .del-btn:active { background: #C04060; color: #fff; }
-    .del-btn i { pointer-events: none; }
-
-    .move-btn {
-      padding: 8px 12px; border-radius: 10px;
-      border: none; background: var(--accent); color: #fff;
-      font-size: 10px; font-weight: 800;
-      cursor: pointer; touch-action: manipulation; white-space: nowrap;
-    }
-    .move-btn:active { opacity: 0.8; }
-
-    .total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .total-row span   { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-    .total-row strong { font-size: 22px; font-weight: 800; color: var(--text); font-family: 'Playfair Display', serif; }
-
-    #checkout-btn {
-      width: 100%; padding: 17px; border-radius: 17px; border: none;
-      background: var(--green); color: #fff;
-      font-size: 13px; font-weight: 800; letter-spacing: 1px;
-      cursor: pointer; touch-action: manipulation;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      transition: background 0.18s;
-    }
-    #checkout-btn:active { background: #1bb352; }
-    #checkout-btn i { pointer-events: none; }
-
-    .empty { text-align: center; padding: 56px 20px; color: var(--muted); }
-    .empty i { font-size: 42px; opacity: 0.18; color: var(--accent); display: block; margin-bottom: 14px; }
-    .empty p { font-size: 13px; line-height: 1.85; }
-
-
-    /* =====================================================
-       ABOUT / FOOTER SECTION
-       ===================================================== */
-    .about {
-      margin: 36px 14px 56px; padding: 36px 24px;
-      background: var(--card-bg); border-radius: 32px;
-      border: 1px solid var(--border-md);
-      text-align: center; position: relative; overflow: hidden;
-    }
-    .about::before {
-      content: 'E';
-      position: absolute; top: -26px; right: -4px;
-      font-family: 'Playfair Display'; font-size: 150px;
-      color: var(--accent); opacity: 0.05; pointer-events: none; line-height: 1;
-    }
-    .about-est  { font-size: 10px; font-weight: 800; color: var(--accent); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 13px; }
-    .about h3   { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 13px; }
-    .about p    { font-size: 12.5px; color: var(--muted); line-height: 1.9; margin-bottom: 24px; }
-    .about-foot { margin-top: 44px; font-size: 8px; letter-spacing: 3px; opacity: 0.22; font-weight: 700; color: var(--text); }
-
-    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-    .contact-link {
-      padding: 13px 8px; border-radius: 13px;
-      background: var(--bg); border: 1px solid var(--border-md);
-      display: flex; align-items: center; justify-content: center; gap: 7px;
-      text-decoration: none; color: var(--text);
-      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-      touch-action: manipulation; transition: background 0.18s, color 0.18s;
-    }
-    .contact-link i { font-size: 13px; flex-shrink: 0; pointer-events: none; }
-    .contact-link:active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-
-    /* =====================================================
-       TOAST NOTIFICATION
-       ===================================================== */
-    #toast {
-      position: fixed; bottom: 26px; left: 50%;
-      transform: translateX(-50%) translateY(10px);
-      background: var(--text); color: var(--bg);
-      padding: 11px 20px; border-radius: var(--r-pill);
-      font-size: 11px; font-weight: 700; letter-spacing: 0.4px;
-      opacity: 0; pointer-events: none; white-space: nowrap;
-      transition: opacity 0.2s, transform 0.2s;
-      z-index: 9999;
-    }
-    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
+    .sheet-header { padding: 0 20px 15px; display: flex; justify-content: space-between; align-items: center; }
   </style>
-
 </head>
 <body>
 
-  <!-- =====================================================
-       SPLASH SCREEN
-       ===================================================== -->
-
   <div id="splash">
-    <h1 class="splash-logo">Enis Collection</h1>
-    <p class="splash-tagline">Elegance for every woman</p>
-    <div class="splash-divider"></div>
-    <p class="splash-slogan">Pamper Your Body</p>
-    <button id="btn-shop-now" type="button">SHOP NOW</button>
+    <h1>Enis Collection</h1>
+    <p>Premium Cape Coast Fashion</p>
+    <button class="ios-btn" id="btn-shop-now">Explore Collection</button>
   </div>
-
-  <!-- =====================================================
-       SHOP PAGE
-       ===================================================== -->
 
   <div id="shop">
-
-```
-<div class="shop-header">
-  <h1 class="shop-title">Enis Collection</h1>
-  <p class="shop-subtitle">Pamper Your Body</p>
-</div>
-
-<!-- Category filter -->
-<div class="cats" id="cats">
-  <button type="button" class="cat active" data-cat="All">All Items</button>
-  <button type="button" class="cat" data-cat="Thrift">Thrift</button>
-  <button type="button" class="cat" data-cat="Store">Store</button>
-  <button type="button" class="cat" data-cat="Handmade">Handmade</button>
-</div>
-
-<!-- Scrollable product feed -->
-<div class="feed" id="feed">
-  <div class="grid" id="grid"></div>
-
-  <!-- About / contact section -->
-  <div class="about">
-    <p class="about-est">Est. 2022</p>
-    <h3>Our Story</h3>
-    <p>Enis Collection started in 2022 in Cape Coast with a simple goal — help women feel confident and comfortable in what they wear. The brand began with carefully selected thrift pieces and handmade outfits, each chosen with attention to style and quality. Today, Enis Collection continues to offer stylish pieces for the modern woman.</p>
-    <div class="contact-grid">
-      <a class="contact-link" href="https://wa.me/233546527892"><i class="fab fa-whatsapp" style="color:#25D366"></i>WhatsApp</a>
-      <a class="contact-link" href="https://www.tiktok.com/@eniscollection1"><i class="fab fa-tiktok"></i>TikTok</a>
-      <a class="contact-link" href="tel:+233546527892"><i class="fas fa-phone-alt"></i>Call</a>
-      <a class="contact-link" href="mailto:contact@eniscollection.com"><i class="fas fa-envelope"></i>Email</a>
+    <div class="nav-bar">
+      <h1>Enis Collection</h1>
     </div>
-    <p class="about-foot">MADE WITH GRACE &bull; ENIS COLLECTION</p>
-  </div>
-</div>
-```
 
-  </div><!-- /shop -->
-
-  <!-- =====================================================
-       ITEM PREVIEW MODAL
-       ===================================================== -->
-
-  <div id="preview">
-    <div id="preview-card">
-
-```
-  <div id="preview-img-wrap">
-    <img id="preview-img" src="" alt="" />
-    <div class="prev-icons">
-      <button type="button" class="prev-icon-btn" id="prev-heart"><i class="fas fa-heart"></i></button>
-      <button type="button" class="prev-icon-btn" id="prev-bag"><i class="fas fa-shopping-bag"></i></button>
+    <div class="cats" id="cats">
+      <button class="cat active" data-cat="All">All Items</button>
+      <button class="cat" data-cat="Thrift">Thrift</button>
+      <button class="cat" data-cat="Store">Store</button>
+      <button class="cat" data-cat="Handmade">Handmade</button>
     </div>
-  </div>
 
-  <div class="preview-info">
-    <h2 class="preview-name" id="preview-name"></h2>
-    <p  class="preview-meta" id="preview-meta"></p>
-    <a  id="preview-order" href="#" target="_blank" rel="noopener">
-      <i class="fab fa-whatsapp"></i>
-      <span>ORDER ON WHATSAPP</span>
-    </a>
-  </div>
-
-</div>
-```
-
-  </div>
-
-  <!-- =====================================================
-       FLOATING ACTION BUTTONS
-       ===================================================== -->
-
-  <div id="fabs">
-    <button type="button" class="fab fab-heart" id="fab-heart">
-      <i class="fas fa-heart"></i>
-      <span class="fab-badge" id="wish-badge">0</span>
-    </button>
-    <button type="button" class="fab fab-bag" id="fab-bag">
-      <i class="fas fa-shopping-bag"></i>
-      <span class="fab-badge" id="cart-badge">0</span>
-    </button>
-  </div>
-
-  <!-- =====================================================
-       CART PANEL
-       ===================================================== -->
-
-  <div class="panel" id="cart-panel">
-    <div class="panel-head">
-      <h2>My Bag</h2>
-      <button type="button" class="panel-close" id="cart-close"><i class="fas fa-times"></i></button>
+    <div class="feed">
+      <div class="grid" id="grid"></div>
     </div>
-    <div class="panel-body" id="cart-body"></div>
-    <div class="panel-footer" id="cart-footer" style="display:none">
-      <div class="total-row">
-        <span>Total</span>
-        <strong id="cart-total">&#8373;0</strong>
+
+    <nav class="tab-bar">
+      <a href="#" class="tab-item active">
+        <i class="fas fa-home"></i>Shop
+      </a>
+      <a href="#" class="tab-item" id="wish-tab">
+        <i class="fas fa-heart"></i>Wishlist
+        <span class="badge" id="wish-badge" style="display:none">0</span>
+      </a>
+      <a href="#" class="tab-item" id="bag-tab">
+        <i class="fas fa-shopping-bag"></i>Bag
+        <span class="badge" id="cart-badge" style="display:none">0</span>
+      </a>
+    </nav>
+  </div>
+
+  <div class="sheet" id="cart-sheet">
+    <div class="sheet-content">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2 style="font-size: 24px; font-weight: 700;">My Bag</h2>
+        <button id="close-sheet" style="color:var(--ios-accent); background:none; border:none; font-size:17px; font-weight:600;">Done</button>
       </div>
-      <button type="button" id="checkout-btn"><i class="fab fa-whatsapp"></i>CHECKOUT VIA WHATSAPP</button>
+      <div id="cart-items" style="flex:1; overflow-y:auto; padding:0 20px;"></div>
+      <div style="padding: 20px 20px 40px;">
+        <button class="ios-btn" style="background:var(--ios-accent); color:white; width:100%;">Checkout via WhatsApp</button>
+      </div>
     </div>
   </div>
-
-  <!-- =====================================================
-       WISHLIST PANEL
-       ===================================================== -->
-
-  <div class="panel" id="wish-panel">
-    <div class="panel-head">
-      <h2>Wishlist</h2>
-      <button type="button" class="panel-close" id="wish-close"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="panel-body" id="wish-body"></div>
-  </div>
-
-  <div id="toast"></div>
-
-  <!-- =====================================================
-       JAVASCRIPT
-       Script is at end of body — DOM is ready, no
-       DOMContentLoaded wrapper needed.
-       ===================================================== -->
 
   <script>
-
-    /* ---------------------------------------------------
-       SETTINGS — edit these to customise the shop
-       --------------------------------------------------- */
-
-    var WA_NUMBER = "233546527892";   // WhatsApp number (no + sign)
-
-    /* Products list.
-       To ADD a product: copy one block and change the values.
-       To REMOVE: delete the block.
-       Categories must match the filter buttons: "Thrift" | "Store" | "Handmade"  */
-    var PRODUCTS = [
-      { id:1,  name:"Thick Seamless Dress",    price:50, size:"10",     cat:"Thrift",   img:"images/item1.jpg"  },
-      { id:2,  name:"Plaited Skirts & Top",    price:50, size:"8/10",   cat:"Thrift",   img:"images/item2.jpg"  },
-      { id:3,  name:"Short Length Essential",  price:45, size:"8",      cat:"Thrift",   img:"images/item3.jpg"  },
-      { id:4,  name:"Church & Work",           price:50, size:"8",      cat:"Store",    img:"images/item4.jpg"  },
-      { id:5,  name:"Dinner & Party Elegance", price:45, size:"8/10",   cat:"Store",    img:"images/item5.jpg"  },
-      { id:6,  name:"Lecture & Beach Set",     price:45, size:"6/8/10", cat:"Store",    img:"images/item6.jpg"  },
-      { id:7,  name:"Ruched SHEIN Special",    price:50, size:"8/10",   cat:"Thrift",   img:"images/item7.jpg"  },
-      { id:8,  name:"Ultimate Work Gown",      price:50, size:"12/14",  cat:"Thrift",   img:"images/item8.jpg"  },
-      { id:9,  name:"Skirt & Basic Top Duo",   price:50, size:"10/12",  cat:"Store",    img:"images/item9.jpg"  },
-      { id:10, name:"Refined Church Wear",     price:50, size:"10",     cat:"Store",    img:"images/item10.jpg" }
+    const PRODUCTS = [
+      { id:1, name:"Thick Seamless Dress", price:50, size:"10", cat:"Thrift", img:"https://images.unsplash.com/photo-1539008835270-2d7c449b0fbd?auto=format&fit=crop&w=500" },
+      { id:2, name:"Plaited Skirts & Top", price:50, size:"8/10", cat:"Thrift", img:"https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=500" },
+      { id:3, name:"Essential Silk Set", price:120, size:"M", cat:"Store", img:"https://images.unsplash.com/photo-1564485377539-4af72d1f6a2f?auto=format&fit=crop&w=500" },
+      { id:4, name:"Handmade Crochet", price:85, size:"Custom", cat:"Handmade", img:"https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=500" }
     ];
 
+    let cart = [];
 
-    /* ---------------------------------------------------
-       APP STATE
-       --------------------------------------------------- */
-    var cart         = [];      // [{ product, qty }]
-    var wishlist     = [];      // [product]
-    var openProduct  = null;    // product shown in preview modal
-    var toastTimer   = null;
-    var scrollTimer  = null;
-
-
-    /* ---------------------------------------------------
-       SPLASH IMAGE FALLBACK
-       If Splash-Dress.PNG is missing, show a gradient instead.
-       --------------------------------------------------- */
-    (function () {
-      var img = new Image();
-      img.onerror = function () {
-        document.getElementById("splash").classList.add("no-image");
-      };
-      img.src = "images/Splash-Dress.PNG";
-    }());
-
-
-    /* ---------------------------------------------------
-       SPLASH → SHOP  (the critical transition)
-       FIX: pointer-events:none applied synchronously in JS
-       before the CSS opacity fade begins, so no touch bleed.
-       --------------------------------------------------- */
-    document.getElementById("btn-shop-now").addEventListener("click", function () {
-      var splash = document.getElementById("splash");
-      var shop   = document.getElementById("shop");
-      var fabs   = document.getElementById("fabs");
-
-      // Disable splash touches instantly (don't wait for CSS)
-      splash.style.pointerEvents = "none";
-      // Trigger CSS fade
-      splash.classList.add("gone");
-
-      // Show shop
-      shop.classList.add("open");
-
-      // Show FABs
-      fabs.classList.add("visible");
-
-      // Render products
-      renderGrid("All");
-    });
-
-
-    /* ---------------------------------------------------
-       CATEGORY FILTER
-       --------------------------------------------------- */
-    document.getElementById("cats").addEventListener("click", function (e) {
-      var btn = e.target.closest(".cat");
-      if (!btn) return;
-      document.querySelectorAll(".cat").forEach(function (c) { c.classList.remove("active"); });
-      btn.classList.add("active");
-      renderGrid(btn.dataset.cat);
-      document.getElementById("feed").scrollTo({ top: 0, behavior: "smooth" });
-    });
-
-
-    /* ---------------------------------------------------
-       FAB SCROLL HIDE / SHOW
-       FIX: single "scrolling" class, never conflicts with "visible"
-       --------------------------------------------------- */
-    document.getElementById("feed").addEventListener("scroll", function () {
-      document.getElementById("fabs").classList.add("scrolling");
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(function () {
-        document.getElementById("fabs").classList.remove("scrolling");
-      }, 900);
-    }, { passive: true });
-
-
-    /* ---------------------------------------------------
-       RENDER PRODUCT GRID
-       FIX: grid.onclick assigned once and never re-assigned.
-       --------------------------------------------------- */
-    var grid = document.getElementById("grid");
-
-    // Delegate all grid taps once
-    grid.addEventListener("click", function (e) {
-      var wishBtn = e.target.closest("[data-wish]");
-      var bagBtn  = e.target.closest("[data-bag]");
-      var imgWrap = e.target.closest("[data-open]");
-
-      if      (wishBtn) { e.stopPropagation(); toggleWish(+wishBtn.dataset.wish); }
-      else if (bagBtn)  { e.stopPropagation(); toggleBag(+bagBtn.dataset.bag);   }
-      else if (imgWrap) { openPreview(+imgWrap.dataset.open); }
-    });
+    // Navigation Logic
+    document.getElementById("btn-shop-now").onclick = () => {
+        document.getElementById("splash").classList.add("gone");
+        renderGrid("All");
+    };
 
     function renderGrid(filter) {
-      var items = PRODUCTS.filter(function (p) {
-        return filter === "All" || p.cat === filter;
-      });
-
-      grid.innerHTML = items.map(function (p) {
-        var liked  = wishlist.some(function (w) { return w.id === p.id; });
-        var bagged = cart.some(function (c) { return c.product.id === p.id; });
-        return (
-          '<div class="card" id="card-' + p.id + '">' +
-            '<div class="card-img" data-open="' + p.id + '">' +
-              '<img src="' + p.img + '" loading="lazy" alt="' + p.name + '" />' +
-              '<span class="card-price">&#8373;' + p.price + '</span>' +
-              '<div class="card-icons">' +
-                '<button type="button" class="icon-btn ' + (liked  ? 'liked'  : '') + '" data-wish="' + p.id + '"><i class="fas fa-heart"></i></button>' +
-                '<button type="button" class="icon-btn ' + (bagged ? 'bagged' : '') + '" data-bag="'  + p.id + '" id="bag-btn-' + p.id + '"><i class="fas ' + (bagged ? 'fa-check' : 'fa-shopping-bag') + '"></i></button>' +
-              '</div>' +
-            '</div>' +
-            '<div class="card-info">' +
-              '<p class="card-size">SIZE ' + p.size + '</p>' +
-              '<p class="card-name">' + p.name + '</p>' +
-            '</div>' +
-          '</div>'
-        );
-      }).join("");
-
-      // Staggered fade-in animation
-      grid.querySelectorAll(".card").forEach(function (card, i) {
-        setTimeout(function () { card.classList.add("show"); }, 30 + i * 38);
-      });
+        const grid = document.getElementById("grid");
+        const items = PRODUCTS.filter(p => filter === "All" || p.cat === filter);
+        grid.innerHTML = items.map(p => `
+            <div class="card" onclick="addToCart(${p.id})">
+                <img src="${p.img}">
+                <div class="card-body">
+                    <div class="card-name">${p.name}</div>
+                    <div class="card-price">₵${p.price}</div>
+                </div>
+            </div>
+        `).join('');
     }
 
-
-    /* ---------------------------------------------------
-       ITEM PREVIEW
-       --------------------------------------------------- */
-    function openPreview(id) {
-      openProduct = PRODUCTS.find(function (p) { return p.id === id; });
-      if (!openProduct) return;
-
-      document.getElementById("preview-img").src = openProduct.img;
-      document.getElementById("preview-name").textContent = openProduct.name;
-      document.getElementById("preview-meta").textContent =
-        "UK " + openProduct.size + " \u2022 \u20B5" + openProduct.price;
-      document.getElementById("preview-order").href =
-        "https://wa.me/" + WA_NUMBER + "?text=" +
-        encodeURIComponent("Hi Enis! I'd like to order: " + openProduct.name + " (Size " + openProduct.size + ")");
-
-      syncPreviewButtons();
-      document.getElementById("preview").classList.add("open");
+    function addToCart(id) {
+        const p = PRODUCTS.find(x => x.id === id);
+        if(!cart.find(c => c.id === id)) {
+            cart.push(p);
+            updateUI();
+        }
     }
 
-    function closePreview() {
-      document.getElementById("preview").classList.remove("open");
-      setTimeout(function () { openProduct = null; }, 220);
+    function updateUI() {
+        const badge = document.getElementById("cart-badge");
+        badge.innerText = cart.length;
+        badge.style.display = cart.length > 0 ? "flex" : "none";
     }
 
-    function syncPreviewButtons() {
-      if (!openProduct) return;
-      var liked  = wishlist.some(function (w) { return w.id === openProduct.id; });
-      var bagged = cart.some(function (c) { return c.product.id === openProduct.id; });
-      var hBtn = document.getElementById("prev-heart");
-      var bBtn = document.getElementById("prev-bag");
-      hBtn.classList.toggle("liked",  liked);
-      bBtn.classList.toggle("bagged", bagged);
-      bBtn.innerHTML = '<i class="fas ' + (bagged ? "fa-check" : "fa-shopping-bag") + '"></i>';
-    }
+    // Sheet Handling
+    document.getElementById("bag-tab").onclick = () => {
+        const list = document.getElementById("cart-items");
+        list.innerHTML = cart.map(i => `
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px; background:white; padding:15px; border-radius:14px;">
+                <div style="display:flex; gap:12px;">
+                    <img src="${i.img}" style="width:50px; height:50px; border-radius:8px; object-fit:cover;">
+                    <div>
+                        <div style="font-weight:600;">${i.name}</div>
+                        <div style="color:var(--ios-secondary); font-size:13px;">Size ${i.size}</div>
+                    </div>
+                </div>
+                <div style="font-weight:700;">₵${i.price}</div>
+            </div>
+        `).join('');
+        document.getElementById("cart-sheet").classList.add("open");
+    };
 
-    // Close when tapping the dark overlay (not the card itself)
-    document.getElementById("preview").addEventListener("click", closePreview);
-    document.getElementById("preview-card").addEventListener("click", function (e) { e.stopPropagation(); });
+    document.getElementById("close-sheet").onclick = () => {
+        document.getElementById("cart-sheet").classList.remove("open");
+    };
 
-    document.getElementById("prev-heart").addEventListener("click", function () {
-      if (openProduct) toggleWish(openProduct.id);
-    });
-    document.getElementById("prev-bag").addEventListener("click", function () {
-      if (openProduct) toggleBag(openProduct.id);
-    });
-
-
-    /* ---------------------------------------------------
-       WISHLIST
-       --------------------------------------------------- */
-    function toggleWish(id) {
-      var product = PRODUCTS.find(function (p) { return p.id === id; });
-      var idx     = wishlist.findIndex(function (w) { return w.id === id; });
-
-      if (idx === -1) { wishlist.push(product); showToast("Saved to Wishlist \u2665"); }
-      else            { wishlist.splice(idx, 1); showToast("Removed from Wishlist");  }
-
-      updateBadges();
-
-      // Sync the card button
-      var btn = document.querySelector('[data-wish="' + id + '"]');
-      if (btn) btn.classList.toggle("liked", idx === -1);
-
-      // Sync the preview if it's open for this product
-      if (openProduct && openProduct.id === id) syncPreviewButtons();
-    }
-
-
-    /* ---------------------------------------------------
-       CART / BAG
-       --------------------------------------------------- */
-    function toggleBag(id) {
-      var product = PRODUCTS.find(function (p) { return p.id === id; });
-      var idx     = cart.findIndex(function (c) { return c.product.id === id; });
-
-      if (idx === -1) { cart.push({ product: product, qty: 1 }); showToast("Added to Bag"); }
-      else            { cart.splice(idx, 1);                      showToast("Removed from Bag"); }
-
-      updateBadges();
-      syncBagButton(id);
-      if (openProduct && openProduct.id === id) syncPreviewButtons();
-    }
-
-    function syncBagButton(id) {
-      var bagged = cart.some(function (c) { return c.product.id === id; });
-      var btn    = document.getElementById("bag-btn-" + id);
-      if (!btn) return;
-      btn.className = "icon-btn" + (bagged ? " bagged" : "");
-      btn.innerHTML = '<i class="fas ' + (bagged ? "fa-check" : "fa-shopping-bag") + '"></i>';
-    }
-
-    function changeQty(id, delta) {
-      var item = cart.find(function (c) { return c.product.id === id; });
-      if (!item) return;
-      item.qty += delta;
-      if (item.qty <= 0) cart = cart.filter(function (c) { return c.product.id !== id; });
-      updateBadges();
-      renderCartPanel();
-    }
-
-    function removeCartItem(id) {
-      cart = cart.filter(function (c) { return c.product.id !== id; });
-      updateBadges();
-      renderCartPanel();
-      syncBagButton(id);
-    }
-
-
-    /* ---------------------------------------------------
-       BADGE COUNTS
-       --------------------------------------------------- */
-    function updateBadges() {
-      var cartQty = cart.reduce(function (sum, c) { return sum + c.qty; }, 0);
-      var wishQty = wishlist.length;
-
-      var cb = document.getElementById("cart-badge");
-      var wb = document.getElementById("wish-badge");
-      cb.textContent = cartQty;
-      wb.textContent = wishQty;
-      cb.classList.toggle("show", cartQty > 0);
-      wb.classList.toggle("show", wishQty > 0);
-    }
-
-
-    /* ---------------------------------------------------
-       PANEL OPEN / CLOSE
-       --------------------------------------------------- */
-    document.getElementById("fab-heart").addEventListener("click", function () {
-      renderWishPanel();
-      document.getElementById("wish-panel").classList.add("open");
-    });
-    document.getElementById("fab-bag").addEventListener("click", function () {
-      renderCartPanel();
-      document.getElementById("cart-panel").classList.add("open");
-    });
-    document.getElementById("cart-close").addEventListener("click", function () {
-      document.getElementById("cart-panel").classList.remove("open");
-    });
-    document.getElementById("wish-close").addEventListener("click", function () {
-      document.getElementById("wish-panel").classList.remove("open");
-    });
-
-
-    /* ---------------------------------------------------
-       CART PANEL RENDER
-       --------------------------------------------------- */
-    function renderCartPanel() {
-      var body   = document.getElementById("cart-body");
-      var footer = document.getElementById("cart-footer");
-
-      if (!cart.length) {
-        body.innerHTML = '<div class="empty"><i class="fas fa-shopping-bag"></i><p>Your bag is empty.<br>Add something beautiful!</p></div>';
-        footer.style.display = "none";
-        return;
-      }
-
-      footer.style.display = "block";
-      var total = 0;
-
-      body.innerHTML = cart.map(function (entry) {
-        var p = entry.product, q = entry.qty;
-        total += p.price * q;
-        return (
-          '<div class="panel-item">' +
-            '<img src="' + p.img + '" alt="' + p.name + '" />' +
-            '<div class="item-info">' +
-              '<h4>' + p.name + '</h4>' +
-              '<p>Size ' + p.size + '</p>' +
-              '<p class="item-price">&#8373;' + (p.price * q) + '</p>' +
-              '<div class="qty-row">' +
-                '<button type="button" class="qty-btn" data-qid="' + p.id + '" data-d="-1">&#8722;</button>' +
-                '<span class="qty-val">' + q + '</span>' +
-                '<button type="button" class="qty-btn" data-qid="' + p.id + '" data-d="1">+</button>' +
-              '</div>' +
-            '</div>' +
-            '<button type="button" class="del-btn" data-del="' + p.id + '"><i class="fas fa-trash-alt"></i></button>' +
-          '</div>'
-        );
-      }).join("");
-
-      document.getElementById("cart-total").innerHTML = "&#8373;" + total;
-
-      // Delegate cart body taps
-      body.onclick = function (e) {
-        var q = e.target.closest("[data-qid]");
-        var d = e.target.closest("[data-del]");
-        if (q) changeQty(+q.dataset.qid, +q.dataset.d);
-        else if (d) removeCartItem(+d.dataset.del);
-      };
-    }
-
-    document.getElementById("checkout-btn").addEventListener("click", function () {
-      if (!cart.length) return;
-      var total = 0;
-      var lines = cart.map(function (c) {
-        total += c.product.price * c.qty;
-        return "- " + c.product.name + " (Size " + c.product.size + ") x" + c.qty + " = GHS" + (c.product.price * c.qty);
-      }).join("\n");
-      window.open(
-        "https://wa.me/" + WA_NUMBER + "?text=" +
-        encodeURIComponent("Hi Enis! I'd like to order:\n\n" + lines + "\n\nTotal: GHS" + total),
-        "_blank"
-      );
-    });
-
-
-    /* ---------------------------------------------------
-       WISHLIST PANEL RENDER
-       --------------------------------------------------- */
-    function renderWishPanel() {
-      var body = document.getElementById("wish-body");
-
-      if (!wishlist.length) {
-        body.innerHTML = '<div class="empty"><i class="fas fa-heart"></i><p>Nothing saved yet.<br>Tap the heart on any item!</p></div>';
-        return;
-      }
-
-      body.innerHTML = wishlist.map(function (p) {
-        return (
-          '<div class="panel-item">' +
-            '<img src="' + p.img + '" alt="' + p.name + '" />' +
-            '<div class="item-info">' +
-              '<h4>' + p.name + '</h4>' +
-              '<p>Size ' + p.size + '</p>' +
-              '<p class="item-price">&#8373;' + p.price + '</p>' +
-            '</div>' +
-            '<div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;flex-shrink:0;">' +
-              '<button type="button" class="move-btn" data-move="' + p.id + '">+ Bag</button>' +
-              '<button type="button" class="del-btn"  data-wdel="' + p.id + '"><i class="fas fa-times"></i></button>' +
-            '</div>' +
-          '</div>'
-        );
-      }).join("");
-
-      body.onclick = function (e) {
-        var m = e.target.closest("[data-move]");
-        var d = e.target.closest("[data-wdel]");
-        if (m) moveWishToBag(+m.dataset.move);
-        else if (d) removeWishItem(+d.dataset.wdel);
-      };
-    }
-
-    function removeWishItem(id) {
-      wishlist = wishlist.filter(function (w) { return w.id !== id; });
-      updateBadges();
-      renderWishPanel();
-      var btn = document.querySelector('[data-wish="' + id + '"]');
-      if (btn) btn.classList.remove("liked");
-    }
-
-    function moveWishToBag(id) {
-      if (cart.some(function (c) { return c.product.id === id; })) {
-        showToast("Already in your bag!"); return;
-      }
-      var product = PRODUCTS.find(function (p) { return p.id === id; });
-      cart.push({ product: product, qty: 1 });
-      updateBadges();
-      renderWishPanel();
-      syncBagButton(id);
-      showToast("Added to Bag");
-    }
-
-
-    /* ---------------------------------------------------
-       TOAST
-       --------------------------------------------------- */
-    function showToast(msg) {
-      var t = document.getElementById("toast");
-      t.textContent = msg;
-      t.classList.add("show");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(function () { t.classList.remove("show"); }, 2200);
-    }
-
+    // Filter Logic
+    document.getElementById("cats").onclick = (e) => {
+        if(e.target.classList.contains('cat')) {
+            document.querySelectorAll('.cat').forEach(c => c.classList.remove('active'));
+            e.target.classList.add('active');
+            renderGrid(e.target.dataset.cat);
+        }
+    };
   </script>
-
 </body>
 </html>
