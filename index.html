@@ -3,164 +3,123 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="color-scheme" content="light" />
   <title>ENIS COLLECTION</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Montserrat:wght@300;400;600;700;800&display=swap" />
 
   <style>
     :root {
-      /* Apple-style Color Palette */
-      --ios-bg: #F2F2F7;
-      --ios-card: #FFFFFF;
-      --ios-accent: #B06B7A;
-      --ios-text: #000000;
-      --ios-secondary: #8E8E93;
-      --ios-glass: rgba(255, 255, 255, 0.7);
-      --blur: blur(20px);
-      --ease-ios: cubic-bezier(0.4, 0, 0.2, 1);
+      --bg:          #FDF8F5;
+      --card-bg:     #FFF9F7;
+      --text:        #2C1A1A;
+      --muted:       #9E7E7E;
+      --accent:      #B06B7A;   
+      --gold:        #C8956A;   
+      --green:       #25D366;   
+      --border:      rgba(176,107,122,0.13);
+      --border-md:   rgba(176,107,122,0.24);
+      --ease:        cubic-bezier(0.25,1,0.5,1);
+      --r-card:      20px;
+      --r-pill:      50px;
     }
 
-    * {
+    *, *::before, *::after {
       margin: 0; padding: 0; box-sizing: border-box;
-      -webkit-font-smoothing: antialiased;
+      font-family: 'Montserrat', sans-serif;
       -webkit-tap-highlight-color: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
     }
 
-    body {
-      background-color: var(--ios-bg);
-      color: var(--ios-text);
+    html, body {
+      height: 100%; width: 100%;
+      background: var(--bg);
       overflow: hidden;
-      height: 100vh;
     }
+    body { position: fixed; width: 100%; }
 
-    /* ================= SPLASH ================= */
+    /* SPLASH SCREEN */
     #splash {
-      position: fixed; inset: 0; z-index: 2000;
-      background: #000 url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800') center/cover;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 60px 30px;
-      transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1);
-    }
-    #splash.gone { transform: translateY(-100%); }
-    
-    #splash h1 { 
-        font-family: 'Playfair Display'; font-size: 48px; color: white; margin-bottom: 10px;
-    }
-    #splash p { color: rgba(255,255,255,0.8); font-size: 16px; margin-bottom: 30px; }
-
-    .ios-btn {
-      height: 54px; background: white; color: black;
-      border-radius: 14px; border: none; font-weight: 600; font-size: 17px;
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.2s;
-    }
-    .ios-btn:active { transform: scale(0.96); opacity: 0.8; }
-
-    /* ================= MAIN SHOP ================= */
-    #shop {
-      height: 100vh; display: flex; flex-direction: column;
-      padding-top: env(safe-area-inset-top);
-    }
-
-    /* Apple-style Navigation Bar */
-    .nav-bar {
-      padding: 20px; background: var(--ios-glass);
-      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
-      position: sticky; top: 0; z-index: 100;
-      display: flex; justify-content: center; align-items: center;
-    }
-    .nav-bar h1 { font-family: 'Playfair Display'; font-size: 22px; }
-
-    /* Pill Filter */
-    .cats { 
-        display: flex; gap: 8px; overflow-x: auto; padding: 15px 20px; 
-        scrollbar-width: none;
-    }
-    .cats::-webkit-scrollbar { display: none; }
-    .cat {
-      padding: 8px 18px; border-radius: 10px; border: none;
-      background: #E5E5EA; color: #3A3A3C; font-size: 14px; font-weight: 600;
-      transition: 0.3s; white-space: nowrap;
-    }
-    .cat.active { background: var(--ios-accent); color: white; }
-
-    /* Feed & Grid */
-    .feed { flex: 1; overflow-y: auto; padding-bottom: 120px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; }
-
-    .card {
-      background: var(--ios-card); border-radius: 18px; overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      transition: transform 0.3s;
-    }
-    .card:active { transform: scale(0.97); }
-    .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
-    .card-body { padding: 12px; }
-    .card-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; color: #1C1C1E; }
-    .card-price { font-size: 15px; font-weight: 700; color: var(--ios-accent); }
-
-    /* ================= TAB BAR ================= */
-    .tab-bar {
-      position: fixed; bottom: 0; width: 100%;
-      height: 84px; background: var(--ios-glass);
-      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
-      border-top: 0.5px solid rgba(0,0,0,0.1);
-      display: flex; justify-content: space-around;
-      padding-top: 10px; padding-bottom: env(safe-area-inset-bottom);
-      z-index: 500;
-    }
-    .tab-item { 
-      display: flex; flex-direction: column; align-items: center; 
-      color: var(--ios-secondary); font-size: 10px; font-weight: 500;
-      text-decoration: none; position: relative;
-    }
-    .tab-item i { font-size: 22px; margin-bottom: 4px; }
-    .tab-item.active { color: var(--ios-accent); }
-    
-    .badge {
-      position: absolute; top: -4px; right: -8px;
-      background: #FF3B30; color: white; font-size: 10px;
-      min-width: 18px; height: 18px; border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: bold; border: 2px solid white;
-    }
-
-    /* ================= PANEL (Sheet) ================= */
-    .sheet {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.4);
-      z-index: 1500; display: none; align-items: flex-end;
-    }
-    .sheet.open { display: flex; }
-    .sheet-content {
-      width: 100%; background: var(--ios-bg);
-      border-radius: 20px 20px 0 0; max-height: 90vh;
+      position: fixed; inset: 0; z-index: 1000;
       display: flex; flex-direction: column;
-      animation: slideUp 0.4s var(--ease-ios);
+      justify-content: center; align-items: center;
+      background-color: #2C0F18;
+      background-image: linear-gradient(160deg, rgba(28,8,16,0.88) 0%, rgba(44,16,24,0.55) 50%, rgba(44,20,20,0.18) 100%);
+      background-size: cover; background-position: center top;
+      transition: opacity 0.55s ease, visibility 0.55s;
     }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    #splash.gone { opacity: 0; visibility: hidden; pointer-events: none; }
 
-    .sheet-handle {
-      width: 36px; height: 5px; background: #C7C7CC;
-      border-radius: 3px; margin: 12px auto;
+    .splash-logo { font-family: 'Great Vibes', cursive; font-size: 72px; color: #FFF5F0; line-height: 1.1; }
+    .splash-tagline { font-family: 'Playfair Display', serif; font-style: italic; font-size: 13px; color: rgba(255,220,225,0.9); letter-spacing: 2px; margin-top: 10px; }
+    .splash-divider { width: 40px; height: 1px; background: rgba(240,185,200,0.45); margin: 16px auto 0; }
+    .splash-slogan { font-size: 9px; letter-spacing: 8px; text-transform: uppercase; font-weight: 700; color: rgba(240,185,200,0.8); margin-top: 14px; }
+
+    #btn-shop-now {
+      margin-top: 48px; padding: 0 68px; height: 56px; border-radius: var(--r-pill);
+      border: 1.5px solid rgba(255,220,225,0.45); background: rgba(255,245,240,0.12);
+      color: #FFF5F0; font-weight: 700; font-size: 11px; letter-spacing: 4px; cursor: pointer;
     }
-    .sheet-header { padding: 0 20px 15px; display: flex; justify-content: space-between; align-items: center; }
+
+    /* SHOP PAGE */
+    #shop {
+      position: fixed; inset: 0; z-index: 100;
+      display: flex; flex-direction: column;
+      background: var(--bg); opacity: 0; pointer-events: none;
+      transform: translateY(20px); transition: opacity 0.42s var(--ease), transform 0.42s var(--ease);
+    }
+    #shop.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+    .shop-header { flex-shrink: 0; padding: 40px 0 16px; text-align: center; }
+    .shop-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; text-transform: uppercase; letter-spacing: 5px; color: var(--text); }
+    .shop-subtitle { font-size: 9px; text-transform: uppercase; letter-spacing: 6px; font-weight: 600; color: var(--accent); margin-top: 10px; }
+
+    .cats { flex-shrink: 0; display: flex; gap: 8px; overflow-x: auto; padding: 12px 15px; scrollbar-width: none; }
+    .cat { padding: 10px 20px; border-radius: var(--r-pill); border: 1px solid var(--border-md); font-size: 9px; font-weight: 700; text-transform: uppercase; background: var(--card-bg); color: var(--muted); cursor: pointer; }
+    .cat.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    .feed { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 14px; }
+
+    /* CARD STYLING */
+    .card { border-radius: 26px; overflow: hidden; background: var(--card-bg); opacity: 0; transform: translateY(18px); transition: 0.4s; }
+    .card.show { opacity: 1; transform: translateY(0); }
+    .card-img { position: relative; width: 100%; aspect-ratio: 1/1.35; overflow: hidden; }
+    .card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .card-price { position: absolute; bottom: 10px; right: 10px; background: var(--accent); color: #fff; padding: 6px 12px; border-radius: 11px; font-size: 11px; font-weight: 800; }
+    .card-info { padding: 12px; }
+    .card-name { font-size: 12px; font-weight: 700; color: var(--text); margin-top: 4px; }
+
+    /* ABOUT SECTION */
+    .about { margin: 36px 14px 56px; padding: 36px 24px; background: var(--card-bg); border-radius: 32px; border: 1px solid var(--border-md); text-align: center; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 20px 0; }
+    .contact-link { padding: 13px; border-radius: 13px; background: var(--bg); border: 1px solid var(--border-md); text-decoration: none; color: var(--text); font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 7px; }
+
+    /* MODAL & FAB */
+    #fabs { position: fixed; right: 14px; bottom: 38px; z-index: 250; display: flex; flex-direction: column; gap: 8px; opacity: 0; transition: 0.3s; }
+    #fabs.visible { opacity: 1; }
+    .fab { width: 45px; height: 45px; border-radius: 50%; border: none; background: var(--accent); color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 18px; }
+
+    #preview { position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; padding: 20px; }
+    #preview.open { display: flex; }
+    #preview-card { background: white; width: 100%; max-width: 320px; border-radius: 30px; overflow: hidden; }
+    #preview-order { background: var(--green); color: white; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-weight: 800; }
   </style>
 </head>
 <body>
 
   <div id="splash">
-    <h1>Enis Collection</h1>
-    <p>Premium Cape Coast Fashion</p>
-    <button class="ios-btn" id="btn-shop-now">Explore Collection</button>
+    <h1 class="splash-logo">Enis Collection</h1>
+    <p class="splash-tagline">Elegance for every woman</p>
+    <div class="splash-divider"></div>
+    <p class="splash-slogan">Pamper Your Body</p>
+    <button id="btn-shop-now">SHOP NOW</button>
   </div>
 
   <div id="shop">
-    <div class="nav-bar">
-      <h1>Enis Collection</h1>
+    <div class="shop-header">
+      <h1 class="shop-title">Enis Collection</h1>
+      <p class="shop-subtitle">Pamper Your Body</p>
     </div>
 
     <div class="cats" id="cats">
@@ -172,110 +131,88 @@
 
     <div class="feed">
       <div class="grid" id="grid"></div>
-    </div>
 
-    <nav class="tab-bar">
-      <a href="#" class="tab-item active">
-        <i class="fas fa-home"></i>Shop
-      </a>
-      <a href="#" class="tab-item" id="wish-tab">
-        <i class="fas fa-heart"></i>Wishlist
-        <span class="badge" id="wish-badge" style="display:none">0</span>
-      </a>
-      <a href="#" class="tab-item" id="bag-tab">
-        <i class="fas fa-shopping-bag"></i>Bag
-        <span class="badge" id="cart-badge" style="display:none">0</span>
-      </a>
-    </nav>
+      <div class="about">
+        <p style="color:var(--accent); font-weight:800; font-size:10px; letter-spacing:3px;">EST. 2022</p>
+        <h3 style="font-family:'Playfair Display'; margin: 10px 0;">Our Story</h3>
+        <p style="font-size:12px; line-height:1.8; color:var(--muted);">Enis Collection started in 2022 in Cape Coast with a simple goal — help women feel confident and comfortable in what they wear.</p>
+        <div class="contact-grid">
+          <a class="contact-link" href="https://wa.me/233546527892"><i class="fab fa-whatsapp" style="color:#25D366"></i>WhatsApp</a>
+          <a class="contact-link" href="https://www.tiktok.com/@eniscollection1"><i class="fab fa-tiktok"></i>TikTok</a>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="sheet" id="cart-sheet">
-    <div class="sheet-content">
-      <div class="sheet-handle"></div>
-      <div class="sheet-header">
-        <h2 style="font-size: 24px; font-weight: 700;">My Bag</h2>
-        <button id="close-sheet" style="color:var(--ios-accent); background:none; border:none; font-size:17px; font-weight:600;">Done</button>
-      </div>
-      <div id="cart-items" style="flex:1; overflow-y:auto; padding:0 20px;"></div>
-      <div style="padding: 20px 20px 40px;">
-        <button class="ios-btn" style="background:var(--ios-accent); color:white; width:100%;">Checkout via WhatsApp</button>
+  <div id="fabs">
+    <button class="fab"><i class="fas fa-shopping-bag"></i></button>
+  </div>
+
+  <div id="preview" onclick="this.classList.remove('open')">
+    <div id="preview-card" onclick="event.stopPropagation()">
+      <img id="preview-img" style="width:100%; aspect-ratio:1/1.2; object-fit:cover;">
+      <div style="padding:20px; text-align:center;">
+        <h2 id="preview-name" style="font-family:'Playfair Display';"></h2>
+        <p id="preview-meta" style="color:var(--gold); margin: 10px 0 20px; font-weight:bold;"></p>
+        <a id="preview-order" href="#">
+          <i class="fab fa-whatsapp"></i> ORDER ON WHATSAPP
+        </a>
       </div>
     </div>
   </div>
 
   <script>
     const PRODUCTS = [
-      { id:1, name:"Thick Seamless Dress", price:50, size:"10", cat:"Thrift", img:"https://images.unsplash.com/photo-1539008835270-2d7c449b0fbd?auto=format&fit=crop&w=500" },
-      { id:2, name:"Plaited Skirts & Top", price:50, size:"8/10", cat:"Thrift", img:"https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=500" },
-      { id:3, name:"Essential Silk Set", price:120, size:"M", cat:"Store", img:"https://images.unsplash.com/photo-1564485377539-4af72d1f6a2f?auto=format&fit=crop&w=500" },
-      { id:4, name:"Handmade Crochet", price:85, size:"Custom", cat:"Handmade", img:"https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=500" }
+      { id:1,  name:"Thick Seamless Dress",    price:50, size:"10",     cat:"Thrift",   img:"https://images.unsplash.com/photo-1539008835270-2d7c449b0fbd?auto=format&fit=crop&w=500" },
+      { id:2,  name:"Plaited Skirts & Top",    price:50, size:"8/10",   cat:"Thrift",   img:"https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=500" },
+      { id:4,  name:"Church & Work",           price:50, size:"8",      cat:"Store",    img:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500" },
+      { id:5,  name:"Dinner & Party Elegance", price:45, size:"8/10",   cat:"Store",    img:"https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=500" },
+      { id:10, name:"Refined Church Wear",     price:50, size:"10",     cat:"Store",    img:"https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=500" }
     ];
 
-    let cart = [];
-
-    // Navigation Logic
     document.getElementById("btn-shop-now").onclick = () => {
-        document.getElementById("splash").classList.add("gone");
-        renderGrid("All");
+      document.getElementById("splash").classList.add("gone");
+      document.getElementById("shop").classList.add("open");
+      document.getElementById("fabs").classList.add("visible");
+      renderGrid("All");
     };
 
     function renderGrid(filter) {
-        const grid = document.getElementById("grid");
-        const items = PRODUCTS.filter(p => filter === "All" || p.cat === filter);
-        grid.innerHTML = items.map(p => `
-            <div class="card" onclick="addToCart(${p.id})">
-                <img src="${p.img}">
-                <div class="card-body">
-                    <div class="card-name">${p.name}</div>
-                    <div class="card-price">₵${p.price}</div>
-                </div>
-            </div>
-        `).join('');
+      const grid = document.getElementById("grid");
+      const items = PRODUCTS.filter(p => filter === "All" || p.cat === filter);
+      grid.innerHTML = items.map((p, i) => `
+        <div class="card" style="transition-delay:${i*50}ms" onclick="openPreview(${p.id})">
+          <div class="card-img">
+            <img src="${p.img}">
+            <span class="card-price">₵${p.price}</span>
+          </div>
+          <div class="card-info">
+            <p style="font-size:9px; color:var(--accent); font-weight:800;">SIZE ${p.size}</p>
+            <p class="card-name">${p.name}</p>
+          </div>
+        </div>
+      `).join('');
+      
+      setTimeout(() => {
+        document.querySelectorAll('.card').forEach(c => c.classList.add('show'));
+      }, 100);
     }
 
-    function addToCart(id) {
-        const p = PRODUCTS.find(x => x.id === id);
-        if(!cart.find(c => c.id === id)) {
-            cart.push(p);
-            updateUI();
-        }
+    function openPreview(id) {
+      const p = PRODUCTS.find(x => x.id === id);
+      document.getElementById("preview-img").src = p.img;
+      document.getElementById("preview-name").innerText = p.name;
+      document.getElementById("preview-meta").innerText = `Size ${p.size} • ₵${p.price}`;
+      document.getElementById("preview-order").href = `https://wa.me/233546527892?text=I'd like to order ${p.name}`;
+      document.getElementById("preview").classList.add("open");
     }
 
-    function updateUI() {
-        const badge = document.getElementById("cart-badge");
-        badge.innerText = cart.length;
-        badge.style.display = cart.length > 0 ? "flex" : "none";
-    }
-
-    // Sheet Handling
-    document.getElementById("bag-tab").onclick = () => {
-        const list = document.getElementById("cart-items");
-        list.innerHTML = cart.map(i => `
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px; background:white; padding:15px; border-radius:14px;">
-                <div style="display:flex; gap:12px;">
-                    <img src="${i.img}" style="width:50px; height:50px; border-radius:8px; object-fit:cover;">
-                    <div>
-                        <div style="font-weight:600;">${i.name}</div>
-                        <div style="color:var(--ios-secondary); font-size:13px;">Size ${i.size}</div>
-                    </div>
-                </div>
-                <div style="font-weight:700;">₵${i.price}</div>
-            </div>
-        `).join('');
-        document.getElementById("cart-sheet").classList.add("open");
-    };
-
-    document.getElementById("close-sheet").onclick = () => {
-        document.getElementById("cart-sheet").classList.remove("open");
-    };
-
-    // Filter Logic
     document.getElementById("cats").onclick = (e) => {
-        if(e.target.classList.contains('cat')) {
-            document.querySelectorAll('.cat').forEach(c => c.classList.remove('active'));
-            e.target.classList.add('active');
-            renderGrid(e.target.dataset.cat);
-        }
+      if(e.target.classList.contains('cat')) {
+        document.querySelectorAll('.cat').forEach(c => c.classList.remove('active'));
+        e.target.classList.add('active');
+        renderGrid(e.target.dataset.cat);
+      }
     };
   </script>
 </body>
