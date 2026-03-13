@@ -59,38 +59,38 @@ transition:opacity .42s var(–ease),transform .42s var(–ease);
 #shop.open{opacity:1;pointer-events:auto;transform:translateY(0);}
 
 /* Header */
-.hdr{flex-shrink:0;padding:calc(env(safe-area-inset-top,16px) + 10px) 16px 0;background:var(–bg);}
-.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.brand-name{font-family:‘Great Vibes’,cursive;font-size:28px;color:var(–text);line-height:1;}
-.brand-tag{font-family:‘Cormorant Garamond’,serif;font-style:italic;font-size:10px;color:var(–muted);}
-.hdr-btn{width:36px;height:36px;border-radius:var(–rsm);background:var(–surface);border:1px solid var(–border);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(–sh-sm);transition:transform .14s;}
+.hdr{flex-shrink:0;padding:calc(env(safe-area-inset-top,14px) + 8px) 16px 0;background:var(–bg);}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.brand-name{font-family:‘Great Vibes’,cursive;font-size:24px;color:var(–text);line-height:1;}
+.brand-tag{font-family:‘Cormorant Garamond’,serif;font-style:italic;font-size:9px;color:var(–muted);}
+.hdr-btn{width:32px;height:32px;border-radius:var(–rsm);background:var(–surface);border:1px solid var(–border);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(–sh-sm);transition:transform .14s;}
 .hdr-btn:active{transform:scale(.88);}
-.hdr-btn i{font-size:13px;color:var(–text2);pointer-events:none;}
+.hdr-btn i{font-size:12px;color:var(–text2);pointer-events:none;}
 
 /* Search */
-.search-row{display:flex;gap:8px;align-items:center;margin-bottom:12px;}
-.search-wrap{flex:1;display:flex;align-items:center;gap:8px;background:var(–surface);border:1px solid var(–border);border-radius:var(–rpill);padding:0 14px;height:42px;box-shadow:var(–sh-sm);}
-.search-wrap i{font-size:13px;color:var(–muted);flex-shrink:0;}
-.search-wrap input{flex:1;border:none;background:transparent;font-family:‘DM Sans’,sans-serif;font-size:13px;color:var(–text);outline:none;}
+.search-row{display:flex;gap:7px;align-items:center;margin-bottom:9px;}
+.search-wrap{flex:1;display:flex;align-items:center;gap:7px;background:var(–surface);border:1px solid var(–border);border-radius:var(–rpill);padding:0 12px;height:36px;box-shadow:var(–sh-sm);}
+.search-wrap i{font-size:12px;color:var(–muted);flex-shrink:0;}
+.search-wrap input{flex:1;border:none;background:transparent;font-family:‘DM Sans’,sans-serif;font-size:12px;color:var(–text);outline:none;}
 .search-wrap input::placeholder{color:var(–muted);}
-.filter-btn{width:42px;height:42px;border-radius:var(–rpill);background:var(–surface);border:1px solid var(–border);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;box-shadow:var(–sh-sm);transition:background .18s;}
+.filter-btn{width:36px;height:36px;border-radius:var(–rpill);background:var(–surface);border:1px solid var(–border);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;box-shadow:var(–sh-sm);transition:background .18s;}
 .filter-btn:active{background:var(–accent);}
 .filter-btn:active i{color:#fff;}
-.filter-btn i{font-size:14px;color:var(–text2);}
+.filter-btn i{font-size:13px;color:var(–text2);}
 
 /* Category */
-.cat-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:0 2px;}
-.cat-title{font-family:‘Cormorant Garamond’,serif;font-size:19px;font-weight:700;color:var(–text);}
-.see-all{font-size:11px;font-weight:500;color:var(–accent);text-decoration:none;display:flex;align-items:center;gap:4px;}
-.see-all i{font-size:9px;}
-.cat-pills{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;}
-.cat-pill{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;min-width:58px;cursor:pointer;touch-action:manipulation;}
-.cat-circle{width:52px;height:52px;border-radius:50%;background:var(–surface);border:1.5px solid var(–border);display:flex;align-items:center;justify-content:center;box-shadow:var(–sh-sm);transition:background .22s,border-color .22s,transform .16s;}
-.cat-circle svg{width:22px;height:22px;fill:var(–text2);transition:fill .22s;}
+.cat-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;padding:0 2px;}
+.cat-title{font-family:‘Cormorant Garamond’,serif;font-size:16px;font-weight:700;color:var(–text);}
+.see-all{font-size:10px;font-weight:500;color:var(–accent);text-decoration:none;display:flex;align-items:center;gap:3px;}
+.see-all i{font-size:8px;}
+.cat-pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;}
+.cat-pill{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;min-width:46px;cursor:pointer;touch-action:manipulation;}
+.cat-circle{width:42px;height:42px;border-radius:50%;background:var(–surface);border:1.5px solid var(–border);display:flex;align-items:center;justify-content:center;box-shadow:var(–sh-sm);transition:background .22s,border-color .22s,transform .16s;}
+.cat-circle svg{width:18px;height:18px;fill:var(–text2);transition:fill .22s;}
 .cat-pill:active .cat-circle{transform:scale(.88);}
 .cat-pill.active .cat-circle{background:var(–text);border-color:var(–text);}
 .cat-pill.active .cat-circle svg{fill:#fff;}
-.cat-lbl{font-size:9.5px;font-weight:500;color:var(–text2);white-space:nowrap;}
+.cat-lbl{font-size:8.5px;font-weight:500;color:var(–text2);white-space:nowrap;}
 .cat-pill.active .cat-lbl{color:var(–accent);font-weight:600;}
 
 /* Feed */
@@ -253,19 +253,39 @@ transition:transform .24s var(–ease);
     <div class="cat-pills" id="catPills">
       <div class="cat-pill active" data-cat="All">
         <div class="cat-circle"><svg viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zm10-10h8v8h-8V3zm0 10h8v8h-8v-8z"/></svg></div>
-        <span class="cat-lbl">All Items</span>
+        <span class="cat-lbl">All</span>
       </div>
       <div class="cat-pill" data-cat="Thrift">
         <div class="cat-circle"><svg viewBox="0 0 24 24"><path d="M12 2C9.5 2 8 3.5 8 5v1H5L4 20h16L19 6h-3V5c0-1.5-1.5-3-4-3zm0 2c1.4 0 2 .8 2 1v1h-4V5c0-.2.6-1 2-1zm-5 3h10l.84 12H6.16L7 7z"/></svg></div>
         <span class="cat-lbl">Thrift</span>
       </div>
       <div class="cat-pill" data-cat="Store">
-        <div class="cat-circle"><svg viewBox="0 0 24 24"><path d="M2 7l1-4h18l1 4v2a3 3 0 0 1-1 2.28V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8.72A3 3 0 0 1 2 9V7zm2 .5V9a1 1 0 0 0 2 0V7.5H4zm4 0V9a1 1 0 0 0 2 0V7.5H8zm4 0V9a1 1 0 0 0 2 0V7.5h-2zm4 0V9a1 1 0 0 0 2 0V7.5h-2zM5 11.1V19h5v-5h4v5h5v-7.9A3 3 0 0 1 17 11a3 3 0 0 1-2-.77A3 3 0 0 1 13 11a3 3 0 0 1-2-.77A3 3 0 0 1 9 11a3 3 0 0 1-2 .87z"/></svg></div>
+        <div class="cat-circle"><svg viewBox="0 0 24 24"><path d="M2 7l1-4h18l1 4v2a3 3 0 0 1-1 2.28V20H4V11.28A3 3 0 0 1 2 9V7zm2 .5V9a1 1 0 0 0 2 0V7.5H4zm4 0V9a1 1 0 0 0 2 0V7.5H8zm4 0V9a1 1 0 0 0 2 0V7.5h-2zm4 0V9a1 1 0 0 0 2 0V7.5h-2zM5 11.1V19h14v-7.9A3 3 0 0 1 17 11a3 3 0 0 1-4 0 3 3 0 0 1-4 0 3 3 0 0 1-2 .87z"/></svg></div>
         <span class="cat-lbl">Store</span>
       </div>
       <div class="cat-pill" data-cat="Handmade">
         <div class="cat-circle"><svg viewBox="0 0 24 24"><path d="M13 2a2 2 0 0 0-2 2v6H9.5A2.5 2.5 0 0 0 7 12.5V18a4 4 0 0 0 4 4h4a5 5 0 0 0 5-5v-7a2 2 0 0 0-2-2h-.5V4a2 2 0 0 0-2-2H13zm0 2h2.5v6H13V4zM9 12.5a.5.5 0 0 1 .5-.5H11v2H9v-1.5zm6 0V12h1.5a.5.5 0 0 1 .5.5v7A3 3 0 0 1 15 22h-4a2 2 0 0 1-2-2v-6h6z"/></svg></div>
         <span class="cat-lbl">Handmade</span>
+      </div>
+      <div class="cat-pill" data-cat="Dresses">
+        <div class="cat-circle"><svg viewBox="0 0 24 24"><path d="M12 2c-1 0-2 .5-2.5 1.5L8 7H5l-2 13h18L19 7h-3l-1.5-3.5C14 2.5 13 2 12 2zm0 2c.4 0 .8.2 1 .7L14.3 7H9.7L11 4.7c.2-.5.6-.7 1-.7zM6.2 9h11.6l1.5 9H4.7L6.2 9z"/></svg></div>
+        <span class="cat-lbl">Dresses</span>
+      </div>
+      <div class="cat-pill" data-cat="Sets">
+        <div class="cat-circle"><svg viewBox="0 0 24 24"><path d="M6.5 2A2.5 2.5 0 0 0 4 4.5v3A2.5 2.5 0 0 0 6.5 10h1v4.5A2.5 2.5 0 0 0 10 17h4a2.5 2.5 0 0 0 2.5-2.5V10h1A2.5 2.5 0 0 0 20 7.5v-3A2.5 2.5 0 0 0 17.5 2h-11zM6 4.5A.5.5 0 0 1 6.5 4h11a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-11A.5.5 0 0 1 6 7.5v-3zM10 10h4v4.5a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V10zm-5 8h14v2H5v-2z"/></svg></div>
+        <span class="cat-lbl">Sets</span>
+      </div>
+      <div class="cat-pill" data-cat="Work">
+        <div class="cat-circle"><svg viewBox="0 0 24 24"><path d="M20 6h-2.5A2.5 2.5 0 0 0 15 3.5h-6A2.5 2.5 0 0 0 6.5 6H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zM9 5.5h6a.5.5 0 0 1 .5.5H8.5A.5.5 0 0 1 9 5.5zM20 19H4V8h16v11z"/></svg></div>
+        <span class="cat-lbl">Work</span>
+      </div>
+      <div class="cat-pill" data-cat="Church">
+        <div class="cat-circle"><svg viewBox="0 0 24 24"><path d="M12 1l-1 4H8l2.5 2-1 4L12 9l2.5 2-1-4L16 5h-3L12 1zM5 14a7 7 0 0 1 14 0v7H5v-7zm2 1v4h10v-4a5 5 0 0 0-10 0z"/></svg></div>
+        <span class="cat-lbl">Church</span>
+      </div>
+      <div class="cat-pill" data-cat="Casual">
+        <div class="cat-circle"><svg viewBox="0 0 24 24"><path d="M16 2H8L2 8l4 2v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V10l4-2-6-6zm0 16H8V9.5l-2.3-.9L9 5.4V4h6v1.4l3.3 3.2L16 9.5V18z"/></svg></div>
+        <span class="cat-lbl">Casual</span>
       </div>
     </div>
   </div>
@@ -352,16 +372,16 @@ transition:transform .24s var(–ease);
 <script>
 var WA = "233546527892";
 var PRODUCTS = [
-  {id:1, name:"Thick Seamless Dress",    price:50, size:"10",     cat:"Thrift",   img:"images/item1.jpg"},
-  {id:2, name:"Plaited Skirts & Top",    price:50, size:"8/10",   cat:"Thrift",   img:"images/item2.jpg"},
-  {id:3, name:"Short Length Essential",  price:45, size:"8",      cat:"Thrift",   img:"images/item3.jpg"},
-  {id:4, name:"Church & Work",           price:50, size:"8",      cat:"Store",    img:"images/item4.jpg"},
-  {id:5, name:"Dinner & Party Elegance", price:45, size:"8/10",   cat:"Store",    img:"images/item5.jpg"},
-  {id:6, name:"Lecture & Beach Set",     price:45, size:"6/8/10", cat:"Store",    img:"images/item6.jpg"},
-  {id:7, name:"Ruched SHEIN Special",    price:50, size:"8/10",   cat:"Thrift",   img:"images/item7.jpg"},
-  {id:8, name:"Ultimate Work Gown",      price:50, size:"12/14",  cat:"Thrift",   img:"images/item8.jpg"},
-  {id:9, name:"Skirt & Basic Top Duo",   price:50, size:"10/12",  cat:"Store",    img:"images/item9.jpg"},
-  {id:10,name:"Refined Church Wear",     price:50, size:"10",     cat:"Store",    img:"images/item10.jpg"}
+  {id:1,  name:"Thick Seamless Dress",    price:50, size:"10",     cat:["Thrift","Dresses"],  img:"images/item1.jpg"},
+  {id:2,  name:"Plaited Skirts & Top",    price:50, size:"8/10",   cat:["Thrift","Sets"],     img:"images/item2.jpg"},
+  {id:3,  name:"Short Length Essential",  price:45, size:"8",      cat:["Thrift","Casual"],   img:"images/item3.jpg"},
+  {id:4,  name:"Church & Work",           price:50, size:"8",      cat:["Store","Church","Work"], img:"images/item4.jpg"},
+  {id:5,  name:"Dinner & Party Elegance", price:45, size:"8/10",   cat:["Store","Dresses"],   img:"images/item5.jpg"},
+  {id:6,  name:"Lecture & Beach Set",     price:45, size:"6/8/10", cat:["Store","Sets","Casual"], img:"images/item6.jpg"},
+  {id:7,  name:"Ruched SHEIN Special",    price:50, size:"8/10",   cat:["Thrift","Dresses"],  img:"images/item7.jpg"},
+  {id:8,  name:"Ultimate Work Gown",      price:50, size:"12/14",  cat:["Thrift","Work"],     img:"images/item8.jpg"},
+  {id:9,  name:"Skirt & Basic Top Duo",   price:50, size:"10/12",  cat:["Store","Sets"],      img:"images/item9.jpg"},
+  {id:10, name:"Refined Church Wear",     price:50, size:"10",     cat:["Store","Church"],    img:"images/item10.jpg"}
 ];
 
 var cart=[], wish=[], cur=null, toastT=null, scrollT=null;
@@ -421,8 +441,10 @@ grid.addEventListener("click",function(e){
 function renderGrid(filter,query){
   var q=(query||"").toLowerCase();
   var items=PRODUCTS.filter(function(p){
-    var cm=filter==="All"||p.cat===filter;
-    var sm=!q||p.name.toLowerCase().indexOf(q)!==-1||p.cat.toLowerCase().indexOf(q)!==-1||p.size.toLowerCase().indexOf(q)!==-1;
+    var cats=Array.isArray(p.cat)?p.cat:[p.cat];
+    var cm=filter==="All"||cats.indexOf(filter)!==-1;
+    var allText=p.name+" "+cats.join(" ")+" "+p.size;
+    var sm=!q||allText.toLowerCase().indexOf(q)!==-1;
     return cm&&sm;
   });
   if(!items.length){
@@ -430,6 +452,7 @@ function renderGrid(filter,query){
     return;
   }
   grid.innerHTML=items.map(function(p){
+    var cats=Array.isArray(p.cat)?p.cat:[p.cat];
     var liked=wish.some(function(w){return w.id===p.id;});
     var bagged=cart.some(function(c){return c.product.id===p.id;});
     return '<div class="card" id="c'+p.id+'">'+
@@ -442,7 +465,7 @@ function renderGrid(filter,query){
         '</div>'+
       '</div>'+
       '<div class="card-info">'+
-        '<p class="card-cat">'+p.cat+'</p>'+
+        '<p class="card-cat">'+cats[0]+'</p>'+
         '<p class="card-name">'+p.name+'</p>'+
       '</div>'+
     '</div>';
