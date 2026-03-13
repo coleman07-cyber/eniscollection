@@ -286,15 +286,17 @@
     #item-preview {
         position: fixed; inset: 0; z-index: 10000;
         display: none; align-items: center; justify-content: center;
-        padding: 24px 20px;
         background: rgba(0,0,0,0);
         backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
         transition: background 0.4s ease, backdrop-filter 0.4s ease;
+        left: 50%; transform: translateX(-50%);
+        width: 100%; max-width: 420px;
     }
     #item-preview.active {
         display: flex;
         background: rgba(0,0,0,0.65);
         backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        transform: translateX(-50%);
     }
 
     .preview-box {
