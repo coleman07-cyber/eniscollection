@@ -886,7 +886,7 @@
     function toggleWish(id) {
         const product = myProducts.find(p => p.id === id);
         const idx = wishlist.findIndex(w => w.id === id);
-        if (idx === -1) { wishlist.push(product); showToast('💜Saved to Wishlist'); }
+        if (idx === -1) { wishlist.push(product); showToast('💕Saved to Wishlist'); }
         else { wishlist.splice(idx, 1); showToast('Removed from Wishlist'); }
         updateBadges();
         const btn = document.getElementById('wish-' + id);
