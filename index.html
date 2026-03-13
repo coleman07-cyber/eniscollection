@@ -282,21 +282,12 @@
 
     /* ══════════════════════════════════════════════════════
        PREVIEW MODAL BACKDROP
-       - position: fixed  → covers the whole browser window
-       - left: 50% + translateX(-50%) + max-width: 420px
-         → locks the backdrop over the app column only,
-         so the card always appears centred on the app
-         no matter how wide the screen is
-       To change modal width: edit max-width below (matches app-shell)
+       position/top/left/width are set by JS in openPreview()
+       so the backdrop always sits exactly over the app column.
+       Only edit the visual properties below (blur, colours).
     ══════════════════════════════════════════════════════ */
     #item-preview {
         position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100%;
-        max-width: 420px;      /* ← keep this the same as .app-shell max-width */
         z-index: 10000;
         display: none;
         align-items: center;
@@ -314,11 +305,10 @@
     }
 
     /* ── The card inside the modal ──
-       width: 82% of the modal (so 82% of 420px = ~344px)
-       max-width: 310px  → cap it so it's not too large on desktop
-       height: 68vh      → 68% of screen height
-       To make the card bigger: increase width % or max-width
-       To make it taller: increase 68vh                          */
+       width: 82% of the column  |  max-width: 310px cap
+       height: 68vh = 68% of screen height
+       Make bigger: raise width% or max-width
+       Make taller: raise 68vh                               */
     .preview-box {
         width: 82%;
         max-width: 310px;
@@ -425,48 +415,89 @@
     .splash-slogan { font-size: 10px; letter-spacing: 6px; text-transform: uppercase; font-weight: 700; color: var(--accent-gold); margin-top: -10px; }
     .btn-discover { margin-top: 50px; padding: 20px 75px; border-radius: 50px; border: none; font-weight: 800; background: #FFF; color: #000; letter-spacing: 3px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 13px; }
 
-    /* ══════════════════════════════
-       FABs — dark modern redesign
-    ══════════════════════════════ */
+    /* ══════════════════════════════════════════════════════
+       FABs — theme-aware (auto light / dark)
+       The colours below use CSS variables so they flip
+       automatically when the phone switches mode.
+       To reposition: edit right + bottom values.
+       To resize: edit width + height + font-size.
+    ══════════════════════════════════════════════════════ */
     .fab-group {
-        position: fixed; right: 14px; bottom: 44px; z-index: 9000;
-        display: none; flex-direction: column; gap: 10px; align-items: center;
+        position: fixed;
+        right: 14px;
+        bottom: 44px;
+        z-index: 9000;
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
         transition: opacity 0.3s var(--ease-luxury), transform 0.3s var(--ease-luxury);
     }
-    .fab-group.visible { display: flex; opacity: 1; transform: translateY(0); }
+    .fab-group.visible  { display: flex; opacity: 1; transform: translateY(0); }
     .fab-group.hidden-scroll { opacity: 0; transform: translateY(20px); pointer-events: none; }
 
     .fab {
-        width: 52px; height: 52px; border-radius: 18px;
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer; position: relative; font-size: 20px;
-        border: none; transition: transform 0.25s var(--ease-spring), box-shadow 0.25s;
+        width: 52px;
+        height: 52px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        font-size: 20px;
+        border: none;
+        transition: transform 0.25s var(--ease-spring), box-shadow 0.25s;
     }
     .fab:active { transform: scale(0.88); }
 
+    /* ── Wishlist FAB ──
+       Light: soft pink background with red icon
+       Dark:  deep dark-rose background with pink icon    */
     .fab-wish {
-        background: linear-gradient(145deg, #1e1219, #2d1a22);
-        color: #ff6b8a;
-        box-shadow: 0 8px 24px rgba(229,62,62,0.28), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
-        border: 1px solid rgba(229,62,62,0.2);
+        background: var(--card-bg);
+        color: #E53E3E;
+        box-shadow: 0 4px 16px rgba(229, 62, 62, 0.2), 0 2px 6px rgba(0,0,0,0.08);
+        border: 1.5px solid rgba(229, 62, 62, 0.25);
     }
-    .fab-wish:hover { box-shadow: 0 12px 32px rgba(229,62,62,0.38), 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08); }
+    @media (prefers-color-scheme: dark) {
+        .fab-wish {
+            background: #2d1a22;
+            color: #ff6b8a;
+            box-shadow: 0 8px 24px rgba(229,62,62,0.28), 0 2px 8px rgba(0,0,0,0.4);
+            border: 1px solid rgba(229,62,62,0.2);
+        }
+    }
 
+    /* ── Cart FAB ──
+       Light: soft warm white with gold icon
+       Dark:  deep dark-gold background with yellow icon  */
     .fab-cart {
-        background: linear-gradient(145deg, #1a1710, #261f0d);
-        color: #e6bb4a;
-        box-shadow: 0 8px 24px rgba(197,160,40,0.28), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
-        border: 1px solid rgba(197,160,40,0.2);
+        background: var(--card-bg);
+        color: var(--accent-gold);
+        box-shadow: 0 4px 16px rgba(197, 160, 40, 0.2), 0 2px 6px rgba(0,0,0,0.08);
+        border: 1.5px solid rgba(197, 160, 40, 0.25);
     }
-    .fab-cart:hover { box-shadow: 0 12px 32px rgba(197,160,40,0.38), 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08); }
+    @media (prefers-color-scheme: dark) {
+        .fab-cart {
+            background: #261f0d;
+            color: #e6bb4a;
+            box-shadow: 0 8px 24px rgba(197,160,40,0.28), 0 2px 8px rgba(0,0,0,0.4);
+            border: 1px solid rgba(197,160,40,0.2);
+        }
+    }
 
+    /* ── Badge on FAB ── */
     .fab-badge {
-        position: absolute; top: -7px; right: -7px;
-        min-width: 20px; height: 20px; border-radius: 10px; padding: 0 5px;
+        position: absolute;
+        top: -7px; right: -7px;
+        min-width: 20px; height: 20px;
+        border-radius: 10px; padding: 0 5px;
         font-size: 9px; font-weight: 900;
         display: flex; align-items: center; justify-content: center;
-        border: 2px solid #0C0C0E;
-        transform: scale(0); transition: transform 0.3s var(--ease-spring);
+        border: 2px solid var(--bg);      /* ← matches page bg in both modes */
+        transform: scale(0);
+        transition: transform 0.3s var(--ease-spring);
         font-family: 'Montserrat', sans-serif;
     }
     .fab-wish .fab-badge { background: #E53E3E; color: #fff; }
@@ -953,7 +984,18 @@
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order:\n\n• ${previewProduct.name}\n  Size: ${previewProduct.size}\n  Price: ₵${previewProduct.price}\n  🖼 ${imageUrl}`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
         syncPreviewState();
+
+        // ── Position the modal backdrop exactly over the app column ──
+        // This reads the app-shell's real position on screen so it works
+        // whether the site is viewed on mobile, desktop, or as a PWA.
         const modal = document.getElementById('item-preview');
+        const shell = document.querySelector('.app-shell');
+        const r = shell.getBoundingClientRect();
+        modal.style.top    = r.top + 'px';
+        modal.style.left   = r.left + 'px';
+        modal.style.width  = r.width + 'px';
+        modal.style.height = r.height + 'px';
+
         modal.style.display = 'flex';
         requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add('active')));
     }
