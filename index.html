@@ -405,17 +405,55 @@
     .preview-bag-btn.added { background: rgba(124,58,237,0.45); border-color: rgba(124,58,237,0.6); }
     .preview-bag-btn.added i { color: #fff; transform: scale(1.2); }
 
-    /* SPLASH */
-    #splash-screen { 
-        position: absolute; inset: 0; z-index: 9999; 
-        background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG') center/cover; 
-        display: flex; flex-direction: column; justify-content: center; align-items: center; 
-        transition: transform 1.2s var(--ease-luxury), opacity 0.8s ease; 
+    /* ══════════════════════════════════════════════════════
+       SPLASH SCREEN
+       To swap background: change url() in #splash-screen
+       To adjust darkness: edit the rgba values in the gradient
+    ══════════════════════════════════════════════════════ */
+    #splash-screen {
+        position: absolute; inset: 0; z-index: 9999;
+        background:
+            linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 38%, rgba(0,0,0,0.1) 58%, rgba(0,0,0,0.94) 100%),
+            url('images/splash-neon.png') center/cover no-repeat;
+        display: flex; flex-direction: column;
+        justify-content: center; align-items: center; text-align: center;
+        padding: 0 32px;
+        transition: opacity 1s ease, transform 1.2s var(--ease-luxury);
     }
-    #splash-screen.hidden { opacity: 0; transform: scale(1.1); pointer-events: none; }
-    .splash-title { font-family: 'Great Vibes', cursive; color: white; font-size: 64px; }
-    .splash-slogan { font-size: 10px; letter-spacing: 6px; text-transform: uppercase; font-weight: 700; color: var(--accent-gold); margin-top: -10px; }
-    .btn-discover { margin-top: 50px; padding: 20px 75px; border-radius: 50px; border: none; font-weight: 800; background: #FFF; color: #000; letter-spacing: 3px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 13px; }
+    #splash-screen.hidden { opacity: 0; transform: scale(1.06); pointer-events: none; }
+
+    .splash-badge {
+        font-size: 9px; font-weight: 800; letter-spacing: 5px; text-transform: uppercase;
+        color: #E6A817;
+        background: rgba(230,168,23,0.12); border: 1px solid rgba(230,168,23,0.35);
+        padding: 6px 18px; border-radius: 50px; margin-bottom: 22px;
+    }
+    .splash-title {
+        font-family: 'Great Vibes', cursive; color: #ffffff; font-size: 58px; line-height: 1; white-space: nowrap;
+        text-shadow: 0 0 40px rgba(230,168,23,0.55), 0 2px 20px rgba(0,0,0,0.8);
+        margin-bottom: 10px;
+    }
+    .splash-slogan {
+        font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+        font-weight: 700; color: rgba(255,255,255,0.65);
+    }
+    .splash-divider {
+        width: 40px; height: 1px; margin: 20px auto;
+        background: linear-gradient(to right, transparent, #E6A817, transparent);
+    }
+    .splash-location {
+        font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+        font-weight: 600; color: rgba(255,255,255,0.4); margin-bottom: 48px;
+    }
+    .btn-discover {
+        padding: 18px 64px; border-radius: 50px; border: none;
+        font-weight: 800; background: #E6A817; color: #000;
+        letter-spacing: 3px; cursor: pointer;
+        font-family: 'Montserrat', sans-serif; font-size: 11px;
+        box-shadow: 0 8px 32px rgba(230,168,23,0.45);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-discover:active { transform: scale(0.95); box-shadow: 0 4px 16px rgba(230,168,23,0.3); }
 
     /* ══════════════════════════════════════════════════════
        FABs — theme-aware (auto light / dark)
@@ -600,8 +638,11 @@
 <!-- SPLASH -->
 
 <div id="splash-screen">
+    <div class="splash-badge">Cape Coast &nbsp;·&nbsp; Ghana</div>
     <h1 class="splash-title">Enis Collection</h1>
     <p class="splash-slogan">Pamper Your Body</p>
+    <div class="splash-divider"></div>
+    <p class="splash-location">Est. 2022 &nbsp;·&nbsp; Women's Fashion</p>
     <button class="btn-discover" onclick="launchApp()">SHOP NOW</button>
 </div>
 
