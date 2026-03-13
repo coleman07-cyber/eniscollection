@@ -132,104 +132,71 @@
     }
     .filter-apply:active { opacity: 0.8; }
 
-    /* Category section */
-    .cat-section { margin-bottom: 2px; }
+    /* ══════════════════════════════
+       CATEGORY TAB BAR — Underline style
+    ══════════════════════════════ */
+    .cat-section { margin-bottom: 0; }
     .cat-header {
         display: flex; justify-content: space-between; align-items: center;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
     }
     .cat-header h2 {
         font-size: 16px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px;
     }
     .see-all-btn {
         font-size: 11px; font-weight: 700; color: var(--accent-pink);
-        background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 3px;
+        background: none; border: none; cursor: pointer;
+        display: flex; align-items: center; gap: 3px;
         font-family: 'Montserrat', sans-serif; transition: opacity 0.2s;
     }
     .see-all-btn:active { opacity: 0.6; }
 
-    /* ── PILL CHIP SCROLL ── */
+    /* Tab scroll container */
     .cat-icon-scroll {
-        display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px;
+        display: flex; gap: 0; overflow-x: auto; padding-bottom: 0;
+        border-bottom: 1.5px solid var(--border);
+        position: relative;
     }
 
+    /* Each tab */
     .cat-icon-item {
-        flex-shrink: 0; cursor: pointer;
-        transition: transform 0.2s var(--ease-spring);
+        flex-shrink: 0; cursor: pointer; position: relative;
+        padding: 8px 14px 10px;
+        transition: transform 0.15s var(--ease-spring);
     }
-    .cat-icon-item:active { transform: scale(0.93); }
+    .cat-icon-item:active { transform: scale(0.94); }
 
-    /* The pill itself */
-    .cat-pill {
-        display: flex; align-items: center; gap: 6px;
-        padding: 8px 14px; border-radius: 50px;
-        background: var(--cat-bg);
-        border: 1.5px solid transparent;
-        white-space: nowrap;
-        position: relative; overflow: hidden;
-        transition: background 0.3s var(--ease-luxury),
-                    border-color 0.3s,
-                    box-shadow 0.35s,
-                    transform 0.3s var(--ease-spring);
+    /* Tab label */
+    .cat-tab-label {
+        font-size: 12px; font-weight: 600; color: var(--text-soft);
+        white-space: nowrap; letter-spacing: 0.1px;
+        transition: color 0.25s, font-weight 0.2s;
+        position: relative; z-index: 1;
+    }
+    .cat-icon-item.active .cat-tab-label {
+        color: var(--text-main); font-weight: 800;
     }
 
-    .cat-pill-emoji { font-size: 15px; line-height: 1; position: relative; z-index: 2; }
-
-    .cat-pill-label {
-        font-size: 11px; font-weight: 700; color: var(--text-soft);
-        letter-spacing: 0.1px; position: relative; z-index: 2;
-        transition: color 0.25s;
-    }
-
-    /* ── Active pill: iOS 26 liquid glass ── */
-    .cat-icon-item.active .cat-pill {
-        background: rgba(255,255,255,0.18);
-        backdrop-filter: blur(18px) saturate(200%);
-        -webkit-backdrop-filter: blur(18px) saturate(200%);
-        border-color: rgba(255,255,255,0.5);
-        box-shadow:
-            0 0 0 3px rgba(124,58,237,0.14),
-            0 6px 20px rgba(124,58,237,0.28),
-            inset 0 1px 0 rgba(255,255,255,0.65),
-            inset 0 -1px 0 rgba(124,58,237,0.18);
-        transform: translateY(-1px);
-    }
-    .cat-icon-item.active .cat-pill-label { color: var(--accent-violet); font-weight: 800; }
-
-    /* Shimmer sweep on active */
-    .cat-pill::before {
-        content: ''; position: absolute; inset: 0;
-        background: linear-gradient(105deg,
-            rgba(255,255,255,0.5) 0%,
-            rgba(255,255,255,0.04) 50%,
-            rgba(124,58,237,0.08) 100%);
-        opacity: 0; transition: opacity 0.3s var(--ease-luxury);
-        pointer-events: none;
-    }
-    .cat-icon-item.active .cat-pill::before { opacity: 1; }
-
-    /* Gleam dot top-left */
-    .cat-pill::after {
+    /* Active underline bar */
+    .cat-icon-item::after {
         content: ''; position: absolute;
-        top: 5px; left: 12px;
-        width: 14px; height: 5px; border-radius: 50%;
-        background: rgba(255,255,255,0.75); filter: blur(2px);
-        opacity: 0; transition: opacity 0.3s var(--ease-luxury);
-        pointer-events: none;
+        bottom: -1.5px; left: 14px; right: 14px; height: 2.5px;
+        border-radius: 2px;
+        background: var(--grad);
+        transform: scaleX(0);
+        transition: transform 0.3s var(--ease-spring);
+        transform-origin: center;
     }
-    .cat-icon-item.active .cat-pill::after { opacity: 1; }
+    .cat-icon-item.active::after { transform: scaleX(1); }
 
-    @media (prefers-color-scheme: dark) {
-        .cat-icon-item.active .cat-pill {
-            background: rgba(255,255,255,0.1);
-            border-color: rgba(255,255,255,0.25);
-            box-shadow:
-                0 0 0 3px rgba(124,58,237,0.2),
-                0 6px 22px rgba(124,58,237,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.35),
-                inset 0 -1px 0 rgba(124,58,237,0.25);
-        }
+    /* Subtle bg tint on hover/active */
+    .cat-icon-item::before {
+        content: ''; position: absolute; inset: 0;
+        background: var(--grad-soft);
+        opacity: 0; transition: opacity 0.25s;
+        border-radius: 10px 10px 0 0;
     }
+    .cat-icon-item.active::before { opacity: 1; }
 
     /* Search results highlight */
     .search-results-bar {
@@ -970,10 +937,7 @@
         scroll.innerHTML = categories.map(cat => `
             <div class="cat-icon-item ${cat.key === activeCategory ? 'active' : ''}"
                  id="caticon-${cat.key}" onclick="selectCategory('${cat.key}')">
-                <div class="cat-pill">
-                    <span class="cat-pill-emoji">${cat.icon}</span>
-                    <span class="cat-pill-label">${cat.label}</span>
-                </div>
+                <span class="cat-tab-label">${cat.icon} ${cat.label}</span>
             </div>
         `).join('');
     }
