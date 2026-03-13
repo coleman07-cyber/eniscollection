@@ -136,7 +136,7 @@
     .cat-section { margin-bottom: 2px; }
     .cat-header {
         display: flex; justify-content: space-between; align-items: center;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
     }
     .cat-header h2 {
         font-size: 16px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px;
@@ -148,42 +148,88 @@
     }
     .see-all-btn:active { opacity: 0.6; }
 
-    /* Category icon scroll */
+    /* ── PILL CHIP SCROLL ── */
     .cat-icon-scroll {
-        display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px;
+        display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px;
     }
+
     .cat-icon-item {
-        display: flex; flex-direction: column; align-items: center;
-        gap: 5px; cursor: pointer; flex-shrink: 0;
-        transition: transform 0.25s var(--ease-spring);
+        flex-shrink: 0; cursor: pointer;
+        transition: transform 0.2s var(--ease-spring);
     }
-    .cat-icon-item:active { transform: scale(0.85); }
-    .cat-icon-circle {
-        width: 50px; height: 50px; border-radius: 50%;
-        background: var(--cat-bg); display: flex; align-items: center;
-        justify-content: center; font-size: 20px;
-        transition: background 0.3s var(--ease-luxury), box-shadow 0.3s, transform 0.3s var(--ease-spring);
-        border: 2px solid transparent;
+    .cat-icon-item:active { transform: scale(0.93); }
+
+    /* The pill itself */
+    .cat-pill {
+        display: flex; align-items: center; gap: 6px;
+        padding: 8px 14px; border-radius: 50px;
+        background: var(--cat-bg);
+        border: 1.5px solid transparent;
+        white-space: nowrap;
         position: relative; overflow: hidden;
+        transition: background 0.3s var(--ease-luxury),
+                    border-color 0.3s,
+                    box-shadow 0.35s,
+                    transform 0.3s var(--ease-spring);
     }
-    .cat-icon-circle::before {
+
+    .cat-pill-emoji { font-size: 15px; line-height: 1; position: relative; z-index: 2; }
+
+    .cat-pill-label {
+        font-size: 11px; font-weight: 700; color: var(--text-soft);
+        letter-spacing: 0.1px; position: relative; z-index: 2;
+        transition: color 0.25s;
+    }
+
+    /* ── Active pill: iOS 26 liquid glass ── */
+    .cat-icon-item.active .cat-pill {
+        background: rgba(255,255,255,0.18);
+        backdrop-filter: blur(18px) saturate(200%);
+        -webkit-backdrop-filter: blur(18px) saturate(200%);
+        border-color: rgba(255,255,255,0.5);
+        box-shadow:
+            0 0 0 3px rgba(124,58,237,0.14),
+            0 6px 20px rgba(124,58,237,0.28),
+            inset 0 1px 0 rgba(255,255,255,0.65),
+            inset 0 -1px 0 rgba(124,58,237,0.18);
+        transform: translateY(-1px);
+    }
+    .cat-icon-item.active .cat-pill-label { color: var(--accent-violet); font-weight: 800; }
+
+    /* Shimmer sweep on active */
+    .cat-pill::before {
         content: ''; position: absolute; inset: 0;
-        background: var(--grad); opacity: 0;
-        transition: opacity 0.3s var(--ease-luxury);
+        background: linear-gradient(105deg,
+            rgba(255,255,255,0.5) 0%,
+            rgba(255,255,255,0.04) 50%,
+            rgba(124,58,237,0.08) 100%);
+        opacity: 0; transition: opacity 0.3s var(--ease-luxury);
+        pointer-events: none;
     }
-    .cat-icon-item.active .cat-icon-circle::before { opacity: 1; }
-    .cat-icon-item.active .cat-icon-circle {
-        box-shadow: 0 6px 20px rgba(124,58,237,0.4);
-        transform: translateY(-2px);
+    .cat-icon-item.active .cat-pill::before { opacity: 1; }
+
+    /* Gleam dot top-left */
+    .cat-pill::after {
+        content: ''; position: absolute;
+        top: 5px; left: 12px;
+        width: 14px; height: 5px; border-radius: 50%;
+        background: rgba(255,255,255,0.75); filter: blur(2px);
+        opacity: 0; transition: opacity 0.3s var(--ease-luxury);
+        pointer-events: none;
     }
-    .cat-icon-circle span { position: relative; z-index: 1; }
-    .cat-icon-label {
-        font-size: 9px; font-weight: 700; color: var(--text-soft);
-        text-align: center; max-width: 56px;
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        transition: color 0.2s;
+    .cat-icon-item.active .cat-pill::after { opacity: 1; }
+
+    @media (prefers-color-scheme: dark) {
+        .cat-icon-item.active .cat-pill {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.25);
+            box-shadow:
+                0 0 0 3px rgba(124,58,237,0.2),
+                0 6px 22px rgba(124,58,237,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.35),
+                inset 0 -1px 0 rgba(124,58,237,0.25);
+        }
     }
-    .cat-icon-item.active .cat-icon-label { color: var(--accent-violet); }
 
     /* Search results highlight */
     .search-results-bar {
@@ -668,9 +714,12 @@
                 <h4>Category</h4>
                 <div class="filter-pills" id="filterCategoryPills">
                     <div class="filter-pill active" onclick="selectFilterPill(this,'category','All')">All</div>
+                    <div class="filter-pill" onclick="selectFilterPill(this,'category','Dresses')">Dresses</div>
                     <div class="filter-pill" onclick="selectFilterPill(this,'category','Thrift')">Thrift</div>
                     <div class="filter-pill" onclick="selectFilterPill(this,'category','Store')">Store</div>
                     <div class="filter-pill" onclick="selectFilterPill(this,'category','Handmade')">Handmade</div>
+                    <div class="filter-pill" onclick="selectFilterPill(this,'category','Accessories')">Accessories</div>
+                    <div class="filter-pill" onclick="selectFilterPill(this,'category','Bags')">Bags</div>
                 </div>
             </div>
             <div>
@@ -845,24 +894,49 @@
 <script>
     /* ── PRODUCT DATA ── */
     const myProducts = [
-        { id:1,  name: "Thick Seamless Dress",    price: 50, size: "10",      category: "Thrift",   image: "images/item1.jpg" },
-        { id:2,  name: "Plaited Skirts & Top",    price: 50, size: "8/10",    category: "Thrift",   image: "images/item2.jpg" },
-        { id:3,  name: "Short Length Essential",  price: 45, size: "8",       category: "Thrift",   image: "images/item3.jpg" },
-        { id:4,  name: "Church & Work",           price: 50, size: "8",       category: "Store",    image: "images/item4.jpg" },
-        { id:5,  name: "Dinner & Party Elegance", price: 45, size: "8/10",    category: "Store",    image: "images/item5.jpg" },
-        { id:6,  name: "Lecture & Beach Set",     price: 45, size: "6/8/10",  category: "Store",    image: "images/item6.jpg" },
-        { id:7,  name: "Ruched SHEIN Special",    price: 50, size: "8/10",    category: "Thrift",   image: "images/item7.jpg" },
-        { id:8,  name: "Ultimate Work Gown",      price: 50, size: "12/14",   category: "Thrift",   image: "images/item8.jpg" },
-        { id:9,  name: "Skirt & Basic Top Duo",   price: 50, size: "10/12",   category: "Store",    image: "images/item9.jpg" },
-        { id:10, name: "Refined Church Wear",     price: 50, size: "10",      category: "Store",    image: "images/item10.jpg" }
+        { id:1,  name: "Thick Seamless Dress",      price: 50,  size: "10",      category: "Thrift",   image: "images/item1.jpg" },
+        { id:2,  name: "Plaited Skirts & Top",       price: 50,  size: "8/10",    category: "Thrift",   image: "images/item2.jpg" },
+        { id:3,  name: "Short Length Essential",     price: 45,  size: "8",       category: "Thrift",   image: "images/item3.jpg" },
+        { id:4,  name: "Church & Work",              price: 50,  size: "8",       category: "Store",    image: "images/item4.jpg" },
+        { id:5,  name: "Dinner & Party Elegance",    price: 45,  size: "8/10",    category: "Store",    image: "images/item5.jpg" },
+        { id:6,  name: "Lecture & Beach Set",        price: 45,  size: "6/8/10",  category: "Store",    image: "images/item6.jpg" },
+        { id:7,  name: "Ruched SHEIN Special",       price: 50,  size: "8/10",    category: "Thrift",   image: "images/item7.jpg" },
+        { id:8,  name: "Ultimate Work Gown",         price: 50,  size: "12/14",   category: "Thrift",   image: "images/item8.jpg" },
+        { id:9,  name: "Skirt & Basic Top Duo",      price: 50,  size: "10/12",   category: "Store",    image: "images/item9.jpg" },
+        { id:10, name: "Refined Church Wear",        price: 50,  size: "10",      category: "Store",    image: "images/item10.jpg" },
+        { id:11, name: "Floral Midi Dress",          price: 55,  size: "8/10/12", category: "Dresses",  image: "images/item11.jpg" },
+        { id:12, name: "Satin Evening Gown",         price: 80,  size: "10/12",   category: "Dresses",  image: "images/item12.jpg" },
+        { id:13, name: "Casual Linen Co-ord",        price: 60,  size: "8/10",    category: "Store",    image: "images/item13.jpg" },
+        { id:14, name: "Bodycon Night Out",          price: 55,  size: "8/10",    category: "Thrift",   image: "images/item14.jpg" },
+        { id:15, name: "Handwoven Kente Blouse",     price: 65,  size: "Free",    category: "Handmade", image: "images/item15.jpg" },
+        { id:16, name: "Smocked Sundress",           price: 48,  size: "8/10/12", category: "Dresses",  image: "images/item16.jpg" },
+        { id:17, name: "Wrap Tie Maxi",              price: 52,  size: "10/12",   category: "Dresses",  image: "images/item17.jpg" },
+        { id:18, name: "Crochet Beach Cover",        price: 40,  size: "Free",    category: "Handmade", image: "images/item18.jpg" },
+        { id:19, name: "Puff Sleeve Mini",           price: 48,  size: "6/8",     category: "Store",    image: "images/item19.jpg" },
+        { id:20, name: "Ankara Print Set",           price: 70,  size: "8/10/12", category: "Handmade", image: "images/item20.jpg" },
+        { id:21, name: "Denim Vintage Jacket",       price: 60,  size: "10/12",   category: "Thrift",   image: "images/item21.jpg" },
+        { id:22, name: "Pastel Coord Set",           price: 55,  size: "8/10",    category: "Store",    image: "images/item22.jpg" },
+        { id:23, name: "Embroidered Boho Top",       price: 42,  size: "Free",    category: "Handmade", image: "images/item23.jpg" },
+        { id:24, name: "Off-Shoulder Gown",          price: 75,  size: "10/12",   category: "Dresses",      image: "images/item24.jpg" },
+        { id:25, name: "Pearl Drop Earrings",         price: 25,  size: "Free",    category: "Accessories",  image: "images/item25.jpg" },
+        { id:26, name: "Gold Chain Necklace",         price: 30,  size: "Free",    category: "Accessories",  image: "images/item26.jpg" },
+        { id:27, name: "Beaded Bracelet Set",         price: 20,  size: "Free",    category: "Accessories",  image: "images/item27.jpg" },
+        { id:28, name: "Silk Scarf Wrap",             price: 35,  size: "Free",    category: "Accessories",  image: "images/item28.jpg" },
+        { id:29, name: "Mini Woven Tote",             price: 55,  size: "One Size",category: "Bags",         image: "images/item29.jpg" },
+        { id:30, name: "Leather Crossbody Bag",       price: 75,  size: "One Size",category: "Bags",         image: "images/item30.jpg" },
+        { id:31, name: "Kente Clutch Purse",          price: 45,  size: "One Size",category: "Bags",         image: "images/item31.jpg" },
+        { id:32, name: "Raffia Bucket Bag",           price: 60,  size: "One Size",category: "Bags",         image: "images/item32.jpg" },
     ];
 
     /* ── CATEGORIES with icons ── */
     const categories = [
-        { key: 'All',      label: 'All Items', icon: '✨' },
-        { key: 'Thrift',   label: 'Thrift',    icon: '👗' },
-        { key: 'Store',    label: 'Store',     icon: '🛍️' },
-        { key: 'Handmade', label: 'Handmade',  icon: '🧵' },
+        { key: 'All',         label: 'All',         icon: '✨' },
+        { key: 'Dresses',     label: 'Dresses',     icon: '👘' },
+        { key: 'Thrift',      label: 'Thrift',      icon: '🏷️' },
+        { key: 'Store',       label: 'Store',       icon: '🛍️' },
+        { key: 'Handmade',    label: 'Handmade',    icon: '🧵' },
+        { key: 'Accessories', label: 'Accessories', icon: '💎' },
+        { key: 'Bags',        label: 'Bags',        icon: '👜' },
     ];
 
     let cart = [];
@@ -894,10 +968,12 @@
     function renderCategoryIcons() {
         const scroll = document.getElementById('catIconScroll');
         scroll.innerHTML = categories.map(cat => `
-            <div class="cat-icon-item ${cat.key === activeCategory ? 'active' : ''}" 
+            <div class="cat-icon-item ${cat.key === activeCategory ? 'active' : ''}"
                  id="caticon-${cat.key}" onclick="selectCategory('${cat.key}')">
-                <div class="cat-icon-circle">${cat.icon}</div>
-                <div class="cat-icon-label">${cat.label}</div>
+                <div class="cat-pill">
+                    <span class="cat-pill-emoji">${cat.icon}</span>
+                    <span class="cat-pill-label">${cat.label}</span>
+                </div>
             </div>
         `).join('');
     }
