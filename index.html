@@ -899,7 +899,7 @@
     function toggleCart(id) {
         const product = myProducts.find(p => p.id === id);
         const idx = cart.findIndex(c => c.product.id === id);
-        if (idx === -1) { cart.push({ product, qty: 1 }); showToast('Added to Bag'); }
+        if (idx === -1) { cart.push({ product, qty: 1 }); showToast('🛍️Added to Bag'); }
         else { cart.splice(idx, 1); showToast('Removed from Bag'); }
         updateBadges();
         const btn = document.getElementById('cartbtn-' + id);
@@ -940,7 +940,7 @@
         const product = myProducts.find(p => p.id === id);
         cart.push({ product, qty: 1 });
         updateBadges(); renderWishlistPanel();
-        showToast('Added to Bag');
+        showToast('🛍️Added to Bag');
     }
 
     function updateBadges() {
