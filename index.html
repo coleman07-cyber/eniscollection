@@ -14,52 +14,107 @@
   --accent: #D4AF37;
   --white: #FFFFFF;
   --radius: 24px;
-  --shadow: 0 10px 30px rgba(0,0,0,0.06);
+  --shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; padding-bottom: 100px; }
+body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
 /* ── HEADER ── */
 .hdr { position: sticky; top: 0; z-index: 100; background: rgba(253, 252, 251, 0.95); backdrop-filter: blur(15px); padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.03); text-align: center; }
 .brand-name { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 600; color: var(--text); }
 .brand-tag { font-family: 'Montserrat', sans-serif; text-transform: uppercase; font-size: 8px; letter-spacing: 4px; color: var(--gold); font-weight: 600; margin-top: 4px; display: block; }
 
-/* ── FLOATING NAV (WISHLIST & CART) ── */
-.floating-nav { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; gap: 20px; background: rgba(26, 22, 20, 0.9); padding: 12px 25px; border-radius: 40px; backdrop-filter: blur(10px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
-.nav-item { position: relative; color: var(--accent); font-size: 20px; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; }
-.nav-badge { position: absolute; top: -5px; right: -5px; background: var(--white); color: var(--text); font-size: 10px; font-weight: 800; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+/* ── BOTTOM RIGHT FLOATING CONTROLS ── */
+.floating-actions { 
+  position: fixed; 
+  bottom: 30px; 
+  right: 20px; 
+  z-index: 1000; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 15px; 
+}
+.float-btn { 
+  width: 55px; 
+  height: 55px; 
+  background: var(--text); 
+  color: var(--accent); 
+  border-radius: 50%; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: 20px; 
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
+  position: relative;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.nav-badge { 
+  position: absolute; 
+  top: 0; 
+  right: 0; 
+  background: var(--gold); 
+  color: white; 
+  font-size: 10px; 
+  font-weight: 800; 
+  width: 20px; 
+  height: 20px; 
+  border-radius: 50%; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  border: 2px solid var(--text);
+}
 
 /* ── CATEGORIES (FIXED ROUNDING) ── */
 .cat-section { padding: 20px; }
 .cat-pills { display: flex; gap: 18px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
 .cat-pill { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; cursor: pointer; opacity: 0.5; transition: 0.3s; }
 .cat-pill.active { opacity: 1; }
-.cat-circle { width: 55px; height: 55px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.02); color: #444; overflow: hidden; }
-.cat-pill.active .cat-circle { background: var(--text); color: var(--accent); transform: scale(1.05); }
+.cat-circle { width: 55px; height: 55px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.02); color: #444; }
+.cat-pill.active .cat-circle { background: var(--text); color: var(--accent); transform: scale(1.1); }
 .cat-lbl { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
 /* ── PRODUCT GRID ── */
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 40px; }
-.card { border-radius: var(--radius); overflow: hidden; animation: fadeIn 0.5s ease forwards; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
+.card { border-radius: var(--radius); overflow: hidden; }
 .card-img-box { position: relative; aspect-ratio: 0.75; border-radius: var(--radius); overflow: hidden; background: #eee; }
 .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
-.price-pill { position: absolute; bottom: 12px; left: 12px; background: white; padding: 6px 12px; border-radius: 12px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-
-/* ── ABOUT SECTION ── */
-.about { background: #1A1614; color: white; padding: 60px 25px; border-radius: 40px 40px 0 0; text-align: center; margin-top: 40px; }
-.about h3 { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--accent); margin-bottom: 15px; }
-.about p { font-size: 13px; font-weight: 300; line-height: 1.8; opacity: 0.8; margin-bottom: 30px; }
-.social-links { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.social-btn { border: 1px solid rgba(255,255,255,0.15); padding: 15px; border-radius: 15px; font-size: 10px; color: white; text-decoration: none; font-weight: 600; text-transform: uppercase; }
+.price-pill { position: absolute; bottom: 12px; left: 12px; background: white; padding: 6px 12px; border-radius: 12px; font-weight: 700; font-size: 13px; box-shadow: var(--shadow); }
 
 /* ── CARD BUTTONS ── */
 .card-actions { position: absolute; top: 12px; right: 12px; display: flex; flex-direction: column; gap: 8px; }
 .action-btn { width: 36px; height: 36px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); color: #BBB; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); cursor: pointer; }
 .action-btn.active-wish { color: #FF4D4D; }
 .action-btn.active-cart { background: var(--text); color: var(--accent); }
+
+/* ── ABOUT SECTION ── */
+.about { background: #1A1614; color: white; padding: 60px 25px 100px; border-radius: 40px 40px 0 0; text-align: center; }
+.about h3 { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--accent); margin-bottom: 15px; }
+.about p { font-size: 13px; font-weight: 300; line-height: 1.8; opacity: 0.8; margin-bottom: 35px; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.contact-btn { 
+  background: rgba(255,255,255,0.05); 
+  border: 1px solid rgba(255,255,255,0.1); 
+  padding: 18px 10px; 
+  border-radius: 18px; 
+  color: white; 
+  text-decoration: none; 
+  font-size: 10px; 
+  font-weight: 600; 
+  text-transform: uppercase; 
+  letter-spacing: 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: 0.3s;
+}
+.contact-btn i { font-size: 18px; color: var(--accent); }
+.contact-btn:active { background: var(--accent); color: black; }
+.contact-btn:active i { color: black; }
+
 </style>
 </head>
 <body>
@@ -69,12 +124,12 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
   <span class="brand-tag">Pamper your body</span>
 </div>
 
-<div class="floating-nav">
-  <div class="nav-item" title="Wishlist">
+<div class="floating-actions">
+  <div class="float-btn" onclick="alert('Wishlist coming soon!')">
     <i class="far fa-heart"></i>
     <span class="nav-badge" id="wish-count">0</span>
   </div>
-  <div class="nav-item" title="Cart">
+  <div class="float-btn" onclick="alert('Cart coming soon!')">
     <i class="fas fa-shopping-bag"></i>
     <span class="nav-badge" id="cart-count">0</span>
   </div>
@@ -92,12 +147,25 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
 <div class="grid" id="product-grid"></div>
 
 <div class="about">
-  <h3>Our Story</h3>
-  <p>Enis Collection is a celebration of femininity and style. Founded in 2022, we provide curated fashion that makes every woman feel pampered and confident. From Cape Coast to the world, we bring you the best in thrift, boutique, and handmade pieces.</p>
-  <div class="social-links">
-    <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-    <a href="#" class="social-btn"><i class="fab fa-instagram"></i> Instagram</a>
+  <h3>Get in Touch</h3>
+  <p>Enis Collection is dedicated to providing premium fashion and a pampered experience. Have a question or want to order? Contact us directly.</p>
+  
+  <div class="contact-grid">
+    <a href="tel:+233546527892" class="contact-btn">
+      <i class="fas fa-phone-alt"></i> Call Us
+    </a>
+    <a href="mailto:Sheilaenima@gmail.com" class="contact-btn">
+      <i class="far fa-envelope"></i> Email
+    </a>
+    <a href="https://wa.me/233546527892" class="contact-btn">
+      <i class="fab fa-whatsapp"></i> WhatsApp
+    </a>
+    <a href="https://www.tiktok.com/@eniscollection1" class="contact-btn">
+      <i class="fab fa-tiktok"></i> TikTok
+    </a>
   </div>
+  
+  <p style="margin-top:50px; font-size:8px; opacity:0.3; letter-spacing:2px;">© 2026 ENIS COLLECTION | CAPE COAST</p>
 </div>
 
 <script>
