@@ -10,92 +10,83 @@
 :root {
   --bg: #FDFCFB; 
   --text: #1A1614;
-  --yellow: #F2C94C; 
-  --brown: #6B3E26;  
+  --yellow: #F2C94C; /* Your Custom Yellow */
+  --brown: #6B3E26;  /* Your Custom Brown */
   --white: #FFFFFF;
+  --radius: 30px;
 }
 
-/* ── PERFORMANCE FIXES ── */
+/* ── SMOOTH TOUCH LOGIC ── */
 * { 
   margin:0; padding:0; box-sizing:border-box; 
   -webkit-tap-highlight-color:transparent; 
-  /* Critical for smooth scrolling on mobile */
-  touch-action: pan-y; 
+  touch-action: pan-y; /* Fixes glitchy scrolling */
 }
+body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-body { 
-  font-family: 'Montserrat', sans-serif; 
-  background: var(--bg); 
-  color: var(--text); 
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* ── SPLASH SCREEN ── */
+/* ── RESTORED PREVIOUS SPLASH STYLE ── */
 #splash {
   position: fixed; inset: 0; z-index: 3000;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   background: #12100E url('images/Splash-Dress.PNG') center/cover no-repeat;
   transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
 }
-#splash::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.65); }
-.splash-content { position: relative; z-index: 1; text-align: center; color: white; }
-.splash-logo { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 600; }
+#splash::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
 #splash.hide { transform: translateY(-100%); }
+.splash-content { position: relative; z-index: 1; text-align: center; color: white; }
+.splash-logo { font-family: 'Playfair Display', serif; font-size: 42px; margin-bottom: 5px; }
 
 /* ── HEADER ── */
 .hdr { position: sticky; top: 0; z-index: 100; background: rgba(253, 252, 251, 0.95); backdrop-filter: blur(15px); padding: 15px 20px; text-align: center; }
 .brand-name { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 600; color: var(--brown); }
-.brand-tag { font-family: 'Outfit', sans-serif; text-transform: uppercase; font-size: 8px; letter-spacing: 5px; color: var(--yellow); font-weight: 700; display: block; margin-top: 4px; }
+.brand-tag { font-family: 'Montserrat', sans-serif; text-transform: uppercase; font-size: 8px; letter-spacing: 4px; color: var(--yellow); font-weight: 600; display: block; margin-top: 4px; }
+
+/* ── CATEGORIES (BLACK THEME) ── */
+.cat-section { padding: 20px; }
+.cat-pills { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.cat-pill { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; min-width: 65px; }
+.cat-circle { width: 58px; height: 58px; border-radius: 50%; background: var(--white); display: flex; align-items: center; justify-content: center; border: 1px solid #f0f0f0; transition: 0.3s; color: #777; }
+.cat-pill.active .cat-circle { background: var(--text); color: var(--white); border-color: var(--text); }
+.cat-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; color: #BBB; }
 
 /* ── PRODUCT GRID ── */
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 40px; }
 .card-img-box { position: relative; aspect-ratio: 0.75; border-radius: 28px; overflow: hidden; background: #f5f5f5; }
 .card-img-box img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
-.modern-price { 
-  position: absolute; bottom: 12px; left: 12px; 
-  background: var(--brown); color: var(--yellow); 
-  padding: 6px 14px; border-radius: 12px; font-weight: 700; font-size: 11px;
-}
+/* BROWN/YELLOW PRICE TAG */
+.modern-price { position: absolute; bottom: 12px; left: 12px; background: var(--brown); color: var(--yellow); padding: 6px 12px; border-radius: 12px; font-weight: 700; font-size: 11px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-/* ── COMPACT FLOATING BAR ── */
+/* ACTION BUTTONS */
+.action-overlay { position: absolute; top: 12px; right: 12px; display: flex; flex-direction: column; gap: 8px; }
+.icon-btn { width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: #444; }
+.icon-btn.active-cart { background: var(--yellow); color: var(--brown); }
+
+/* ── FLOATING UI (SCROLL HIDE & REDUCED GAP) ── */
 .float-bar { 
   position: fixed; bottom: 25px; right: 20px; z-index: 1000; 
   display: flex; flex-direction: column; 
-  gap: 6px; /* Reduced gap between wishlist and cart */
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  gap: 6px; /* Reduced gap */
+  transition: opacity 0.3s ease, transform 0.3s ease; 
 }
+.float-bar.hidden { opacity: 0; transform: translateY(20px); pointer-events: none; }
 
-/* Hide when scrolling class */
-.float-bar.hidden {
-  opacity: 0;
-  transform: translateY(20px);
-  pointer-events: none;
-}
-
-.modern-float { 
-  width: 44px; height: 44px; /* Slightly smaller for a modern look */
-  background: var(--brown); color: var(--yellow); 
-  border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-  font-size: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.25); cursor: pointer; position: relative;
-}
-
-.m-badge { 
-  position: absolute; top: -3px; right: -3px; background: var(--yellow); 
-  color: var(--brown); font-size: 9px; width: 18px; height: 18px; border-radius: 50%; 
-  display: flex; align-items: center; justify-content: center; border: 2px solid var(--brown); 
-}
+.modern-float { width: 48px; height: 48px; background: var(--brown); color: var(--yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); cursor: pointer; position: relative; }
+.m-badge { position: absolute; top: -4px; right: -4px; background: var(--yellow); color: var(--brown); font-size: 9px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--brown); }
 
 /* ── SMALLER DRAWER ITEMS ── */
-.drawer { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: flex-end; }
+.drawer { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: flex-end; }
 .drawer.open { display: flex; }
-.drawer-content { width: 100%; background: var(--white); border-radius: 35px 35px 0 0; padding: 25px 20px; max-height: 70vh; overflow-y: auto; }
+.drawer-content { width: 100%; background: var(--white); border-radius: 35px 35px 0 0; padding: 30px 20px; max-height: 70vh; overflow-y: auto; }
 .small-item { display: flex; gap: 12px; margin-bottom: 12px; align-items: center; border-bottom: 1px solid #f9f9f9; padding-bottom: 10px; }
 .small-item img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
+.small-item b { font-size: 13px; font-weight: 500; }
+.small-item span { color: var(--brown); font-size: 12px; font-weight: 600; }
 
-/* ── ABOUT SECTION ── */
+/* ── ABOUT ── */
 .about-section { background: var(--brown); color: white; padding: 60px 25px 120px; border-radius: 40px 40px 0 0; text-align: center; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+.contact-link { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; color: white; text-decoration: none; font-size: 12px; display: flex; flex-direction: column; gap: 8px; align-items: center; }
 </style>
 </head>
 <body>
@@ -103,13 +94,22 @@ body {
 <div id="splash">
   <div class="splash-content">
     <h1 class="splash-logo">Enis Collection</h1>
-    <button onclick="document.getElementById('splash').classList.add('hide')" style="margin-top:25px; background:var(--yellow); border:none; color:var(--brown); padding:14px 40px; border-radius:50px; text-transform:uppercase; font-size:10px; font-weight:700; letter-spacing:2px;">Explore Shop</button>
+    <button onclick="document.getElementById('splash').classList.add('hide')" style="margin-top:20px; background:var(--yellow); border:none; color:var(--brown); padding:12px 40px; border-radius:50px; text-transform:uppercase; font-size:10px; letter-spacing:2px; font-weight:700;">Enter Shop</button>
   </div>
 </div>
 
 <div class="hdr">
   <h1 class="brand-name">Enis Collection</h1>
   <span class="brand-tag">Pamper your body</span>
+</div>
+
+<div class="cat-section">
+  <div class="cat-pills">
+    <div class="cat-pill active" onclick="filterCat('ALL', this)"><div class="cat-circle"><i class="fa-solid fa-grip"></i></div><span class="cat-lbl">All</span></div>
+    <div class="cat-pill" onclick="filterCat('THRIFT', this)"><div class="cat-circle"><i class="fa-solid fa-leaf"></i></div><span class="cat-lbl">Thrift</span></div>
+    <div class="cat-pill" onclick="filterCat('STORE', this)"><div class="cat-circle"><i class="fa-solid fa-bag-shopping"></i></div><span class="cat-lbl">Store</span></div>
+    <div class="cat-pill" onclick="filterCat('CUSTOM', this)"><div class="cat-circle"><i class="fa-solid fa-wand-sparkles"></i></div><span class="cat-lbl">Custom</span></div>
+  </div>
 </div>
 
 <div class="grid" id="main-grid"></div>
@@ -120,57 +120,64 @@ body {
 </div>
 
 <div class="about-section">
-  <h3 style="color:var(--yellow); font-family:'Playfair Display'; font-size:28px;">Enis Boutique</h3>
-  <p style="margin-top:10px; opacity:0.7;">Curated fashion for your unique style.</p>
+  <h3 style="font-family:'Playfair Display'; font-size:28px; color:var(--yellow);">Enis Boutique</h3>
+  <div class="contact-grid">
+    <a href="https://wa.me/233546527892" class="contact-link"><i class="fab fa-whatsapp" style="color:var(--yellow)"></i> WhatsApp</a>
+    <a href="tel:+233546527892" class="contact-link"><i class="fas fa-phone-alt" style="color:var(--yellow)"></i> Call</a>
+    <a href="mailto:Sheilaenima@gmail.com" class="contact-link"><i class="far fa-envelope" style="color:var(--yellow)"></i> Email</a>
+    <a href="https://www.tiktok.com/@eniscollection1" class="contact-link"><i class="fab fa-tiktok" style="color:var(--yellow)"></i> TikTok</a>
+  </div>
 </div>
 
 <div id="drawer" class="drawer" onclick="this.classList.remove('open')">
   <div class="drawer-content" onclick="event.stopPropagation()">
-    <h2 id="d-title" style="font-family:'Playfair Display'; margin-bottom:20px;"></h2>
+    <h2 id="d-title" style="font-family:'Playfair Display'; margin-bottom:20px; font-size:20px;"></h2>
     <div id="d-list"></div>
-    <button id="checkout-btn" onclick="sendWA()" style="display:none; width:100%; padding:20px; background:var(--brown); color:var(--yellow); border-radius:18px; border:none; margin-top:15px; font-weight:700;">Order on WhatsApp</button>
+    <button id="checkout-btn" onclick="sendWA()" style="display:none; width:100%; padding:18px; background:var(--brown); color:var(--yellow); border-radius:15px; border:none; margin-top:15px; font-weight:700;">Order on WhatsApp</button>
   </div>
 </div>
 
 <script>
 const DB = [
-  {id:1, name:"Thick Seamless Dress", price:50, img:"images/item1.jpg"},
-  {id:2, name:"Plaited Skirts & Top", price:50, img:"images/item2.jpg"},
-  {id:3, name:"Short Length Essential", price:45, img:"images/item3.jpg"},
-  {id:4, name:"Church & Work Gown", price:50, img:"images/item4.jpg"}
+  {id:1, name:"Thick Seamless Dress", price:50, cat:"THRIFT", img:"images/item1.jpg"},
+  {id:2, name:"Plaited Skirts & Top", price:50, cat:"THRIFT", img:"images/item2.jpg"},
+  {id:3, name:"Short Length Essential", price:45, cat:"THRIFT", img:"images/item3.jpg"},
+  {id:4, name:"Church & Work Gown", price:50, cat:"STORE", img:"images/item4.jpg"},
+  {id:5, name:"Dinner Party Elegance", price:45, cat:"STORE", img:"images/item5.jpg"},
+  {id:6, name:"Lecture & Beach Set", price:45, cat:"STORE", img:"images/item6.jpg"},
+  {id:7, name:"Handmade Silk Wrap", price:65, cat:"CUSTOM", img:"images/item7.jpg"},
+  {id:8, name:"Ruched SHEIN Special", price:50, cat:"THRIFT", img:"images/item8.jpg"},
+  {id:9, name:"Ultimate Work Gown", price:50, cat:"THRIFT", img:"images/item9.jpg"},
+  {id:10, name:"Refined Church Wear", price:50, cat:"STORE", img:"images/item10.jpg"}
 ];
 
 let wish = []; let cart = [];
-const floatingBar = document.getElementById('floatingBar');
-let isScrolling;
+const fBar = document.getElementById('floatingBar');
+let scrollTimer;
 
-// ── HIDE FLOATING BAR ON SCROLL ──
+// SCROLL HIDE LOGIC
 window.addEventListener('scroll', () => {
-  // Add hidden class immediately when scrolling starts
-  floatingBar.classList.add('hidden');
-
-  // Clear timeout throughout the scroll
-  window.clearTimeout(isScrolling);
-
-  // Set timeout to show bar 150ms after scroll ends
-  isScrolling = setTimeout(() => {
-    floatingBar.classList.remove('hidden');
+  fBar.classList.add('hidden');
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(() => {
+    fBar.classList.remove('hidden');
   }, 150);
 }, { passive: true });
 
-function renderGrid() {
+function renderGrid(f = 'ALL') {
   const g = document.getElementById('main-grid');
-  g.innerHTML = DB.map(p => `
+  const items = f === 'ALL' ? DB : DB.filter(x => x.cat === f);
+  g.innerHTML = items.map(p => `
     <div class="card">
       <div class="card-img-box">
         <img src="${p.img}">
         <div class="modern-price">₵${p.price}</div>
-        <div style="position:absolute; top:12px; right:12px; display:flex; flex-direction:column; gap:8px;">
-          <button onclick="toggle('wish', ${p.id})" style="width:34px; height:34px; border-radius:50%; border:none; background:rgba(255,255,255,0.9);"><i class="${wish.includes(p.id)?'fa-solid':'fa-regular'} fa-heart"></i></button>
-          <button onclick="toggle('cart', ${p.id})" style="width:34px; height:34px; border-radius:50%; border:none; background:${cart.includes(p.id)?'var(--yellow)':'rgba(255,255,255,0.9)'};"><i class="fa-solid fa-cart-shopping"></i></button>
+        <div class="action-overlay">
+          <button onclick="toggle('wish', ${p.id})" class="icon-btn"><i class="${wish.includes(p.id)?'fa-solid':'fa-regular'} fa-heart" style="${wish.includes(p.id)?'color:#e74c3c':''}"></i></button>
+          <button onclick="toggle('cart', ${p.id})" class="icon-btn ${cart.includes(p.id)?'active-cart':''}"><i class="fa-solid fa-cart-shopping"></i></button>
         </div>
       </div>
-      <div style="padding:10px 0"><h4 style="font-size:13px;">${p.name}</h4></div>
+      <div style="padding:10px 0"><h4 style="font-size:13px; font-weight:500;">${p.name}</h4></div>
     </div>
   `).join('');
 }
@@ -186,13 +193,29 @@ function toggle(type, id) {
 function openDrawer(type) {
   const d = document.getElementById('drawer');
   const list = type === 'wish' ? wish : cart;
-  document.getElementById('d-title').innerText = type === 'wish' ? 'Favorites' : 'Cart';
+  document.getElementById('d-title').innerText = type === 'wish' ? 'Favorites' : 'Cart Items';
   document.getElementById('checkout-btn').style.display = type === 'cart' && list.length ? 'block' : 'none';
+  
   document.getElementById('d-list').innerHTML = list.length ? list.map(id => {
     const p = DB.find(x => x.id === id);
-    return `<div class="small-item"><img src="${p.img}"><div><b>${p.name}</b><br><span>₵${p.price}</span></div></div>`;
-  }).join('') : '<p style="text-align:center; padding:20px; font-size:12px; opacity:0.5;">Empty</p>';
+    return `<div class="small-item">
+      <img src="${p.img}">
+      <div style="flex:1"><b>${p.name}</b><br><span>₵${p.price}</span></div>
+      <i class="fa-solid fa-trash" style="color:#eee; font-size:12px;" onclick="toggle('${type}', ${p.id}); openDrawer('${type}')"></i>
+    </div>`;
+  }).join('') : '<p style="text-align:center; padding:20px; color:#ccc; font-size:12px;">Nothing here yet.</p>';
   d.classList.add('open');
+}
+
+function filterCat(c, el) {
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderGrid(c);
+}
+
+function sendWA() {
+  const items = cart.map(id => DB.find(x => x.id === id).name).join(', ');
+  window.open(`https://wa.me/233546527892?text=Order Request: ${items}`);
 }
 
 renderGrid();
