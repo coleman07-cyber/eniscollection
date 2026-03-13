@@ -855,7 +855,8 @@
         document.getElementById('preview-price').innerText = 'Enis Collection';
         document.getElementById('preview-price-badge').innerText = `from ₵${previewProduct.price}`;
         document.getElementById('preview-size-chip').innerText = `UK ${previewProduct.size}`;
-        const msg = encodeURIComponent(`Hi Enis! I'd like to order: ${previewProduct.name} (Size ${previewProduct.size})`);
+        const imageUrl = `https://eniscollection.vercel.app/${previewProduct.image}`;
+        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order:\n\n• ${previewProduct.name}\n  Size: ${previewProduct.size}\n  Price: ₵${previewProduct.price}\n  🖼 ${imageUrl}`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
         syncPreviewState();
         const modal = document.getElementById('item-preview');
@@ -1008,9 +1009,12 @@
 
     function checkoutViaWA() {
         if (!cart.length) return;
-        const lines = cart.map(c => `• ${c.product.name} (Size ${c.product.size}) x${c.qty} = ₵${c.product.price*c.qty}`).join('\n');
+        const lines = cart.map(c => {
+            const imageUrl = `https://eniscollection.vercel.app/${c.product.image}`;
+            return `• ${c.product.name}\n  Size: ${c.product.size} | Qty: ${c.qty} | ₵${c.product.price * c.qty}\n  🖼 ${imageUrl}`;
+        }).join('\n\n');
         const total = cart.reduce((s,c) => s+c.product.price*c.qty, 0);
-        const msg = encodeURIComponent(`Hi Enis! I'd like to order:\n\n${lines}\n\nTotal: ₵${total}`);
+        const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order:\n\n${lines}\n\n━━━━━━━━━━\nTotal: ₵${total}`);
         window.open(`https://wa.me/233546527892?text=${msg}`, '_blank');
     }
 
