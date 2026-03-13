@@ -3,163 +3,264 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
-<title>ENIS COLLECTION</title>
+<title>ENIS COLLECTION | Luxury Fashion</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&family=Great+Vibes&display=swap"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap"/>
 <style>
-:root{
-  --bg:#FDFCFB; 
-  --text:#1A1614;
-  --gold:#C5A059;
-  --accent:#D4AF37;
-  --border:rgba(0,0,0,0.05);
+:root {
+  --bg: #FDFCFB; 
+  --text: #1A1614;
+  --gold: #C5A059;
+  --accent: #D4AF37;
+  --white: #FFFFFF;
+  --soft-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  --glass: rgba(255, 252, 249, 0.8);
 }
-*,*::before,*::after{margin:0!important;padding:0!important;box-sizing:border-box!important;-webkit-tap-highlight-color:transparent!important;}
-body{font-family:'DM Sans',sans-serif!important;background:var(--bg)!important;color:var(--text)!important;overflow-x:hidden!important;}
 
-/* ── HEADER (CENTERED) ── */
-.hdr{padding:20px 16px 10px!important;}
-.hdr-top{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-bottom:15px!important;}
-.brand-wrap{text-align:center!important;flex:1!important;} 
-.brand-name{font-family:'Great Vibes',cursive!important;font-size:32px!important;line-height:1!important;}
-.brand-tag{font-family:'Cormorant Garamond',serif!important;font-style:italic!important;font-size:12px!important;color:var(--gold)!important;display:block!important;}
-.hdr-btn{width:40px!important;height:40px!important;border-radius:50%!important;border:1px solid var(--border)!important;background:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important;}
-.spacer{width:40px!important;}
+/* ── BASE STYLES ── */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { 
+  font-family: 'Montserrat', sans-serif; 
+  background: var(--bg); 
+  color: var(--text); 
+  line-height: 1.6;
+  overflow-x: hidden;
+}
 
-/* ── SEARCH & CATEGORY ── */
-.search-row{display:flex!important;gap:10px!important;margin:15px 0!important;}
-.search-wrap{flex:1!important;background:#fff!important;border:1px solid var(--border)!important;border-radius:25px!important;display:flex!important;align-items:center!important;padding:0 15px!important;height:46px!important;}
-.search-wrap input{border:none!important;flex:1!important;outline:none!important;font-size:14px!important;margin-left:8px!important;}
-.filter-btn{width:46px!important;height:46px!important;border-radius:50%!important;background:#222!important;color:var(--accent)!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+/* ── NAVIGATION ── */
+.hdr {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+.hdr-top { display: flex; justify-content: space-between; align-items: center; }
+.brand-wrap { text-align: center; flex: 1; }
+.brand-name { 
+  font-family: 'Great Vibes', cursive; 
+  font-size: 34px; 
+  color: var(--text);
+  letter-spacing: 1px;
+}
+.brand-tag { 
+  font-family: 'Cormorant Garamond', serif; 
+  text-transform: uppercase;
+  font-size: 10px; 
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-top: -5px;
+  display: block;
+}
+.hdr-btn { 
+  width: 42px; height: 42px; border-radius: 50%; 
+  border: none; background: var(--white); 
+  box-shadow: var(--soft-shadow);
+  display: flex; align-items: center; justify-content: center;
+  transition: 0.3s;
+}
 
-.cat-hdr{display:flex!important;justify-content:space-between!important;align-items:center!important;margin:10px 0!important;}
-.cat-title{font-family:'Cormorant Garamond',serif!important;font-size:20px!important;font-weight:700!important;}
-.see-all{color:var(--gold)!important;font-size:13px!important;font-weight:700!important;}
+/* ── SEARCH BAR ── */
+.search-container { padding: 15px 20px; }
+.search-wrap { 
+  background: var(--white); 
+  border-radius: 50px; 
+  display: flex; align-items: center; 
+  padding: 0 20px; height: 50px;
+  box-shadow: var(--soft-shadow);
+}
+.search-wrap input { 
+  border: none; flex: 1; outline: none; 
+  font-size: 14px; margin-left: 12px;
+  color: var(--text);
+}
 
-.cat-pills{display:flex!important;gap:15px!important;overflow-x:auto!important;padding:10px 0!important;scrollbar-width:none!important;}
-.cat-pill{display:flex!important;flex-direction:column!important;align-items:center!important;gap:6px!important;flex-shrink:0!important;}
-.cat-circle{width:50px!important;height:50px!important;border-radius:50%!important;border:1px solid var(--border)!important;background:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important;}
-.cat-pill.active .cat-circle{background:var(--gold)!important;color:#fff!important;border-color:var(--gold)!important;}
-.cat-lbl{font-size:10px!important;font-weight:800!important;text-transform:uppercase!important;letter-spacing:0.5px!important;}
+/* ── CATEGORIES ── */
+.cat-section { padding: 0 20px; margin-bottom: 20px; }
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 600;
+  margin-bottom: 15px; border-left: 3px solid var(--gold);
+  padding-left: 10px;
+}
+.cat-pills { 
+  display: flex; gap: 20px; overflow-x: auto; 
+  padding: 5px 0 15px; scrollbar-width: none; 
+}
+.cat-pill { 
+  display: flex; flex-direction: column; align-items: center; 
+  gap: 8px; flex-shrink: 0; cursor: pointer;
+}
+.cat-circle { 
+  width: 60px; height: 60px; border-radius: 50%; 
+  background: var(--white); border: 1px solid rgba(0,0,0,0.03);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--soft-shadow); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.cat-pill.active .cat-circle { background: var(--text); color: var(--accent); transform: scale(1.1); }
+.cat-lbl { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
 
-/* ── GRID ── */
-.grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:16px!important;padding:16px!important;}
-.card-img-box{position:relative!important;border-radius:24px!important;overflow:hidden!important;aspect-ratio:0.85!important;background:#eee!important;}
-.card-img-box img{width:100%!important;height:100%!important;object-fit:cover!important;}
-.price-tag{position:absolute!important;bottom:12px!important;left:12px!important;background:rgba(255,255,255,0.9)!important;padding:6px 12px!important;border-radius:12px!important;font-weight:800!important;font-size:14px!important;}
+/* ── PRODUCT GRID ── */
+.grid { 
+  display: grid; grid-template-columns: 1fr 1fr; 
+  gap: 20px; padding: 0 20px 40px; 
+}
+.card { 
+  background: var(--white); border-radius: 20px; 
+  overflow: hidden; box-shadow: var(--soft-shadow);
+  transition: transform 0.3s ease;
+}
+.card:active { transform: scale(0.97); }
+.card-img-box { position: relative; aspect-ratio: 0.8; overflow: hidden; }
+.card-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Icons matching your original interactive logic */
-.card-icons{position:absolute!important;bottom:12px!important;right:12px!important;display:flex!important;flex-direction:column!important;gap:8px!important;}
-.icon-btn{width:36px!important;height:36px!important;border-radius:50%!important;background:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 4px 10px rgba(0,0,0,0.1)!important;border:none!important;}
-.icon-btn.bagged{background:#1A1614!important;color:var(--accent)!important;}
+.price-badge {
+  position: absolute; top: 15px; left: 15px;
+  background: var(--white); padding: 5px 12px;
+  border-radius: 30px; font-weight: 700; font-size: 13px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.fav-btn {
+  position: absolute; top: 15px; right: 15px;
+  width: 35px; height: 35px; border-radius: 50%;
+  background: rgba(255,255,255,0.8); border: none;
+  backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center;
+}
 
-.card-meta{padding:10px 4px!important;}
-.card-tag{font-size:9px!important;font-weight:800!important;color:var(--gold)!important;text-transform:uppercase!important;letter-spacing:1px!important;display:block!important;margin-bottom:2px!important;}
-.card-title{font-family:'Cormorant Garamond',serif!important;font-size:16px!important;font-weight:700!important;color:var(--text)!important;}
+.card-info { padding: 15px; }
+.card-tag { 
+  font-size: 9px; font-weight: 700; color: var(--gold); 
+  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; display: block;
+}
+.card-title { 
+  font-family: 'Cormorant Garamond', serif; 
+  font-size: 17px; font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 
-/* ── ABOUT ── */
-.about{padding:40px 16px!important;background:#fff!important;border-top:1px solid var(--border)!important;text-align:center!important;margin-top:20px!important;}
-.about h3{font-family:'Cormorant Garamond',serif!important;font-size:24px!important;margin-bottom:12px!important;}
-.about p{font-size:14px!important;color:#666!important;line-height:1.6!important;margin-bottom:24px!important;}
-.contact-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:12px!important;}
-.contact-link{background:#F9F9F9!important;border:1px solid var(--border)!important;padding:12px!important;border-radius:12px!important;font-size:10px!important;font-weight:700!important;text-transform:uppercase!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;}
+/* ── ABOUT SECTION (LUXE VERSION) ── */
+.about { 
+  background: #1A1614; color: #FFF; 
+  padding: 60px 30px; text-align: center;
+  border-radius: 40px 40px 0 0;
+}
+.about h3 { font-family: 'Great Vibes', cursive; font-size: 40px; color: var(--accent); margin-bottom: 15px; }
+.about p { font-size: 14px; opacity: 0.8; margin-bottom: 30px; font-weight: 300; letter-spacing: 0.5px; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.contact-link { 
+  border: 1px solid rgba(255,255,255,0.2); 
+  padding: 15px; border-radius: 15px; color: #FFF;
+  text-decoration: none; font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1px;
+  transition: 0.3s;
+}
+.contact-link:active { background: var(--accent); color: #000; border-color: var(--accent); }
 
-/* ── SPLASH ── */
-#splash{position:fixed!important;inset:0!important;background:#12100E!important;z-index:1000!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;color:#fff!important;transition:0.6s!important;}
-#splash.hide{opacity:0!important;pointer-events:none!important;}
-#splash h1{font-family:'Great Vibes',cursive!important;font-size:60px!important;}
-#btnShop{margin-top:30px!important;padding:12px 40px!important;border-radius:30px!important;border:1px solid var(--accent)!important;color:#fff!important;font-weight:700!important;text-transform:uppercase!important;font-size:12px!important;letter-spacing:2px!important;}
+/* ── SPLASH SCREEN ── */
+#splash {
+  position: fixed; inset: 0; background: #000; z-index: 1000;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+#splash.hide { transform: translateY(-100%); }
+.splash-logo { font-family: 'Great Vibes', cursive; font-size: 65px; color: var(--white); margin-bottom: 10px; }
+#btnEnter {
+  margin-top: 40px; background: none; border: 1px solid var(--accent);
+  color: #FFF; padding: 12px 50px; border-radius: 50px;
+  font-size: 12px; letter-spacing: 4px; text-transform: uppercase;
+  transition: 0.4s;
+}
 </style>
 </head>
 <body>
 
 <div id="splash">
-  <span style="font-size:10px; letter-spacing:5px; text-transform:uppercase; color:var(--accent);">Ghanaian Women's Fashion</span>
-  <h1>Enis Collection</h1>
-  <button id="btnShop">Shop Now</button>
+  <div style="text-align:center">
+    <span style="font-size:9px; letter-spacing:6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:10px;">Enis Boutique</span>
+    <h1 class="splash-logo">Enis Collection</h1>
+    <button id="btnEnter">Discover</button>
+  </div>
 </div>
 
 <div class="hdr">
   <div class="hdr-top">
-    <div class="spacer"></div>
-    <div class="brand-wrap">
+    <div style="width:42px"></div> <div class="brand-wrap">
       <span class="brand-name">Enis Collection</span>
       <span class="brand-tag">Pamper your body</span>
     </div>
     <button class="hdr-btn"><i class="far fa-bell"></i></button>
   </div>
+</div>
 
-  <div class="search-row">
-    <div class="search-wrap">
-      <i class="fas fa-search" style="color:#ccc"></i>
-      <input type="text" id="searchInput" placeholder="Search pieces...">
-    </div>
-    <button class="filter-btn"><i class="fas fa-sliders-h"></i></button>
-  </div>
-
-  <div class="cat-hdr">
-    <span class="cat-title">Category</span>
-    <span class="see-all">See All <i class="fas fa-arrow-right"></i></span>
-  </div>
-
-  <div class="cat-pills">
-    <div class="cat-pill active"><div class="cat-circle"><i class="fas fa-th-large"></i></div><span class="cat-lbl">All</span></div>
-    <div class="cat-pill"><div class="cat-circle"><i class="fas fa-shopping-bag"></i></div><span class="cat-lbl">Thrift</span></div>
-    <div class="cat-pill"><div class="cat-circle"><i class="fas fa-store"></i></div><span class="cat-lbl">Store</span></div>
+<div class="search-container">
+  <div class="search-wrap">
+    <i class="fas fa-search" style="color:var(--gold)"></i>
+    <input type="text" placeholder="Find your style...">
   </div>
 </div>
 
-<div class="grid" id="grid"></div>
+<div class="cat-section">
+  <h2 class="section-title">Shop by Category</h2>
+  <div class="cat-pills">
+    <div class="cat-pill active"><div class="cat-circle"><i class="fas fa-gem"></i></div><span class="cat-lbl">All</span></div>
+    <div class="cat-pill"><div class="cat-circle"><i class="fas fa-leaf"></i></div><span class="cat-lbl">Thrift</span></div>
+    <div class="cat-pill"><div class="cat-circle"><i class="fas fa-crown"></i></div><span class="cat-lbl">Store</span></div>
+    <div class="cat-pill"><div class="cat-circle"><i class="fas fa-magic"></i></div><span class="cat-lbl">Handmade</span></div>
+  </div>
+</div>
+
+<div class="grid" id="mainGrid"></div>
 
 <div class="about">
   <h3>Our Story</h3>
-  <p>Enis Collection started in 2022 in Cape Coast with a simple goal — help women feel confident and comfortable in what they wear. From carefully selected thrift pieces to handmade outfits, each item is chosen with attention to style and quality.</p>
+  <p>Curating timeless elegance for the modern Ghanaian woman since 2022. From Cape Coast to your wardrobe, we bring you quality that speaks for itself.</p>
   <div class="contact-grid">
-    <a href="https://wa.me/233546527892" class="contact-link"><i class="fab fa-whatsapp" style="color:green"></i> WhatsApp</a>
-    <a href="tel:+233546527892" class="contact-link"><i class="fas fa-phone"></i> Call</a>
-    <a href="https://www.tiktok.com/@eniscollection1" class="contact-link"><i class="fab fa-tiktok"></i> TikTok</a>
-    <a href="mailto:contact@eniscollection.com" class="contact-link"><i class="fas fa-envelope"></i> Email</a>
+    <a href="#" class="contact-link"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+    <a href="#" class="contact-link"><i class="fab fa-instagram"></i> Instagram</a>
+    <a href="#" class="contact-link"><i class="fab fa-tiktok"></i> TikTok</a>
+    <a href="#" class="contact-link"><i class="fas fa-envelope"></i> Contact</a>
   </div>
+  <p style="margin-top:40px; font-size:10px; opacity:0.5;">© 2026 ENIS COLLECTION. ALL RIGHTS RESERVED.</p>
 </div>
 
 <script>
-const PRODUCTS = [
-  {id:1, name:"Thick Seamless Dress", price:50, cat:"THRIFT", img:"images/item1.jpg"},
-  {id:2, name:"Plaited Skirts & Top", price:50, cat:"THRIFT", img:"images/item2.jpg"},
-  {id:3, name:"Short Length Essential", price:45, cat:"THRIFT", img:"images/item3.jpg"},
-  {id:4, name:"Church & Work Gown", price:50, cat:"STORE", img:"images/item4.jpg"},
-  {id:5, name:"Dinner Party Elegance", price:45, cat:"STORE", img:"images/item5.jpg"},
-  {id:6, name:"Lecture & Beach Set", price:45, cat:"STORE", img:"images/item6.jpg"},
-  {id:7, name:"Ruched SHEIN Special", price:50, cat:"THRIFT", img:"images/item7.jpg"},
-  {id:8, name:"Ultimate Work Gown", price:50, cat:"THRIFT", img:"images/item8.jpg"},
-  {id:9, name:"Skirt & Basic Top Duo", price:50, cat:"STORE", img:"images/item9.jpg"},
-  {id:10, name:"Refined Church Wear", price:50, cat:"STORE", img:"images/item10.jpg"}
+const ITEMS = [
+  {id:1, name:"Thick Seamless Dress", price:50, tag:"Thrift Premium", img:"images/item1.jpg"},
+  {id:2, name:"Plaited Skirts & Top", price:50, tag:"Thrift Premium", img:"images/item2.jpg"},
+  {id:3, name:"Short Length Essential", price:45, tag:"Daily Wear", img:"images/item3.jpg"},
+  {id:4, name:"Church & Work Gown", price:50, tag:"Boutique Store", img:"images/item4.jpg"},
+  {id:5, name:"Dinner Party Elegance", price:45, tag:"Special Edition", img:"images/item5.jpg"},
+  {id:6, name:"Lecture & Beach Set", price:45, tag:"Boutique Store", img:"images/item6.jpg"},
+  {id:7, name:"Ruched SHEIN Special", price:50, tag:"Thrift Find", img:"images/item7.jpg"},
+  {id:8, name:"Ultimate Work Gown", price:50, tag:"Professional", img:"images/item8.jpg"},
+  {id:9, name:"Skirt & Basic Top Duo", price:50, tag:"Essentials", img:"images/item9.jpg"},
+  {id:10, name:"Refined Church Wear", price:50, tag:"Boutique Store", img:"images/item10.jpg"}
 ];
 
-function renderGrid() {
-  const grid = document.getElementById('grid');
-  grid.innerHTML = PRODUCTS.map(p => `
+function loadGrid() {
+  const grid = document.getElementById('mainGrid');
+  grid.innerHTML = ITEMS.map(i => `
     <div class="card">
       <div class="card-img-box">
-        <img src="${p.img}" alt="${p.name}">
-        <div class="price-tag">₵${p.price}</div>
-        <div class="card-icons">
-          <button class="icon-btn"><i class="far fa-heart"></i></button>
-          <button class="icon-btn bag-btn"><i class="fas fa-shopping-bag"></i></button>
-        </div>
+        <img src="${i.img}" alt="${i.name}">
+        <div class="price-badge">₵${i.price}</div>
+        <button class="fav-btn"><i class="far fa-heart"></i></button>
       </div>
-      <div class="card-meta">
-        <span class="card-tag">${p.cat}</span>
-        <h4 class="card-title">${p.name}</h4>
+      <div class="card-info">
+        <span class="card-tag">${i.tag}</span>
+        <h4 class="card-title">${i.name}</h4>
       </div>
     </div>
   `).join('');
 }
 
-document.getElementById('btnShop').onclick = () => {
+document.getElementById('btnEnter').onclick = () => {
   document.getElementById('splash').classList.add('hide');
-  renderGrid();
+  loadGrid();
 };
 </script>
+
 </body>
 </html>
