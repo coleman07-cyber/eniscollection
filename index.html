@@ -282,12 +282,14 @@
 
     /* ══════════════════════════════════════════════════════
        PREVIEW MODAL BACKDROP
-       position/top/left/width are set by JS in openPreview()
-       so the backdrop always sits exactly over the app column.
-       Only edit the visual properties below (blur, colours).
+       Lives outside .app-shell so overflow:hidden cannot clip it.
+       position:fixed + inset:0 = covers the full viewport.
+       The card inside is centred with flexbox (align/justify center).
+       DO NOT move #item-preview back inside .app-shell.
     ══════════════════════════════════════════════════════ */
     #item-preview {
         position: fixed;
+        inset: 0;                          /* top/right/bottom/left all = 0 */
         z-index: 10000;
         display: none;
         align-items: center;
@@ -305,7 +307,7 @@
     }
 
     /* ── The card inside the modal ──
-       width: 82% of the column  |  max-width: 310px cap
+       width: 82% of viewport  |  max-width: 310px cap
        height: 68vh = 68% of screen height
        Make bigger: raise width% or max-width
        Make taller: raise 68vh                               */
@@ -721,6 +723,15 @@
 
 </div>
 
+</div><!-- end app-shell -->
+
+<!-- ═══════════════════════════════════════════════════════
+     EVERYTHING BELOW IS OUTSIDE .app-shell ON PURPOSE.
+     The modal, FABs, panels and toast use position:fixed
+     so they must NOT be inside overflow:hidden containers.
+     DO NOT move these back inside .app-shell.
+═══════════════════════════════════════════════════════ -->
+
 <!-- PREVIEW MODAL -->
 
 <div id="item-preview" onclick="closePreview()">
@@ -802,8 +813,6 @@
     </div>
     <div class="panel-body" id="wishlist-body"></div>
 </div>
-
-</div><!-- end app-shell -->
 
 <div id="toast"></div>
 
@@ -984,18 +993,7 @@
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order:\n\n• ${previewProduct.name}\n  Size: ${previewProduct.size}\n  Price: ₵${previewProduct.price}\n  🖼 ${imageUrl}`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
         syncPreviewState();
-
-        // ── Position the modal backdrop exactly over the app column ──
-        // This reads the app-shell's real position on screen so it works
-        // whether the site is viewed on mobile, desktop, or as a PWA.
         const modal = document.getElementById('item-preview');
-        const shell = document.querySelector('.app-shell');
-        const r = shell.getBoundingClientRect();
-        modal.style.top    = r.top + 'px';
-        modal.style.left   = r.left + 'px';
-        modal.style.width  = r.width + 'px';
-        modal.style.height = r.height + 'px';
-
         modal.style.display = 'flex';
         requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add('active')));
     }
