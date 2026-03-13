@@ -280,38 +280,63 @@
     .contact-card-text p  { font-size: 9px; color: var(--text-soft); margin-top: 2px; font-weight: 500; }
     .about-stamp { text-align: center; padding: 40px 22px 0; font-size: 8px; letter-spacing: 4px; font-weight: 700; color: var(--text-soft); opacity: 0.35; text-transform: uppercase; }
 
-    /* ══════════════════════════════
-       PREVIEW MODAL
-       KEY FIX: position: fixed so it covers the full viewport,
-       not just the 420px app-shell column.
-    ══════════════════════════════ */
+    /* ══════════════════════════════════════════════════════
+       PREVIEW MODAL BACKDROP
+       - position: fixed  → covers the whole browser window
+       - left: 50% + translateX(-50%) + max-width: 420px
+         → locks the backdrop over the app column only,
+         so the card always appears centred on the app
+         no matter how wide the screen is
+       To change modal width: edit max-width below (matches app-shell)
+    ══════════════════════════════════════════════════════ */
     #item-preview {
-        position: fixed;          /* ← was: absolute */
-        inset: 0;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 420px;      /* ← keep this the same as .app-shell max-width */
         z-index: 10000;
         display: none;
         align-items: center;
         justify-content: center;
-        background: rgba(0,0,0,0);
-        backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
+        background: rgba(0, 0, 0, 0);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
         transition: background 0.4s ease, backdrop-filter 0.4s ease;
     }
     #item-preview.active {
         display: flex;
-        background: rgba(0,0,0,0.65);
-        backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
     }
 
+    /* ── The card inside the modal ──
+       width: 82% of the modal (so 82% of 420px = ~344px)
+       max-width: 310px  → cap it so it's not too large on desktop
+       height: 68vh      → 68% of screen height
+       To make the card bigger: increase width % or max-width
+       To make it taller: increase 68vh                          */
     .preview-box {
-        width: 82%; max-width: 310px; height: 68vh;
-        border-radius: 44px; overflow: hidden; position: relative;
-        transform: scale(0.88) translateY(30px); opacity: 0;
+        width: 82%;
+        max-width: 310px;
+        height: 68vh;
+        border-radius: 44px;
+        overflow: hidden;
+        position: relative;
+        transform: scale(0.88) translateY(30px);
+        opacity: 0;
         transition: transform 0.55s var(--ease-spring), opacity 0.4s ease;
-        box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-        outline: 5px solid rgba(255,255,255,0.82);
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+        outline: 5px solid rgba(255, 255, 255, 0.82);
         outline-offset: 0px;
     }
-    #item-preview.active .preview-box { transform: scale(1) translateY(0); opacity: 1; }
+    #item-preview.active .preview-box {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
 
     /* Full-bleed image */
     .preview-img-fill { position: absolute; inset: 0; }
