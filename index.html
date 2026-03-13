@@ -359,61 +359,127 @@
     }
 
     /* ══════════════════════════════
-       PREVIEW MODAL — BOTTOM SHEET
+       PREVIEW MODAL — FULL-CARD (Dubai style)
     ══════════════════════════════ */
     #item-preview {
         position: fixed; inset: 0; z-index: 10000;
-        background: rgba(0,0,0,0); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
-        display: none; align-items: flex-end; justify-content: center;
-        transition: background 0.45s ease, backdrop-filter 0.45s ease;
+        display: none; align-items: center; justify-content: center;
+        padding: 24px 20px;
+        background: rgba(0,0,0,0);
+        backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
+        transition: background 0.4s ease, backdrop-filter 0.4s ease;
     }
     #item-preview.active {
-        display: flex; background: rgba(0,0,0,0.5); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        display: flex;
+        background: rgba(0,0,0,0.65);
+        backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
     }
+
     .preview-box {
-        width: 100%; max-width: 420px; background: var(--card-bg);
-        border-radius: 36px 36px 0 0;
-        transform: translateY(100%);
-        transition: transform 0.5s var(--ease-spring);
-        box-shadow: 0 -20px 60px rgba(0,0,0,0.2);
+        width: 100%; max-width: 360px;
+        height: 78vh;
+        border-radius: 32px;
         overflow: hidden;
-        padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+        position: relative;
+        transform: scale(0.88) translateY(30px);
+        opacity: 0;
+        transition: transform 0.55s var(--ease-spring), opacity 0.4s ease;
+        box-shadow: 0 40px 100px rgba(0,0,0,0.6);
     }
-    #item-preview.active .preview-box { transform: translateY(0); }
-
-    /* Drag handle */
-    .preview-handle {
-        width: 36px; height: 4px; border-radius: 2px;
-        background: rgba(0,0,0,0.15); margin: 12px auto 0;
-    }
-    @media (prefers-color-scheme: dark) { .preview-handle { background: rgba(255,255,255,0.15); } }
-
-    .preview-img-wrap {
-        position: relative; width: 100%; height: 280px; overflow: hidden; margin-top: 8px;
-    }
-    .preview-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
-    .preview-img-wrap::after {
-        content:''; position:absolute; bottom:0; left:0; right:0; height:40%;
-        background: linear-gradient(to top, var(--card-bg), transparent);
-        pointer-events: none;
+    #item-preview.active .preview-box {
+        transform: scale(1) translateY(0);
+        opacity: 1;
     }
 
-    .preview-info { padding: 0 20px 4px; }
-    .preview-meta { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-    .preview-name-block h2 {
-        font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900;
-        color: var(--text-main); line-height: 1.2;
+    /* Full-bleed image */
+    .preview-img-fill {
+        position: absolute; inset: 0;
     }
-    .preview-name-block p {
-        font-size: 11px; color: var(--text-soft); margin-top: 4px; font-weight: 600;
+    .preview-img-fill img {
+        width: 100%; height: 100%; object-fit: cover;
+        transition: transform 0.6s var(--ease-luxury);
     }
-    .preview-price-badge {
-        background: var(--grad); color: #fff;
-        padding: 8px 14px; border-radius: 50px;
-        font-size: 13px; font-weight: 800; flex-shrink: 0;
-        box-shadow: 0 4px 14px rgba(124,58,237,0.3);
+
+    /* Gradient overlays — dark at top & strong at bottom */
+    .preview-img-fill::before {
+        content: ''; position: absolute; inset: 0; z-index: 1;
+        background: linear-gradient(
+            180deg,
+            rgba(0,0,0,0.30) 0%,
+            transparent 35%,
+            transparent 50%,
+            rgba(0,0,0,0.75) 80%,
+            rgba(0,0,0,0.92) 100%
+        );
     }
-    .preview-actions { display: flex; flex-direction: column; gap: 8px; padding: 0 20px; }
+
+    /* Heart wishlist button — top right like reference */
+    .preview-wish-circle {
+        position: absolute; top: 18px; right: 18px; z-index: 10;
+        width: 46px; height: 46px; border-radius: 50%;
+        background: rgba(255,255,255,0.18); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.25);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: transform 0.3s var(--ease-spring), background 0.25s;
+    }
+    .preview-wish-circle i { font-size: 18px; color: #fff; transition: transform 0.3s var(--ease-spring); }
+    .preview-wish-circle.wishlisted { background: rgba(229,62,62,0.35); border-color: rgba(229,62,62,0.5); }
+    .preview-wish-circle.wishlisted i { color: #ff6b6b; transform: scale(1.2); }
+    .preview-wish-circle:active { transform: scale(0.88); }
+
+    /* Text overlay — bottom of image */
+    .preview-text-overlay {
+        position: absolute; bottom: 0; left: 0; right: 0; z-index: 5;
+        padding: 24px 22px 20px;
+    }
+    .preview-overlay-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 26px; font-weight: 900;
+        color: #fff; line-height: 1.15; margin-bottom: 6px;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    .preview-overlay-sub {
+        font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.75);
+        margin-bottom: 14px; letter-spacing: 0.2px;
+    }
+    .preview-overlay-meta {
+        display: flex; align-items: center; gap: 18px;
+        margin-bottom: 20px;
+    }
+    .preview-meta-chip {
+        display: flex; align-items: center; gap: 7px;
+        font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.9);
+    }
+    .preview-meta-chip i { font-size: 14px; color: rgba(255,255,255,0.7); }
+
+    /* Order button — white pill like "Search flight" in reference */
+    .preview-order-btn {
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        width: 100%; padding: 17px;
+        background: #fff; color: #0A0A0A;
+        border-radius: 50px; border: none;
+        font-size: 14px; font-weight: 800; letter-spacing: 0.3px;
+        font-family: 'Montserrat', sans-serif;
+        text-decoration: none; cursor: pointer;
+        transition: transform 0.2s var(--ease-spring), box-shadow 0.2s;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .preview-order-btn:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+    .preview-order-btn i { color: #25D366; font-size: 18px; }
+
+    /* Add to bag - ghost button below */
+    .preview-bag-btn {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        width: 100%; padding: 14px;
+        background: rgba(255,255,255,0.12); backdrop-filter: blur(8px);
+        color: #fff; border-radius: 50px;
+        border: 1px solid rgba(255,255,255,0.25);
+        font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+        font-family: 'Montserrat', sans-serif; cursor: pointer; margin-top: 8px;
+        transition: background 0.25s, transform 0.2s var(--ease-spring);
+    }
+    .preview-bag-btn:active { transform: scale(0.97); }
+    .preview-bag-btn.added { background: rgba(124,58,237,0.35); border-color: rgba(124,58,237,0.5); }
 
     /* ══════════════════════════════
        SPLASH (preserved)
@@ -697,28 +763,36 @@
 <!-- ═══════════ PREVIEW MODAL ═══════════ -->
 <div id="item-preview" onclick="closePreview()">
     <div class="preview-box" onclick="event.stopPropagation()">
-        <div class="preview-handle"></div>
-        <div class="preview-img-wrap">
+
+        <!-- Full-bleed image -->
+        <div class="preview-img-fill">
             <img id="preview-img" src="">
-            <button id="preview-wish-btn" class="wish-btn" style="top:14px;right:14px;width:38px;height:38px;" onclick="toggleWishFromPreview()">
-                <i class="fas fa-heart" style="font-size:15px;"></i>
-            </button>
         </div>
-        <div class="preview-info">
-            <div class="preview-meta">
-                <div class="preview-name-block">
-                    <h2 id="preview-name"></h2>
-                    <p id="preview-price"></p>
+
+        <!-- Heart — top right like the reference -->
+        <button class="preview-wish-circle" id="preview-wish-btn" onclick="toggleWishFromPreview()">
+            <i class="fas fa-heart"></i>
+        </button>
+
+        <!-- Text + buttons overlay at bottom -->
+        <div class="preview-text-overlay">
+            <div class="preview-overlay-name" id="preview-name"></div>
+            <div class="preview-overlay-sub" id="preview-price"></div>
+            <div class="preview-overlay-meta">
+                <div class="preview-meta-chip">
+                    <i class="fas fa-tag"></i>
+                    <span id="preview-price-badge"></span>
                 </div>
-                <div class="preview-price-badge" id="preview-price-badge"></div>
+                <div class="preview-meta-chip">
+                    <i class="fas fa-ruler-horizontal"></i>
+                    <span id="preview-size-chip"></span>
+                </div>
             </div>
-        </div>
-        <div class="preview-actions">
-            <a id="wa-btn" href="#" style="background:#25D366; color:white; padding:15px; border-radius:18px; text-decoration:none; font-weight:800; display:flex; align-items:center; gap:10px; font-size:12px; justify-content:center; box-shadow: 0 6px 20px rgba(37,211,102,0.3); font-family:'Montserrat',sans-serif; letter-spacing:0.5px;">
-                <i class="fab fa-whatsapp" style="font-size:16px;"></i> ORDER VIA WHATSAPP
+            <a id="wa-btn" href="#" class="preview-order-btn">
+                <i class="fab fa-whatsapp"></i> Order via WhatsApp
             </a>
-            <button id="preview-cart-btn" onclick="addToCartFromPreview()" style="width:100%; padding:15px; border-radius:18px; border:1.5px solid var(--border); background:var(--bg); color:var(--text-main); font-size:12px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; font-family:'Montserrat',sans-serif; transition: all 0.25s var(--ease-luxury); letter-spacing:0.5px;">
-                <i class="fas fa-shopping-bag"></i> ADD TO BAG
+            <button id="preview-cart-btn" class="preview-bag-btn" onclick="addToCartFromPreview()">
+                <i class="fas fa-shopping-bag"></i> Add to Bag
             </button>
         </div>
     </div>
@@ -987,8 +1061,9 @@
         previewProduct = myProducts.find(p => p.id === id);
         document.getElementById('preview-img').src = previewProduct.image;
         document.getElementById('preview-name').innerText = previewProduct.name;
-        document.getElementById('preview-price').innerText = `Size UK ${previewProduct.size}`;
-        document.getElementById('preview-price-badge').innerText = `₵${previewProduct.price}`;
+        document.getElementById('preview-price').innerText = 'Enis Collection';
+        document.getElementById('preview-price-badge').innerText = `from ₵${previewProduct.price}`;
+        document.getElementById('preview-size-chip').innerText = `UK ${previewProduct.size}`;
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order: ${previewProduct.name} (Size ${previewProduct.size})`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
         syncPreviewState();
@@ -1011,10 +1086,8 @@
         const cb = document.getElementById('preview-cart-btn');
         if (wb) wb.classList.toggle('wishlisted', liked);
         if (cb) {
-            cb.innerHTML = `<i class="fas ${inCart ? 'fa-check' : 'fa-shopping-bag'}"></i> ${inCart ? 'IN BAG' : 'ADD TO BAG'}`;
-            cb.style.background = inCart ? 'var(--grad-soft)' : 'var(--bg)';
-            cb.style.color = inCart ? 'var(--accent-violet)' : 'var(--text-main)';
-            cb.style.borderColor = inCart ? 'var(--accent-violet)' : 'var(--border)';
+            cb.className = 'preview-bag-btn' + (inCart ? ' added' : '');
+            cb.innerHTML = `<i class="fas ${inCart ? 'fa-check' : 'fa-shopping-bag'}"></i> ${inCart ? 'In Bag ✓' : 'Add to Bag'}`;
         }
     }
 
