@@ -281,11 +281,17 @@
     .about-stamp { text-align: center; padding: 40px 22px 0; font-size: 8px; letter-spacing: 4px; font-weight: 700; color: var(--text-soft); opacity: 0.35; text-transform: uppercase; }
 
     /* ══════════════════════════════
-       PREVIEW MODAL — original full-image design, reduced size
+       PREVIEW MODAL
+       KEY FIX: position: fixed so it covers the full viewport,
+       not just the 420px app-shell column.
     ══════════════════════════════ */
     #item-preview {
-        position: absolute; inset: 0; z-index: 10000;
-        display: none; align-items: center; justify-content: center;
+        position: fixed;          /* ← was: absolute */
+        inset: 0;
+        z-index: 10000;
+        display: none;
+        align-items: center;
+        justify-content: center;
         background: rgba(0,0,0,0);
         backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
         transition: background 0.4s ease, backdrop-filter 0.4s ease;
@@ -369,7 +375,7 @@
     .preview-order-btn:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
     .preview-order-btn i { color: #25D366; font-size: 16px; }
 
-    /* Add to Bag — same frosted circle as wishlist, sits in stack below it */
+    /* Add to Bag */
     .preview-bag-btn {
         width: 40px; height: 40px; border-radius: 50%;
         background: rgba(255,255,255,0.18); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
@@ -413,7 +419,6 @@
     }
     .fab:active { transform: scale(0.88); }
 
-    /* Wishlist FAB — warm dark */
     .fab-wish {
         background: linear-gradient(145deg, #1e1219, #2d1a22);
         color: #ff6b8a;
@@ -422,7 +427,6 @@
     }
     .fab-wish:hover { box-shadow: 0 12px 32px rgba(229,62,62,0.38), 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08); }
 
-    /* Cart FAB — cool dark gold */
     .fab-cart {
         background: linear-gradient(145deg, #1a1710, #261f0d);
         color: #e6bb4a;
@@ -661,7 +665,7 @@
 
 </div>
 
-<!-- PREVIEW MODAL — original full-image card, reduced -->
+<!-- PREVIEW MODAL -->
 
 <div id="item-preview" onclick="closePreview()">
     <div class="preview-box" onclick="event.stopPropagation()">
@@ -670,7 +674,6 @@
         </div>
 
 ```
-    <!-- Wishlist + Cart stacked top-right -->
     <div class="preview-action-stack">
         <button class="preview-wish-circle" id="preview-wish-btn" onclick="toggleWishFromPreview()">
             <i class="fas fa-heart"></i>
@@ -680,7 +683,6 @@
         </button>
     </div>
 
-    <!-- Name, sub, price+size, WA button all together at bottom -->
     <div class="preview-text-overlay">
         <div class="preview-overlay-name" id="preview-name"></div>
         <div class="preview-overlay-sub" id="preview-sub">Enis Collection</div>
@@ -745,7 +747,7 @@
     <div class="panel-body" id="wishlist-body"></div>
 </div>
 
-</div>
+</div><!-- end app-shell -->
 
 <div id="toast"></div>
 
