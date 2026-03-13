@@ -854,7 +854,7 @@
         document.getElementById('preview-name').innerText = previewProduct.name;
         document.getElementById('preview-price').innerText = 'Enis Collection';
         document.getElementById('preview-price-badge').innerText = `price ₵${previewProduct.price}`;
-        document.getElementById('preview-size-chip').innerText = `UK ${previewProduct.size}`;
+        document.getElementById('preview-size-chip').innerText = `size ${previewProduct.size}`;
         const imageUrl = `https://eniscollection.vercel.app/${previewProduct.image}`;
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order:\n\n• ${previewProduct.name}\n  Size: ${previewProduct.size}\n  Price: ₵${previewProduct.price}\n  🖼 ${imageUrl}`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
