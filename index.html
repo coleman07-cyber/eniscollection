@@ -10,97 +10,75 @@
 :root {
   --bg: #FDFCFB; 
   --text: #1A1614;
-  --yellow: #F2C94C; /* Your Custom Yellow */
-  --brown: #6B3E26;  /* Your Custom Brown */
+  --gold: #C5A059;
   --white: #FFFFFF;
-  --radius: 28px;
+  --radius: 30px;
 }
 
-/* ── SMOOTH SCROLL LOGIC ── */
+/* ── SMOOTH TOUCH LOGIC ── */
 * { 
   margin:0; padding:0; box-sizing:border-box; 
   -webkit-tap-highlight-color:transparent; 
-  touch-action: pan-y; 
+  touch-action: pan-y; /* Fixes glitchy scrolling vs tapping */
 }
 body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-/* ── CENTERED PREVIOUS SPLASH STYLE ── */
+/* ── RESTORED PREVIOUS SPLASH STYLE ── */
 #splash {
   position: fixed; inset: 0; z-index: 3000;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   background: #12100E url('images/Splash-Dress.PNG') center/cover no-repeat;
   transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
 }
-#splash::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.65); }
-.splash-content { position: relative; z-index: 1; text-align: center; color: white; }
-.splash-logo { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 600; }
+#splash::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
 #splash.hide { transform: translateY(-100%); }
+.splash-content { position: relative; z-index: 1; text-align: center; color: white; }
+.splash-logo { font-family: 'Playfair Display', serif; font-size: 42px; margin-bottom: 5px; }
 
 /* ── HEADER ── */
 .hdr { position: sticky; top: 0; z-index: 100; background: rgba(253, 252, 251, 0.95); backdrop-filter: blur(15px); padding: 15px 20px; text-align: center; }
-.brand-name { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 600; color: var(--brown); }
-.brand-tag { font-family: 'Outfit', sans-serif; text-transform: uppercase; font-size: 8px; letter-spacing: 5px; color: var(--yellow); font-weight: 700; display: block; margin-top: 4px; }
+.brand-name { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 600; color: var(--text); }
+.brand-tag { font-family: 'Montserrat', sans-serif; text-transform: uppercase; font-size: 8px; letter-spacing: 4px; color: var(--gold); font-weight: 600; display: block; margin-top: 4px; }
 
 /* ── CATEGORIES (BLACK THEME) ── */
 .cat-section { padding: 20px; }
 .cat-pills { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
 .cat-pill { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; min-width: 65px; }
-.cat-circle { width: 58px; height: 58px; border-radius: 50%; background: var(--white); display: flex; align-items: center; justify-content: center; border: 1px solid #f0f0f0; transition: 0.3s; color: #777; font-size: 18px; }
+.cat-circle { width: 58px; height: 58px; border-radius: 50%; background: var(--white); display: flex; align-items: center; justify-content: center; border: 1px solid #f0f0f0; transition: 0.3s; color: #777; }
 .cat-pill.active .cat-circle { background: var(--text); color: var(--white); border-color: var(--text); }
-.cat-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; color: #BBB; letter-spacing: 1px; }
+.cat-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; color: #BBB; }
 
 /* ── PRODUCT GRID ── */
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 40px; }
-.card-img-box { position: relative; aspect-ratio: 0.75; border-radius: var(--radius); overflow: hidden; background: #f5f5f5; box-shadow: 0 10px 25px rgba(0,0,0,0.03); }
+.card-img-box { position: relative; aspect-ratio: 0.75; border-radius: 28px; overflow: hidden; background: #f5f5f5; }
 .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-/* CUSTOM COLOR DIFFERENTIATION: BROWN/YELLOW PRICE TAG */
-.modern-price { 
-  position: absolute; bottom: 12px; left: 12px; 
-  background: var(--brown); color: var(--yellow); 
-  padding: 6px 14px; border-radius: 12px; font-weight: 700; font-size: 11px;
-}
+/* BLACK PRICE TAG */
+.modern-price { position: absolute; bottom: 12px; left: 12px; background: var(--text); color: var(--gold); padding: 6px 12px; border-radius: 12px; font-weight: 700; font-size: 11px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
+/* ACTION BUTTONS */
 .action-overlay { position: absolute; top: 12px; right: 12px; display: flex; flex-direction: column; gap: 8px; }
-.icon-btn { 
-  width: 34px; height: 34px; border-radius: 50%; border: none; 
-  background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; 
-  cursor: pointer; font-size: 14px; color: #444; 
-}
-.icon-btn.active-cart { background: var(--yellow); color: var(--brown); }
+.icon-btn { width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: #444; }
+.icon-btn.active-cart { background: var(--gold); color: white; }
 
 /* ── FLOATING UI ── */
 .float-bar { position: fixed; bottom: 25px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
-.modern-float { 
-  width: 48px; height: 48px; background: var(--brown); color: var(--yellow); 
-  border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-  font-size: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); cursor: pointer; position: relative;
-}
-.m-badge { 
-  position: absolute; top: -4px; right: -4px; background: var(--yellow); 
-  color: var(--brown); font-size: 9px; width: 18px; height: 18px; border-radius: 50%; 
-  display: flex; align-items: center; justify-content: center; border: 2px solid var(--brown); 
-}
+.modern-float { width: 48px; height: 48px; background: var(--text); color: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); cursor: pointer; position: relative; }
+.m-badge { position: absolute; top: -4px; right: -4px; background: var(--gold); color: white; font-size: 9px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--text); }
 
-/* ── COMPACT DRAWER ITEMS ── */
-.drawer { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: flex-end; }
+/* ── SMALLER DRAWER ITEMS ── */
+.drawer { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: flex-end; }
 .drawer.open { display: flex; }
-.drawer-content { width: 100%; background: var(--white); border-radius: 35px 35px 0 0; padding: 25px 20px; max-height: 70vh; overflow-y: auto; }
+.drawer-content { width: 100%; background: var(--white); border-radius: 35px 35px 0 0; padding: 30px 20px; max-height: 70vh; overflow-y: auto; }
 .small-item { display: flex; gap: 12px; margin-bottom: 12px; align-items: center; border-bottom: 1px solid #f9f9f9; padding-bottom: 10px; }
 .small-item img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
 .small-item b { font-size: 13px; font-weight: 500; }
-.small-item span { color: var(--brown); font-size: 12px; font-weight: 600; }
+.small-item span { color: var(--gold); font-size: 12px; }
 
-/* ── MODERN ABOUT SECTION ── */
-.about-section { background: var(--brown); color: white; padding: 60px 25px 120px; border-radius: 40px 40px 0 0; text-align: center; }
-.about-section h3 { font-family: 'Playfair Display'; color: var(--yellow); font-size: 28px; }
-.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 25px; }
-.contact-link { 
-  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
-  padding: 15px; border-radius: 15px; color: white; text-decoration: none; 
-  font-size: 12px; display: flex; flex-direction: column; gap: 8px; align-items: center; 
-}
-.contact-link i { color: var(--yellow); font-size: 18px; }
+/* ── ABOUT ── */
+.about-section { background: #12100E; color: white; padding: 60px 25px 120px; border-radius: 40px 40px 0 0; text-align: center; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+.contact-link { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; color: white; text-decoration: none; font-size: 12px; display: flex; flex-direction: column; gap: 8px; align-items: center; }
 </style>
 </head>
 <body>
@@ -108,8 +86,7 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
 <div id="splash">
   <div class="splash-content">
     <h1 class="splash-logo">Enis Collection</h1>
-    <p style="letter-spacing:4px; font-size:9px; opacity:0.8; margin-top:5px;">PAMPER YOUR BODY</p>
-    <button onclick="document.getElementById('splash').classList.add('hide')" style="margin-top:25px; background:var(--yellow); border:none; color:var(--brown); padding:14px 40px; border-radius:50px; text-transform:uppercase; font-size:10px; font-weight:700; letter-spacing:2px;">Explore Shop</button>
+    <button onclick="document.getElementById('splash').classList.add('hide')" style="margin-top:20px; background:transparent; border:1px solid var(--gold); color:white; padding:12px 40px; border-radius:50px; text-transform:uppercase; font-size:10px; letter-spacing:2px;">Enter Shop</button>
   </div>
 </div>
 
@@ -135,13 +112,13 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
 </div>
 
 <div class="about-section">
-  <h3>Our Boutique</h3>
-  <p style="margin-top:15px; font-size:14px; opacity:0.7; line-height:1.6;">Dedicated to bringing you the finest pieces that celebrate your elegance.</p>
+  <h3 style="font-family:'Playfair Display'; font-size:28px; color:var(--gold);">Enis Boutique</h3>
+  <p style="margin-top:10px; font-size:13px; opacity:0.6;">Curated fashion for your unique style.</p>
   <div class="contact-grid">
-    <a href="https://wa.me/233546527892" class="contact-link"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-    <a href="tel:+233546527892" class="contact-link"><i class="fas fa-phone-alt"></i> Call Us</a>
-    <a href="mailto:Sheilaenima@gmail.com" class="contact-link"><i class="far fa-envelope"></i> Email</a>
-    <a href="https://www.tiktok.com/@eniscollection1" class="contact-link"><i class="fab fa-tiktok"></i> TikTok</a>
+    <a href="https://wa.me/233546527892" class="contact-link"><i class="fab fa-whatsapp" style="color:var(--gold)"></i> WhatsApp</a>
+    <a href="tel:+233546527892" class="contact-link"><i class="fas fa-phone-alt" style="color:var(--gold)"></i> Call</a>
+    <a href="mailto:Sheilaenima@gmail.com" class="contact-link"><i class="far fa-envelope" style="color:var(--gold)"></i> Email</a>
+    <a href="https://www.tiktok.com/@eniscollection1" class="contact-link"><i class="fab fa-tiktok" style="color:var(--gold)"></i> TikTok</a>
   </div>
 </div>
 
@@ -149,7 +126,7 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(
   <div class="drawer-content" onclick="event.stopPropagation()">
     <h2 id="d-title" style="font-family:'Playfair Display'; margin-bottom:20px; font-size:20px;"></h2>
     <div id="d-list"></div>
-    <button id="checkout-btn" onclick="sendWA()" style="display:none; width:100%; padding:20px; background:var(--brown); color:var(--yellow); border-radius:18px; border:none; margin-top:15px; font-weight:700;">Order on WhatsApp</button>
+    <button id="checkout-btn" onclick="sendWA()" style="display:none; width:100%; padding:18px; background:var(--text); color:var(--gold); border-radius:15px; border:none; margin-top:15px; font-weight:700;">Order on WhatsApp</button>
   </div>
 </div>
 
@@ -175,7 +152,7 @@ function renderGrid(f = 'ALL') {
   g.innerHTML = items.map(p => `
     <div class="card">
       <div class="card-img-box">
-        <img src="${p.img}" loading="lazy">
+        <img src="${p.img}">
         <div class="modern-price">₵${p.price}</div>
         <div class="action-overlay">
           <button onclick="toggle('wish', ${p.id})" class="icon-btn"><i class="${wish.includes(p.id)?'fa-solid':'fa-regular'} fa-heart" style="${wish.includes(p.id)?'color:#e74c3c':''}"></i></button>
@@ -198,7 +175,7 @@ function toggle(type, id) {
 function openDrawer(type) {
   const d = document.getElementById('drawer');
   const list = type === 'wish' ? wish : cart;
-  document.getElementById('d-title').innerText = type === 'wish' ? 'My Favorites' : 'Shopping Bag';
+  document.getElementById('d-title').innerText = type === 'wish' ? 'Favorites' : 'Cart Items';
   document.getElementById('checkout-btn').style.display = type === 'cart' && list.length ? 'block' : 'none';
   
   document.getElementById('d-list').innerHTML = list.length ? list.map(id => {
@@ -206,9 +183,9 @@ function openDrawer(type) {
     return `<div class="small-item">
       <img src="${p.img}">
       <div style="flex:1"><b>${p.name}</b><br><span>₵${p.price}</span></div>
-      <i class="fa-solid fa-trash-can" style="color:#eee; font-size:12px; padding:5px;" onclick="toggle('${type}', ${p.id}); openDrawer('${type}')"></i>
+      <i class="fa-solid fa-trash" style="color:#eee; font-size:12px;" onclick="toggle('${type}', ${p.id}); openDrawer('${type}')"></i>
     </div>`;
-  }).join('') : '<p style="text-align:center; padding:30px; color:#ccc; font-size:12px;">No items selected.</p>';
+  }).join('') : '<p style="text-align:center; padding:20px; color:#ccc; font-size:12px;">Nothing here yet.</p>';
   d.classList.add('open');
 }
 
@@ -220,7 +197,7 @@ function filterCat(c, el) {
 
 function sendWA() {
   const items = cart.map(id => DB.find(x => x.id === id).name).join(', ');
-  window.open(`https://wa.me/233546527892?text=Order: ${items}`);
+  window.open(`https://wa.me/233546527892?text=Order Request: ${items}`);
 }
 
 renderGrid();
