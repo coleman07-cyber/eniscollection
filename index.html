@@ -9,434 +9,157 @@
 <style>
 :root{
   --bg:#FDFCFB; 
-  --surface:#FFFFFF;
-  --surface2:#F9F6F2;
   --text:#1A1614;
-  --text2:#5C544E;
-  --muted:#A39C94;
-  --accent:#D4AF37;
-  --accent-light:#F9F1D7;
   --gold:#C5A059;
-  --green:#10B981;
-  --border:rgba(212,175,55,0.15);
-  --border-md:rgba(212,175,55,0.3);
-  --sh-sm:0 4px 12px rgba(26,22,20,0.05);
-  --sh-md:0 12px 32px rgba(26,22,20,0.08);
-  --ease:cubic-bezier(0.23, 1, 0.32, 1);
+  --accent:#D4AF37;
+  --border:rgba(0,0,0,0.05);
 }
-*,*::before,*::after{
-  margin:0!important;padding:0!important;box-sizing:border-box!important;
-  -webkit-tap-highlight-color:transparent!important;
-  outline:none!important;
-  scrollbar-width:none!important;
-  -webkit-appearance:none!important;
-  appearance:none!important;
-}
-*::-webkit-scrollbar{display:none!important;}
-html,body{height:100%!important;width:100%!important;overflow:hidden!important;background:var(--bg)!important;}
-body{position:fixed!important;width:100%!important;font-family:'DM Sans',sans-serif!important;color:var(--text)!important;-webkit-text-size-adjust:100%!important;}
-img{display:block!important;max-width:100%!important;border:none!important;}
-a{text-decoration:none!important;color:inherit!important;}
-button{font-family:'DM Sans',sans-serif!important;cursor:pointer!important;border:none!important;background:none!important;color:inherit!important;-webkit-appearance:none!important;appearance:none!important;}
+*,*::before,*::after{margin:0!important;padding:0!important;box-sizing:border-box!important;-webkit-tap-highlight-color:transparent!important;}
+body{font-family:'DM Sans',sans-serif!important;background:var(--bg)!important;color:var(--text)!important;overflow-x:hidden!important;}
+
+/* ── HEADER (CENTERED) ── */
+.hdr{padding:20px 16px 10px!important;}
+.hdr-top{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-bottom:15px!important;}
+.brand-wrap{text-align:center!important;flex:1!important;} 
+.brand-name{font-family:'Great Vibes',cursive!important;font-size:32px!important;line-height:1!important;}
+.brand-tag{font-family:'Cormorant Garamond',serif!important;font-style:italic!important;font-size:12px!important;color:var(--gold)!important;display:block!important;}
+.hdr-btn{width:40px!important;height:40px!important;border-radius:50%!important;border:1px solid var(--border)!important;background:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+.spacer{width:40px!important;}
+
+/* ── SEARCH & CATEGORY ── */
+.search-row{display:flex!important;gap:10px!important;margin:15px 0!important;}
+.search-wrap{flex:1!important;background:#fff!important;border:1px solid var(--border)!important;border-radius:25px!important;display:flex!important;align-items:center!important;padding:0 15px!important;height:46px!important;}
+.search-wrap input{border:none!important;flex:1!important;outline:none!important;font-size:14px!important;margin-left:8px!important;}
+.filter-btn{width:46px!important;height:46px!important;border-radius:50%!important;background:#222!important;color:var(--accent)!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+
+.cat-hdr{display:flex!important;justify-content:space-between!important;align-items:center!important;margin:10px 0!important;}
+.cat-title{font-family:'Cormorant Garamond',serif!important;font-size:20px!important;font-weight:700!important;}
+.see-all{color:var(--gold)!important;font-size:13px!important;font-weight:700!important;}
+
+.cat-pills{display:flex!important;gap:15px!important;overflow-x:auto!important;padding:10px 0!important;scrollbar-width:none!important;}
+.cat-pill{display:flex!important;flex-direction:column!important;align-items:center!important;gap:6px!important;flex-shrink:0!important;}
+.cat-circle{width:50px!important;height:50px!important;border-radius:50%!important;border:1px solid var(--border)!important;background:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+.cat-pill.active .cat-circle{background:var(--gold)!important;color:#fff!important;border-color:var(--gold)!important;}
+.cat-lbl{font-size:10px!important;font-weight:800!important;text-transform:uppercase!important;letter-spacing:0.5px!important;}
+
+/* ── GRID ── */
+.grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:16px!important;padding:16px!important;}
+.card-img-box{position:relative!important;border-radius:24px!important;overflow:hidden!important;aspect-ratio:0.85!important;background:#eee!important;}
+.card-img-box img{width:100%!important;height:100%!important;object-fit:cover!important;}
+.price-tag{position:absolute!important;bottom:12px!important;left:12px!important;background:rgba(255,255,255,0.9)!important;padding:6px 12px!important;border-radius:12px!important;font-weight:800!important;font-size:14px!important;}
+
+/* Icons matching your original interactive logic */
+.card-icons{position:absolute!important;bottom:12px!important;right:12px!important;display:flex!important;flex-direction:column!important;gap:8px!important;}
+.icon-btn{width:36px!important;height:36px!important;border-radius:50%!important;background:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 4px 10px rgba(0,0,0,0.1)!important;border:none!important;}
+.icon-btn.bagged{background:#1A1614!important;color:var(--accent)!important;}
+
+.card-meta{padding:10px 4px!important;}
+.card-tag{font-size:9px!important;font-weight:800!important;color:var(--gold)!important;text-transform:uppercase!important;letter-spacing:1px!important;display:block!important;margin-bottom:2px!important;}
+.card-title{font-family:'Cormorant Garamond',serif!important;font-size:16px!important;font-weight:700!important;color:var(--text)!important;}
+
+/* ── ABOUT ── */
+.about{padding:40px 16px!important;background:#fff!important;border-top:1px solid var(--border)!important;text-align:center!important;margin-top:20px!important;}
+.about h3{font-family:'Cormorant Garamond',serif!important;font-size:24px!important;margin-bottom:12px!important;}
+.about p{font-size:14px!important;color:#666!important;line-height:1.6!important;margin-bottom:24px!important;}
+.contact-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:12px!important;}
+.contact-link{background:#F9F9F9!important;border:1px solid var(--border)!important;padding:12px!important;border-radius:12px!important;font-size:10px!important;font-weight:700!important;text-transform:uppercase!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;}
 
 /* ── SPLASH ── */
-#splash{
-  position:fixed!important;inset:0!important;z-index:200!important;
-  display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;
-  background:#12100E!important; 
-  transition:opacity .6s var(--ease)!important;
-  padding:0 32px!important;
-  text-align:center!important;
-}
-#splash.has-img{
-  background-image:linear-gradient(175deg,rgba(18,16,14,.92) 0%,rgba(18,16,14,.6) 60%,rgba(18,16,14,.2) 100%),url('images/Splash-Dress.PNG')!important;
-  background-size:cover!important;background-position:center 15%!important;
-}
+#splash{position:fixed!important;inset:0!important;background:#12100E!important;z-index:1000!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;color:#fff!important;transition:0.6s!important;}
 #splash.hide{opacity:0!important;pointer-events:none!important;}
-
-.s-eye{
-  font-family:'DM Sans',sans-serif!important;
-  font-size:10px!important;letter-spacing:7px!important;font-weight:600!important;
-  text-transform:uppercase!important;color:var(--accent)!important;
-  margin-bottom:24px!important;display:block!important;
-}
-.s-logo{
-  font-family:'Great Vibes',cursive!important;
-  font-size:76px!important;line-height:1.05!important;color:#FFFFFF!important;
-  text-shadow:0 10px 30px rgba(0,0,0,0.3)!important;
-  margin-bottom:18px!important;display:block!important;
-}
-.s-rule{
-  width:40px!important;height:1px!important;
-  background:linear-gradient(90deg,transparent,var(--accent),transparent)!important;
-  margin:0 auto 20px!important;display:block!important;
-}
-.s-tag{
-  font-family:'Cormorant Garamond',serif!important;font-style:italic!important;
-  font-size:17px!important;color:rgba(255,255,255,.8)!important;letter-spacing:1px!important;
-  display:block!important;margin-bottom:0!important;
-}
-#btnShop{
-  margin-top:60px!important;
-  padding:0 52px!important;height:54px!important;
-  border-radius:100px!important;
-  border:1px solid var(--accent)!important;
-  background:transparent!important;
-  color:#FFF!important;
-  font-family:'DM Sans',sans-serif!important;font-size:11px!important;font-weight:700!important;
-  letter-spacing:4px!important;text-transform:uppercase!important;
-  cursor:pointer!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
-  transition:all .3s!important;
-}
-#btnShop:active{background:var(--accent)!important;color:#000!important;}
-
-/* ── SHOP SHELL ── */
-#shop{
-  position:fixed!important;inset:0!important;z-index:100!important;
-  display:flex!important;flex-direction:column!important;background:var(--bg)!important;
-  opacity:0!important;pointer-events:none!important;transform:translateY(18px)!important;
-  transition:opacity .48s var(--ease),transform .48s var(--ease)!important;
-}
-#shop.open{opacity:1!important;pointer-events:auto!important;transform:translateY(0)!important;}
-
-/* ── HEADER ── */
-.hdr{
-  flex-shrink:0!important;
-  padding-top:calc(env(safe-area-inset-top,14px) + 10px)!important;
-  padding-left:16px!important;padding-right:16px!important;padding-bottom:0!important;
-  background:var(--bg)!important;
-}
-.hdr-top{
-  display:flex!important;align-items:center!important;justify-content:space-between!important;
-  margin-bottom:12px!important;
-}
-.brand-name{
-  font-family:'Great Vibes',cursive!important;
-  font-size:28px!important;color:var(--text)!important;line-height:1!important;
-  display:block!important;
-}
-.brand-tag{
-  font-family:'Cormorant Garamond',serif!important;font-style:italic!important;
-  font-size:11px!important;color:var(--gold)!important;
-  display:block!important;margin-top:2px!important;
-}
-.hdr-btn{
-  width:38px!important;height:38px!important;border-radius:12px!important;
-  background:#FFFFFF!important;border:1px solid var(--border)!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  box-shadow:var(--sh-sm)!important;
-  transition:transform .14s!important;
-}
-.hdr-btn i{font-size:14px!important;color:var(--text2)!important;}
-
-.search-row{
-  display:flex!important;gap:8px!important;align-items:center!important;
-  margin-bottom:12px!important;
-}
-.search-wrap{
-  flex:1!important;display:flex!important;align-items:center!important;gap:8px!important;
-  background:#FFFFFF!important;border:1px solid var(--border)!important;
-  border-radius:100px!important;padding:0 16px!important;
-  height:42px!important;box-shadow:var(--sh-sm)!important;
-}
-.search-wrap i{font-size:13px!important;color:var(--muted)!important;}
-.search-wrap input{
-  flex:1!important;border:none!important;background:transparent!important;
-  font-family:'DM Sans',sans-serif!important;font-size:14px!important;color:var(--text)!important;
-}
-.filter-btn{
-  width:42px!important;height:42px!important;border-radius:50%!important;
-  background:var(--text)!important;border:none!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  box-shadow:var(--sh-sm)!important;
-}
-.filter-btn i{font-size:14px!important;color:var(--accent)!important;}
-
-.cat-hdr{
-  display:flex!important;align-items:center!important;justify-content:space-between!important;
-  margin-bottom:10px!important;
-}
-.cat-title{
-  font-family:'Cormorant Garamond',serif!important;font-size:19px!important;font-weight:700!important;
-  color:var(--text)!important;
-}
-.see-all{
-  font-size:12px!important;font-weight:600!important;color:var(--gold)!important;
-  display:flex!important;align-items:center!important;gap:4px!important;
-}
-
-.cat-pills{
-  display:flex!important;gap:10px!important;overflow-x:auto!important;
-  padding-bottom:15px!important;
-}
-.cat-pill{
-  display:flex!important;flex-direction:column!important;align-items:center!important;
-  gap:6px!important;flex-shrink:0!important;
-}
-.cat-circle{
-  width:48px!important;height:48px!important;border-radius:50%!important;
-  background:#FFFFFF!important;
-  border:1px solid var(--border)!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  box-shadow:var(--sh-sm)!important;
-  transition:all .25s var(--ease)!important;
-}
-.cat-circle svg{ width:20px!important;height:20px!important;fill:var(--text2)!important; }
-.cat-pill.active .cat-circle{background:var(--accent)!important;border-color:var(--accent)!important;transform:translateY(-2px)!important;}
-.cat-pill.active .cat-circle svg{fill:var(--text)!important;}
-.cat-lbl{ font-size:9px!important;font-weight:700!important;color:var(--text2)!important;text-transform:uppercase;letter-spacing:0.5px;}
-
-/* ── FEED ── */
-.feed{flex:1!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;}
-.grid{
-  display:grid!important;grid-template-columns:1fr 1fr!important;
-  gap:16px!important;padding:4px 16px 24px 16px!important;
-}
-
-/* ── CARD ── */
-.card{
-  border-radius:24px!important;
-  transition:opacity .4s var(--ease),transform .4s var(--ease)!important;
-}
-.card-img{
-  position:relative!important;width:100%!important;
-  border-radius:24px!important;overflow:hidden!important;
-  background:var(--surface2)!important;
-}
-.card-img-inner{
-  width:100%!important;aspect-ratio:3/4!important;position:relative!important;
-  overflow:hidden!important;
-}
-.card-price{
-  position:absolute!important;bottom:12px!important;left:12px!important;
-  background:rgba(255,255,255,0.96)!important;
-  color:var(--text)!important;
-  padding:6px 12px!important;
-  border-radius:12px!important;
-  font-size:12px!important;font-weight:800!important;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08)!important;
-}
-.icon-btn{
-  width:34px!important;height:34px!important;border-radius:50%!important;
-  background:rgba(255,255,255,0.96)!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08)!important;
-}
-.icon-btn.liked i{color:#E11D48!important;}
-.icon-btn.bagged{background:var(--text)!important;}
-.icon-btn.bagged i{color:var(--accent)!important;}
-
-.card-info{padding:12px 4px 4px 4px!important;}
-.card-cat{
-  font-size:9px!important;font-weight:800!important;color:var(--gold)!important;
-  letter-spacing:1.2px!important;text-transform:uppercase!important;
-  margin-bottom:4px!important;display:block!important;
-}
-.card-name{
-  font-family:'Cormorant Garamond',serif!important;font-size:16px!important;
-  font-weight:700!important;color:var(--text)!important;line-height:1.2!important;
-}
-
-/* ── PREVIEW ── */
-#preview{
-  position:fixed!important;inset:0!important;z-index:300!important;
-  background:rgba(18,16,14,.85)!important;
-  backdrop-filter:blur(4px)!important;
-  visibility:hidden!important;opacity:0!important;pointer-events:none!important;
-  transition:opacity .22s ease,visibility 0s linear .22s!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-}
-#preview.open{
-  visibility:visible!important;opacity:1!important;pointer-events:auto!important;
-  transition:opacity .22s ease,visibility 0s linear 0s!important;
-}
-#preview-card{
-  width:90%!important;max-width:340px!important;
-  background:var(--surface)!important;
-  border-radius:32px!important;overflow:hidden!important;
-  transform:scale(.91) translateY(16px)!important;
-  transition:transform .26s var(--ease)!important;
-}
-
-/* ── FABS ── */
-#fabs{
-  position:fixed!important;right:15px!important;
-  bottom:calc(env(safe-area-inset-bottom,14px) + 20px)!important;
-  z-index:250!important;display:flex!important;flex-direction:column!important;
-  gap:8px!important;align-items:center!important;
-  opacity:0!important;pointer-events:none!important;transition:opacity .28s ease!important;
-}
-#fabs.visible{opacity:1!important;pointer-events:auto!important;}
-.fab{
-  width:44px!important;height:44px!important;border-radius:50%!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  border:none!important;cursor:pointer!important;position:relative!important;
-  font-size:16px!important;touch-action:manipulation!important;
-}
-.fab-heart{ background:#FFFFFF!important;color:#E11D48!important;border:1px solid var(--border)!important; }
-.fab-bag{ background:var(--text)!important;color:var(--accent)!important;box-shadow:0 10px 25px rgba(0,0,0,0.2)!important; }
-.fab-badge{
-  position:absolute!important;top:-4px!important;right:-4px!important;
-  min-width:17px!important;height:17px!important;border-radius:10px!important;
-  font-size:9px!important;font-weight:700!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  border:2px solid var(--bg)!important;
-  transform:scale(0)!important;transition:transform .22s var(--ease)!important;
-}
-.fab-badge.show{transform:scale(1)!important;}
-
-/* ── PANELS ── */
-.panel{
-  position:fixed!important;inset:0!important;z-index:400!important;
-  display:flex!important;flex-direction:column!important;
-  background:var(--bg)!important;
-  transform:translateX(100%)!important;pointer-events:none!important;
-  transition:transform .36s var(--ease)!important;
-}
-.panel.open{transform:translateX(0)!important;pointer-events:auto!important;}
-
-#toast{
-  position:fixed!important;bottom:26px!important;left:50%!important;
-  transform:translateX(-50%) translateY(8px)!important;
-  background:var(--text)!important;color:var(--accent)!important;
-  padding:10px 20px!important; border-radius:100px!important; font-size:11px!important; font-weight:600!important;
-  opacity:0!important; pointer-events:none!important; transition:all .2s!important;
-  box-shadow:0 10px 30px rgba(0,0,0,0.2)!important; z-index:9999!important;
-}
-#toast.show{opacity:1!important;transform:translateX(-50%) translateY(0)!important;}
+#splash h1{font-family:'Great Vibes',cursive!important;font-size:60px!important;}
+#btnShop{margin-top:30px!important;padding:12px 40px!important;border-radius:30px!important;border:1px solid var(--accent)!important;color:#fff!important;font-weight:700!important;text-transform:uppercase!important;font-size:12px!important;letter-spacing:2px!important;}
 </style>
 </head>
 <body>
 
 <div id="splash">
-  <span class="s-eye">Ghanaian Women's Fashion</span>
-  <span class="s-logo">Enis Collection</span>
-  <span class="s-rule"></span>
-  <span class="s-tag">Elegance for every woman</span>
-  <button id="btnShop" type="button">Shop Now</button>
+  <span style="font-size:10px; letter-spacing:5px; text-transform:uppercase; color:var(--accent);">Ghanaian Women's Fashion</span>
+  <h1>Enis Collection</h1>
+  <button id="btnShop">Shop Now</button>
 </div>
 
-<div id="shop">
-  <div class="hdr">
-    <div class="hdr-top">
-      <div class="brand-wrap">
-        <span class="brand-name">Enis Collection</span>
-        <span class="brand-tag">Pamper your body</span>
-      </div>
-      <button class="hdr-btn" type="button"><i class="far fa-bell"></i></button>
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="spacer"></div>
+    <div class="brand-wrap">
+      <span class="brand-name">Enis Collection</span>
+      <span class="brand-tag">Pamper your body</span>
     </div>
-
-    <div class="search-row">
-      <div class="search-wrap">
-        <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search pieces..."/>
-      </div>
-      <button class="filter-btn" type="button"><i class="fas fa-sliders-h"></i></button>
-    </div>
-
-    <div class="cat-hdr">
-      <span class="cat-title">Category</span>
-      <span class="see-all">See All <i class="fas fa-arrow-right"></i></span>
-    </div>
-
-    <div class="cat-pills" id="catPills">
-      <button class="cat-pill active" data-cat="All" type="button">
-        <span class="cat-circle"><svg viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zm10-10h8v8h-8V3zm0 10h8v8h-8v-8z"/></svg></span>
-        <span class="cat-lbl">All</span>
-      </button>
-      <button class="cat-pill" data-cat="Thrift" type="button">
-        <span class="cat-circle"><svg viewBox="0 0 24 24"><path d="M12 2C9.5 2 8 3.5 8 5v1H5L4 20h16L19 6h-3V5c0-1.5-1.5-3-4-3zm0 2c1.4 0 2 .8 2 1v1h-4V5c0-.2.6-1 2-1zm-5 3h10l.84 12H6.16L7 7z"/></svg></span>
-        <span class="cat-lbl">Thrift</span>
-      </button>
-      <button class="cat-pill" data-cat="Store" type="button">
-        <span class="cat-circle"><svg viewBox="0 0 24 24"><path d="M2 7l1-4h18l1 4v2a3 3 0 0 1-1 2.28V20H4V11.28A3 3 0 0 1 2 9V7zm2 .5V9a1 1 0 0 0 2 0V7.5H4zm4 0V9a1 1 0 0 0 2 0V7.5H8zm4 0V9a1 1 0 0 0 2 0V7.5h-2zm4 0V9a1 1 0 0 0 2 0V7.5h-2zM5 11.1V19h14v-7.9A3 3 0 0 1 17 11a3 3 0 0 1-4 0 3 3 0 0 1-4 0 3 3 0 0 1-2 .87z"/></svg></span>
-        <span class="cat-lbl">Store</span>
-      </button>
-    </div>
+    <button class="hdr-btn"><i class="far fa-bell"></i></button>
   </div>
 
-  <div class="feed" id="feed">
-    <div class="grid" id="grid"></div>
+  <div class="search-row">
+    <div class="search-wrap">
+      <i class="fas fa-search" style="color:#ccc"></i>
+      <input type="text" id="searchInput" placeholder="Search pieces...">
+    </div>
+    <button class="filter-btn"><i class="fas fa-sliders-h"></i></button>
+  </div>
+
+  <div class="cat-hdr">
+    <span class="cat-title">Category</span>
+    <span class="see-all">See All <i class="fas fa-arrow-right"></i></span>
+  </div>
+
+  <div class="cat-pills">
+    <div class="cat-pill active"><div class="cat-circle"><i class="fas fa-th-large"></i></div><span class="cat-lbl">All</span></div>
+    <div class="cat-pill"><div class="cat-circle"><i class="fas fa-shopping-bag"></i></div><span class="cat-lbl">Thrift</span></div>
+    <div class="cat-pill"><div class="cat-circle"><i class="fas fa-store"></i></div><span class="cat-lbl">Store</span></div>
   </div>
 </div>
 
-<div id="preview">
-  <div id="preview-card">
-    <div id="prev-img-wrap">
-      <img id="prevImg" src="" alt=""/>
-      <span class="prev-price" id="prevPrice"></span>
-    </div>
-    <div class="prev-info">
-      <span class="prev-name" id="prevName"></span>
-      <span class="prev-meta" id="prevMeta"></span>
-      <a id="prev-order" href="#" target="_blank">Order on WhatsApp</a>
-    </div>
+<div class="grid" id="grid"></div>
+
+<div class="about">
+  <h3>Our Story</h3>
+  <p>Enis Collection started in 2022 in Cape Coast with a simple goal — help women feel confident and comfortable in what they wear. From carefully selected thrift pieces to handmade outfits, each item is chosen with attention to style and quality.</p>
+  <div class="contact-grid">
+    <a href="https://wa.me/233546527892" class="contact-link"><i class="fab fa-whatsapp" style="color:green"></i> WhatsApp</a>
+    <a href="tel:+233546527892" class="contact-link"><i class="fas fa-phone"></i> Call</a>
+    <a href="https://www.tiktok.com/@eniscollection1" class="contact-link"><i class="fab fa-tiktok"></i> TikTok</a>
+    <a href="mailto:contact@eniscollection.com" class="contact-link"><i class="fas fa-envelope"></i> Email</a>
   </div>
 </div>
-
-<div id="fabs">
-  <button class="fab fab-heart" id="fabHeart" type="button">
-    <i class="fas fa-heart"></i>
-    <span class="fab-badge" id="wishBadge">0</span>
-  </button>
-  <button class="fab fab-bag" id="fabBag" type="button">
-    <i class="fas fa-shopping-bag"></i>
-    <span class="fab-badge" id="cartBadge">0</span>
-  </button>
-</div>
-
-<div class="panel" id="cartPanel">
-  <div class="panel-head"><h2>My Bag</h2><button id="cartClose" type="button">Close</button></div>
-  <div id="cartBody"></div>
-</div>
-
-<div class="panel" id="wishPanel">
-  <div class="panel-head"><h2>Wishlist</h2><button id="wishClose" type="button">Close</button></div>
-  <div id="wishBody"></div>
-</div>
-
-<div id="toast"></div>
 
 <script>
-(function(){
-var WA="233546527892";
-var PRODUCTS=[
-  {id:1, name:"Thick Seamless Dress", price:50, size:"10", cat:["Thrift"], img:"images/item1.jpg"},
-  {id:2, name:"Plaited Skirts & Top", price:50, size:"8/10", cat:["Thrift"], img:"images/item2.jpg"},
-  {id:3, name:"Short Length Essential", price:45, size:"8", cat:["Thrift"], img:"images/item3.jpg"},
-  {id:4, name:"Church & Work Gown", price:50, size:"10", cat:["Store"], img:"images/item4.jpg"}
+const PRODUCTS = [
+  {id:1, name:"Thick Seamless Dress", price:50, cat:"THRIFT", img:"images/item1.jpg"},
+  {id:2, name:"Plaited Skirts & Top", price:50, cat:"THRIFT", img:"images/item2.jpg"},
+  {id:3, name:"Short Length Essential", price:45, cat:"THRIFT", img:"images/item3.jpg"},
+  {id:4, name:"Church & Work Gown", price:50, cat:"STORE", img:"images/item4.jpg"},
+  {id:5, name:"Dinner Party Elegance", price:45, cat:"STORE", img:"images/item5.jpg"},
+  {id:6, name:"Lecture & Beach Set", price:45, cat:"STORE", img:"images/item6.jpg"},
+  {id:7, name:"Ruched SHEIN Special", price:50, cat:"THRIFT", img:"images/item7.jpg"},
+  {id:8, name:"Ultimate Work Gown", price:50, cat:"THRIFT", img:"images/item8.jpg"},
+  {id:9, name:"Skirt & Basic Top Duo", price:50, cat:"STORE", img:"images/item9.jpg"},
+  {id:10, name:"Refined Church Wear", price:50, cat:"STORE", img:"images/item10.jpg"}
 ];
 
-var cart=[], wish=[];
-
-document.getElementById("btnShop").onclick=function(){
-  document.getElementById("splash").classList.add("hide");
-  document.getElementById("shop").classList.add("open");
-  document.getElementById("fabs").classList.add("visible");
-  renderGrid();
-};
-
-function renderGrid(){
-  var grid=document.getElementById("grid");
-  grid.innerHTML=PRODUCTS.map(function(p){
-    return '<div class="card" onclick="openPreview('+p.id+')">'
-      +'<div class="card-img"><div class="card-img-inner"><img src="'+p.img+'"/></div><span class="card-price">&#8373;'+p.price+'</span></div>'
-      +'<div class="card-info"><span class="card-cat">'+p.cat[0]+'</span><span class="card-name">'+p.name+'</span></div>'
-      +'</div>';
-  }).join("");
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = PRODUCTS.map(p => `
+    <div class="card">
+      <div class="card-img-box">
+        <img src="${p.img}" alt="${p.name}">
+        <div class="price-tag">₵${p.price}</div>
+        <div class="card-icons">
+          <button class="icon-btn"><i class="far fa-heart"></i></button>
+          <button class="icon-btn bag-btn"><i class="fas fa-shopping-bag"></i></button>
+        </div>
+      </div>
+      <div class="card-meta">
+        <span class="card-tag">${p.cat}</span>
+        <h4 class="card-title">${p.name}</h4>
+      </div>
+    </div>
+  `).join('');
 }
 
-window.openPreview = function(id){
-  var p=PRODUCTS.find(function(x){return x.id===id;});
-  document.getElementById("prevImg").src=p.img;
-  document.getElementById("prevName").textContent=p.name;
-  document.getElementById("prevPrice").textContent="GHS "+p.price;
-  document.getElementById("preview").classList.add("open");
+document.getElementById('btnShop').onclick = () => {
+  document.getElementById('splash').classList.add('hide');
+  renderGrid();
 };
-
-document.getElementById("preview").onclick=function(){this.classList.remove("open");};
-
-})();
 </script>
 </body>
 </html>
