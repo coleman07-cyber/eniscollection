@@ -5,246 +5,272 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ENIS COLLECTION</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    <style>
+<style>
+    :root {
+        --bg: #FFFFFF;
+        --card-bg: #FFFFFF;
+        --text-main: #000000;
+        --text-soft: #757575;
+        --accent-gold: #C5A028; 
+        --accent-pink: #D65A8D;
+        --search-bg: #F5F5F5;
+        --wa-green: #25D366;
+        --border: rgba(0, 0, 0, 0.06);
+        --ease-luxury: cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    @media (prefers-color-scheme: dark) {
         :root {
-            --bg: #FFFFFF;
-            --card-bg: #FFFFFF;
-            --text-main: #000000;
-            --text-soft: #757575;
-            --accent-gold: #C5A028; 
-            --accent-pink: #D65A8D;
-            --search-bg: #F5F5F5;
-            --border: rgba(0, 0, 0, 0.06);
-            --ease-luxury: cubic-bezier(0.25, 1, 0.5, 1);
+            --bg: #000000;
+            --card-bg: #0D0D0D;
+            --text-main: #FFFFFF;
+            --text-soft: #A1A1A6;
+            --search-bg: #1A1A1A;
+            --border: rgba(255, 255, 255, 0.1);
         }
+    }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #000000;
-                --card-bg: #0D0D0D;
-                --text-main: #FFFFFF;
-                --text-soft: #A1A1A6;
-                --search-bg: #1A1A1A;
-                --border: rgba(255, 255, 255, 0.1);
-            }
-        }
+    /* --- GLOBAL --- */
+    * { 
+        margin: 0; padding: 0; box-sizing: border-box; 
+        font-family: 'Montserrat', sans-serif; 
+        -webkit-tap-highlight-color: transparent;
+        scrollbar-width: none;
+    }
+    *::-webkit-scrollbar { display: none; }
 
-        * { 
-            margin: 0; padding: 0; box-sizing: border-box; 
-            font-family: 'Montserrat', sans-serif; 
-            scrollbar-width: none;
-        }
-        *::-webkit-scrollbar { display: none; }
+    body { background: var(--bg); height: 100vh; overflow: hidden; position: fixed; width: 100%; }
+    .app-shell { width: 100%; max-width: 420px; height: 100vh; margin: 0 auto; background: var(--bg); position: relative; overflow: hidden; display: flex; flex-direction: column; }
 
-        body { background: var(--bg); height: 100vh; overflow: hidden; }
-        
-        .app-shell { width: 100%; max-width: 420px; height: 100vh; margin: 0 auto; background: var(--bg); position: relative; display: flex; flex-direction: column; }
+    #shop-content { 
+        display: none; flex-direction: column; height: 100%; opacity: 0; 
+        transform: translateY(30px); transition: opacity 1.2s var(--ease-luxury), transform 1.2s var(--ease-luxury);
+    }
+    #shop-content.active { opacity: 1; transform: translateY(0); display: flex; }
 
-        /* --- HEADER AS PER IMAGE --- */
-        .header-container {
-            padding: calc(env(safe-area-inset-top) + 15px) 20px 10px;
-        }
+    /* --- NEW HEADER (MATCHING IMAGE) --- */
+    .header-container { padding: calc(env(safe-area-inset-top) + 15px) 20px 10px; }
+    
+    .search-row { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; }
+    .search-bar { 
+        flex: 1; background: var(--search-bg); height: 50px; border-radius: 25px; 
+        display: flex; align-items: center; padding: 0 20px; gap: 12px; 
+    }
+    .search-bar i { color: #8E8E93; font-size: 18px; }
+    .search-bar span { color: #8E8E93; font-size: 15px; }
+    
+    .filter-btn { 
+        width: 50px; height: 50px; background: var(--search-bg); border-radius: 50%; 
+        display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--text-main); 
+    }
 
-        .search-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .section-header h2 { font-size: 24px; font-weight: 700; color: var(--text-main); }
+    .see-all { color: var(--accent-pink); font-size: 14px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 4px; }
 
-        .search-bar {
-            flex: 1;
-            background: var(--search-bg);
-            height: 48px;
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            padding: 0 18px;
-            gap: 10px;
-        }
+    .category-scroll { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 10px; }
+    .cat-item { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; cursor: pointer; }
+    .cat-circle { 
+        width: 70px; height: 70px; background: var(--search-bg); border-radius: 50%; 
+        display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--text-main); transition: 0.3s;
+    }
+    .cat-item.active .cat-circle { background: var(--accent-gold); color: #000; }
+    .cat-item span { font-size: 12px; font-weight: 600; color: var(--text-main); }
 
-        .search-bar i { color: #8E8E93; font-size: 16px; }
-        .search-bar span { color: #8E8E93; font-size: 14px; }
+    /* --- PRODUCT GRID --- */
+    .feed { flex: 1; overflow-y: auto; background: var(--bg); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
+    .product-card { background: var(--bg); border-radius: 30px; overflow: hidden; opacity: 0; transform: translateY(20px); transition: 0.8s var(--ease-luxury); }
+    .product-card.visible { opacity: 1; transform: translateY(0); }
+    .p-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1.35; overflow: hidden; border-radius: 20px; cursor: pointer; }
+    .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .price-tag { position: absolute; bottom: 10px; right: 10px; background: var(--accent-gold); color: #000; padding: 7px 14px; border-radius: 12px; font-size: 11px; font-weight: 800; }
 
-        .filter-btn {
-            width: 48px;
-            height: 48px;
-            background: var(--search-bg);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-main);
-        }
+    /* --- WISHLIST / CART ELEMENTS --- */
+    .wish-btn {
+        position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; border-radius: 50%;
+        background: rgba(255,255,255,0.85); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center;
+        cursor: pointer; border: none; z-index: 2; transition: 0.25s;
+    }
+    .wish-btn.wishlisted i { color: #E53E3E; }
+    .card-footer { padding: 15px 5px 5px; display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .card-info span { font-size: 9px; color: var(--accent-gold); font-weight: 700; letter-spacing: 1px; }
+    .card-info h3 { font-size: 12px; color: var(--text-main); margin-top: 4px; font-weight: 700; }
+    .add-cart-btn {
+        width: 34px; height: 34px; border-radius: 30px; border: none; background: var(--accent-gold); color: #000; cursor: pointer;
+        display: flex; align-items: center; justify-content: center; font-size: 13px; transition: 0.2s;
+    }
+    .add-cart-btn.added { background: #000; color: var(--accent-gold); }
 
-        .category-title-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+    /* --- ABOUT SECTION --- */
+    .about-modern { margin: 60px 15px 40px; padding: 40px 20px; background: var(--card-bg); border-radius: 40px; border: 1px solid var(--border); text-align: center; }
+    .contact-pill-box { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+    .contact-pill { padding: 8px 15px; border-radius: 50px; background: var(--bg); border: 1px solid var(--border); text-decoration: none; color: var(--text-main); font-size: 10px; font-weight: 700; }
 
-        .category-title-row h2 { font-size: 22px; font-weight: 700; color: var(--text-main); }
-        .see-all { color: var(--accent-pink); font-size: 13px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 4px; }
+    /* --- PANELS & FABs --- */
+    .fab-group { position: fixed; right: 14px; bottom: 40px; z-index: 9000; display: none; flex-direction: column; gap: 10px; }
+    .fab-group.visible { display: flex; }
+    .fab { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; box-shadow: 0 8px 24px rgba(0,0,0,0.15); position: relative; }
+    .fab-wish { background: #fff; color: #E53E3E; }
+    .fab-cart { background: var(--accent-gold); color: #000; }
+    .fab-badge { position: absolute; top: -5px; right: -5px; background: #000; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 10px; display: none; }
+    .fab-badge.show { display: block; }
 
-        /* --- CIRCULAR CATEGORIES --- */
-        .category-scroll {
-            display: flex;
-            gap: 18px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-        }
+    /* Side Panel Styles */
+    .side-panel { position: fixed; inset: 0; z-index: 9998; background: var(--bg); transform: translateX(100%); transition: 0.5s var(--ease-luxury); max-width: 420px; margin: 0 auto; display: flex; flex-direction: column; }
+    .side-panel.open { transform: translateX(0); }
+    .panel-header { padding: 40px 20px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+    .panel-body { flex: 1; overflow-y: auto; padding: 20px; }
 
-        .cat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
-            cursor: pointer;
-        }
-
-        .cat-icon-box {
-            width: 65px;
-            height: 65px;
-            background: var(--search-bg);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: var(--text-main);
-            transition: 0.3s;
-        }
-
-        .cat-item.active .cat-icon-box {
-            background: var(--accent-gold);
-            color: #000;
-        }
-
-        .cat-item span { font-size: 12px; font-weight: 500; color: var(--text-main); }
-
-        /* --- FEED --- */
-        .feed { flex: 1; overflow-y: auto; padding-top: 10px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
-        
-        .product-card { background: var(--bg); opacity: 0; transform: translateY(20px); transition: 0.6s var(--ease-luxury); }
-        .product-card.visible { opacity: 1; transform: translateY(0); }
-        .p-image-wrap { position: relative; aspect-ratio: 1/1.3; overflow: hidden; border-radius: 18px; }
-        .p-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .price-tag { position: absolute; bottom: 8px; right: 8px; background: var(--accent-gold); color: #000; padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; }
-        
-        .card-footer { padding: 10px 4px; display: flex; justify-content: space-between; align-items: flex-start; }
-        .card-info h3 { font-size: 12px; font-weight: 600; color: var(--text-main); }
-        .card-info span { font-size: 10px; color: var(--text-soft); }
-
-        /* --- SPLASH --- */
-        #splash-screen { 
-            position: fixed; inset: 0; z-index: 9999; 
-            background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;
-            transition: 0.8s var(--ease-luxury);
-        }
-        #splash-screen.hidden { opacity: 0; pointer-events: none; transform: scale(1.1); }
-        .btn-discover { margin-top: 30px; padding: 15px 40px; border-radius: 30px; border: none; font-weight: 700; background: #fff; cursor: pointer; }
-
-        /* --- UTILS --- */
-        #toast {
-            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
-            background: #000; color: #fff; padding: 10px 20px; border-radius: 20px;
-            font-size: 12px; opacity: 0; transition: 0.3s; z-index: 10000;
-        }
-        #toast.show { opacity: 1; }
-    </style>
+    /* Splash & Preview */
+    #splash-screen { position: absolute; inset: 0; z-index: 9999; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG') center/cover; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
+    #splash-screen.hidden { opacity: 0; pointer-events: none; }
+    .btn-discover { margin-top: 50px; padding: 20px 75px; border-radius: 50px; border: none; font-weight: 800; background: #FFF; color: #000; cursor: pointer; }
+    #item-preview { position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.4); backdrop-filter: blur(15px); display: none; align-items: center; justify-content: center; }
+</style>
 </head>
 <body>
 
 <div class="app-shell">
-    
+
     <div id="splash-screen">
-        <h1 style="font-size: 32px; letter-spacing: 2px;">ENIS COLLECTION</h1>
-        <button class="btn-discover" onclick="launchApp()">ENTER STORE</button>
+        <h1 style="font-family:'Great Vibes'; color:white; font-size:64px;">Enis Collection</h1>
+        <button class="btn-discover" onclick="launchApp()">SHOP NOW</button>
     </div>
 
-    <div class="header-container" id="app-header" style="display:none;">
-        <div class="search-row">
-            <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <span>Search...</span>
+    <div id="shop-content">
+        
+        <div class="header-container">
+            <div class="search-row">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <span>Search...</span>
+                </div>
+                <div class="filter-btn">
+                    <i class="fas fa-sliders-h"></i>
+                </div>
             </div>
-            <div class="filter-btn">
-                <i class="fas fa-sliders-h"></i>
+
+            <div class="section-header">
+                <h2>Category</h2>
+                <a href="#" class="see-all">See All <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="category-scroll">
+                <div class="cat-item active" onclick="filterCat('All', this)">
+                    <div class="cat-circle"><i class="fas fa-border-all"></i></div>
+                    <span>All Items</span>
+                </div>
+                <div class="cat-item" onclick="filterCat('Thrift', this)">
+                    <div class="cat-circle"><i class="fas fa-tshirt"></i></div>
+                    <span>Thrift</span>
+                </div>
+                <div class="cat-item" onclick="filterCat('Store', this)">
+                    <div class="cat-circle"><i class="fas fa-shopping-bag"></i></div>
+                    <span>Store</span>
+                </div>
+                <div class="cat-item" onclick="filterCat('Handmade', this)">
+                    <div class="cat-circle"><i class="fas fa-cut"></i></div>
+                    <span>Handmade</span>
+                </div>
             </div>
         </div>
 
-        <div class="category-title-row">
-            <h2>Category</h2>
-            <a href="#" class="see-all">See All <i class="fas fa-arrow-right"></i></a>
-        </div>
-
-        <div class="category-scroll">
-            <div class="cat-item active" onclick="filterCat('All', this)">
-                <div class="cat-icon-box"><i class="fas fa-border-all"></i></div>
-                <span>All</span>
-            </div>
-            <div class="cat-item" onclick="filterCat('Thrift', this)">
-                <div class="cat-icon-box"><i class="fas fa-tshirt"></i></div>
-                <span>Thrift</span>
-            </div>
-            <div class="cat-item" onclick="filterCat('Store', this)">
-                <div class="cat-icon-box"><i class="fas fa-shopping-bag"></i></div>
-                <span>Store</span>
-            </div>
-            <div class="cat-item" onclick="filterCat('Handmade', this)">
-                <div class="cat-icon-box"><i class="fas fa-cut"></i></div>
-                <span>Handmade</span>
+        <div class="feed" id="mainFeed" onscroll="handleScroll()">
+            <div class="grid" id="productGrid"></div>
+            
+            <div class="about-modern">
+                <h3>OUR STORY</h3>
+                <p>Enis Collection started in 2022 in Cape Coast. We help women feel confident through stylish thrift and handmade outfits.</p>
+                <div class="contact-pill-box">
+                    <a href="https://wa.me/233546527892" class="contact-pill">WhatsApp</a>
+                    <a href="https://www.tiktok.com/@eniscollection1" class="contact-pill">TikTok</a>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="feed" id="mainFeed">
-        <div class="grid" id="productGrid"></div>
+    <div class="fab-group" id="fab-group">
+        <button class="fab fab-wish" onclick="openPanel('wishlist')"><i class="fas fa-heart"></i><span id="wish-badge" class="fab-badge">0</span></button>
+        <button class="fab fab-cart" onclick="openPanel('cart')"><i class="fas fa-shopping-bag"></i><span id="cart-badge" class="fab-badge">0</span></button>
     </div>
 
+</div>
+
+<div id="item-preview" onclick="closePreview()">
+    <div style="background:var(--card-bg); width:300px; padding:20px; border-radius:30px;" onclick="event.stopPropagation()">
+        <img id="preview-img" src="" style="width:100%; border-radius:20px;">
+        <h2 id="preview-name" style="margin-top:15px;"></h2>
+        <p id="preview-price"></p>
+        <button onclick="addToCartFromPreview()" style="width:100%; padding:15px; margin-top:10px; border-radius:20px; background:var(--accent-gold); border:none; font-weight:700;">ADD TO BAG</button>
+    </div>
+</div>
+
+<div class="side-panel" id="cart-panel">
+    <div class="panel-header"><h2>My Bag</h2><button onclick="closePanel('cart')">X</button></div>
+    <div class="panel-body" id="cart-body"></div>
+</div>
+
+<div class="side-panel" id="wishlist-panel">
+    <div class="panel-header"><h2>Wishlist</h2><button onclick="closePanel('wishlist')">X</button></div>
+    <div class="panel-body" id="wishlist-body"></div>
 </div>
 
 <div id="toast"></div>
 
 <script>
     const myProducts = [
-        { id:1, name: "Seamless Dress", price: 50, size: "10", category: "Thrift", image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=400" },
-        { id:2, name: "Plaited Skirt", price: 50, size: "8/10", category: "Thrift", image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?q=80&w=400" },
-        { id:3, name: "Essential Top", price: 45, size: "8", category: "Store", image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=400" },
-        { id:4, name: "Work Gown", price: 50, size: "12", category: "Store", image: "https://images.unsplash.com/photo-1539109132314-3477524c8595?q=80&w=400" }
+        { id:1,  name: "Thick Seamless Dress",    price: 50, size: "10",      category: "Thrift", image: "images/item1.jpg" },
+        { id:2,  name: "Plaited Skirts & Top",    price: 50, size: "8/10",    category: "Thrift",   image: "images/item2.jpg" },
+        { id:3,  name: "Short Length Essential",  price: 45, size: "8",       category: "Thrift", image: "images/item3.jpg" },
+        { id:4,  name: "Church & Work",           price: 50, size: "8",       category: "Store",  image: "images/item4.jpg" },
+        { id:5,  name: "Dinner & Party Elegance", price: 45, size: "8/10",    category: "Store", image: "images/item5.jpg" },
+        { id:6,  name: "Lecture & Beach Set",     price: 45, size: "6/8/10",  category: "Store",   image: "images/item6.jpg" },
+        { id:7,  name: "Ruched SHEIN Special",    price: 50, size: "8/10",    category: "Thrift", image: "images/item7.jpg" },
+        { id:8,  name: "Ultimate Work Gown",      price: 50, size: "12/14",   category: "Thrift",  image: "images/item8.jpg" },
+        { id:9,  name: "Skirt & Basic Top Duo",   price: 50, size: "10/12",   category: "Store",   image: "images/item9.jpg" },
+        { id:10, name: "Refined Church Wear",     price: 50, size: "10",      category: "Store",  image: "images/item10.jpg" }
     ];
+
+    let cart = [];
+    let wishlist = [];
+    let previewProduct = null;
 
     function launchApp() {
         document.getElementById('splash-screen').classList.add('hidden');
-        document.getElementById('app-header').style.display = 'block';
+        document.getElementById('shop-content').classList.add('active');
+        document.getElementById('fab-group').classList.add('visible');
         renderProducts();
     }
 
     function renderProducts(filter = 'All') {
         const grid = document.getElementById('productGrid');
         const items = filter === 'All' ? myProducts : myProducts.filter(p => p.category === filter);
-        
-        grid.innerHTML = items.map(item => `
+        grid.innerHTML = items.map(item => {
+            const liked = wishlist.some(w => w.id === item.id);
+            const inCart = cart.some(c => c.product.id === item.id);
+            return `
             <div class="product-card visible">
-                <div class="p-image-wrap">
+                <div class="p-image-wrap" onclick="openPreview(${item.id})">
                     <img src="${item.image}">
                     <div class="price-tag">₵${item.price}</div>
+                    <button class="wish-btn ${liked ? 'wishlisted' : ''}" onclick="event.stopPropagation(); toggleWish(${item.id})">
+                        <i class="fas fa-heart"></i>
+                    </button>
                 </div>
                 <div class="card-footer">
                     <div class="card-info">
+                        <span>SIZE ${item.size}</span>
                         <h3>${item.name}</h3>
-                        <span>Size ${item.size}</span>
                     </div>
-                    <i class="fas fa-plus-circle" style="color:var(--accent-gold); font-size:18px;"></i>
+                    <button class="add-cart-btn ${inCart ? 'added' : ''}" onclick="toggleCart(${item.id})">
+                        <i class="fas ${inCart ? 'fa-check' : 'fa-shopping-bag'}"></i>
+                    </button>
                 </div>
-            </div>
-        `).join('');
+            </div>`;
+        }).join('');
     }
 
     function filterCat(cat, el) {
@@ -252,6 +278,46 @@
         el.classList.add('active');
         renderProducts(cat);
     }
+
+    function handleScroll() {
+        document.querySelectorAll('.product-card').forEach(card => {
+            if (card.getBoundingClientRect().top < window.innerHeight) card.classList.add('visible');
+        });
+    }
+
+    function openPreview(id) {
+        previewProduct = myProducts.find(p => p.id === id);
+        document.getElementById('preview-img').src = previewProduct.image;
+        document.getElementById('preview-name').innerText = previewProduct.name;
+        document.getElementById('preview-price').innerText = `₵${previewProduct.price}`;
+        document.getElementById('item-preview').style.display = 'flex';
+    }
+
+    function closePreview() { document.getElementById('item-preview').style.display = 'none'; }
+
+    function toggleWish(id) {
+        const idx = wishlist.findIndex(w => w.id === id);
+        if(idx === -1) wishlist.push(myProducts.find(p => p.id === id));
+        else wishlist.splice(idx, 1);
+        updateBadges(); renderProducts();
+    }
+
+    function toggleCart(id) {
+        const idx = cart.findIndex(c => c.product.id === id);
+        if(idx === -1) cart.push({product: myProducts.find(p => p.id === id), qty: 1});
+        else cart.splice(idx, 1);
+        updateBadges(); renderProducts();
+    }
+
+    function updateBadges() {
+        const wb = document.getElementById('wish-badge');
+        const cb = document.getElementById('cart-badge');
+        wb.innerText = wishlist.length; wb.classList.toggle('show', wishlist.length > 0);
+        cb.innerText = cart.length; cb.classList.toggle('show', cart.length > 0);
+    }
+
+    function openPanel(id) { document.getElementById(id + '-panel').classList.add('open'); }
+    function closePanel(id) { document.getElementById(id + '-panel').classList.remove('open'); }
 </script>
 
 </body>
