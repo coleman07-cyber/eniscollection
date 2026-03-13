@@ -356,7 +356,6 @@
     }
     #splash-screen.hidden { opacity: 0; transform: scale(1.06); pointer-events: none; }
 
-    /* Photo fills entire screen */
     .splash-img {
         position: absolute; inset: 0;
         background: url('images/Splash-Dress.PNG') center center/cover no-repeat;
@@ -367,108 +366,110 @@
         to   { transform: scale(1.0); }
     }
 
-    /* Gradient: clear at top, deepens to black at bottom 40% */
+    /* Dark vignette — edges only, center stays bright */
     .splash-overlay {
         position: absolute; inset: 0;
-        background: linear-gradient(
-            180deg,
-            rgba(0,0,0,0.0)   0%,
-            rgba(0,0,0,0.0)   40%,
-            rgba(0,0,0,0.55)  62%,
-            rgba(0,0,0,0.88)  78%,
-            rgba(0,0,0,0.96) 100%
-        );
+        background:
+            linear-gradient(180deg, rgba(0,0,0,0.45) 0%, transparent 18%),
+            linear-gradient(0deg,   rgba(0,0,0,0.72) 0%, transparent 45%);
     }
 
-    /* Soft brand glow behind text */
+    /* Warm amber glow matching the neon sign */
     .splash-glow {
-        position: absolute; bottom: -40px; left: 50%;
+        position: absolute; bottom: 0; left: 50%;
         transform: translateX(-50%);
-        width: 300px; height: 300px; border-radius: 50%; pointer-events: none;
-        background: radial-gradient(ellipse, rgba(124,58,237,0.22) 0%, rgba(232,24,90,0.1) 55%, transparent 75%);
+        width: 320px; height: 260px; border-radius: 50%; pointer-events: none;
+        background: radial-gradient(ellipse, rgba(197,100,0,0.18) 0%, rgba(124,58,237,0.12) 55%, transparent 75%);
         animation: glowPulse 3.5s ease-in-out infinite alternate;
     }
     @keyframes glowPulse {
-        from { opacity: 0.5; transform: translateX(-50%) scale(1); }
-        to   { opacity: 0.9; transform: translateX(-50%) scale(1.1); }
+        from { opacity: 0.6; transform: translateX(-50%) scale(1); }
+        to   { opacity: 1;   transform: translateX(-50%) scale(1.1); }
     }
 
     /* Top-left location tag */
     .splash-corner {
-        position: absolute; top: calc(env(safe-area-inset-top) + 16px); left: 20px;
+        position: absolute; top: calc(env(safe-area-inset-top) + 14px); left: 20px;
         display: flex; align-items: center; gap: 7px;
         opacity: 0; animation: fadeUp 0.8s 0.3s var(--ease-luxury) forwards;
     }
     .splash-corner-line { width: 22px; height: 1px; background: var(--accent-gold); }
     .splash-corner-text {
-        font-size: 8px; font-weight: 700; letter-spacing: 3.5px;
-        text-transform: uppercase; color: rgba(255,255,255,0.55);
+        font-size: 8px; font-weight: 700; letter-spacing: 3px;
+        text-transform: uppercase; color: rgba(255,255,255,0.5);
     }
 
-    /* Bottom-anchored content panel */
+    /* ── CENTERED content — sits in the bottom half ── */
     .splash-content {
         position: absolute; bottom: 0; left: 0; right: 0;
-        padding: 0 30px calc(env(safe-area-inset-bottom) + 50px);
+        /* enough height so everything is visible above chrome nav */
+        padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
+        padding-left: 24px; padding-right: 24px;
         display: flex; flex-direction: column; align-items: center;
         text-align: center;
     }
 
-    /* EST badge */
     .splash-est {
         display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
         opacity: 0; animation: fadeUp 0.7s 0.55s var(--ease-luxury) forwards;
     }
-    .splash-est-line { width: 22px; height: 1px; background: rgba(197,160,40,0.6); }
+    .splash-est-line { width: 22px; height: 1px; background: rgba(197,160,40,0.7); }
     .splash-est span {
         font-size: 8px; font-weight: 800; letter-spacing: 4px;
-        text-transform: uppercase; color: var(--accent-gold); opacity: 0.85;
+        text-transform: uppercase; color: var(--accent-gold);
     }
 
-    /* Big script name */
+    /* Single-line script title — scaled to fit */
     .splash-title {
         font-family: 'Great Vibes', cursive; color: #fff;
-        font-size: 68px; line-height: 1.05;
-        text-shadow: 0 2px 24px rgba(0,0,0,0.6);
-        margin-bottom: 6px;
+        font-size: clamp(44px, 13vw, 62px);
+        line-height: 1; white-space: nowrap;
+        text-shadow: 0 2px 20px rgba(0,0,0,0.5), 0 0 40px rgba(232,120,0,0.25);
+        margin-bottom: 8px;
         opacity: 0; animation: fadeUp 0.9s 0.7s var(--ease-luxury) forwards;
     }
 
-    /* Tagline */
     .splash-slogan {
-        font-size: 9px; letter-spacing: 5px; text-transform: uppercase;
-        font-weight: 600; color: rgba(255,255,255,0.5);
-        margin-bottom: 32px;
+        font-size: 8.5px; letter-spacing: 5px; text-transform: uppercase;
+        font-weight: 700; color: rgba(255,255,255,0.5);
+        margin-bottom: 28px;
         opacity: 0; animation: fadeUp 0.8s 0.85s var(--ease-luxury) forwards;
     }
 
     .splash-divider { display: none; }
 
-    /* CTA */
+    /* Frosted glass pill button — matches neon warmth */
     .btn-discover {
-        padding: 15px 56px; border-radius: 50px; border: none;
-        background: linear-gradient(135deg, #7C3AED 0%, #E8185A 100%);
-        color: #fff; font-weight: 800; letter-spacing: 2.5px; cursor: pointer;
+        padding: 15px 52px; border-radius: 50px;
+        border: 1px solid rgba(255,255,255,0.25);
+        background: rgba(255,255,255,0.12);
+        backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        color: #fff; font-weight: 800; letter-spacing: 3px; cursor: pointer;
         font-family: 'Montserrat', sans-serif; font-size: 11px; text-transform: uppercase;
-        box-shadow: 0 10px 36px rgba(124,58,237,0.5);
-        transition: transform 0.2s var(--ease-spring), box-shadow 0.2s;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+        transition: transform 0.2s var(--ease-spring), background 0.25s, box-shadow 0.2s;
         position: relative; overflow: hidden;
         opacity: 0; animation: fadeUp 0.8s 1.0s var(--ease-luxury) forwards;
     }
+    /* Amber shimmer strip at top */
+    .btn-discover::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(197,160,40,0.8), transparent);
+    }
     .btn-discover::after {
         content: ''; position: absolute; inset: 0; border-radius: inherit;
-        background: linear-gradient(135deg, rgba(255,255,255,0.14), transparent);
+        background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 60%);
     }
-    .btn-discover:active { transform: scale(0.96); box-shadow: 0 5px 18px rgba(124,58,237,0.35); }
+    .btn-discover:active { transform: scale(0.96); background: rgba(255,255,255,0.18); }
 
-    /* Sub caption */
     .splash-sub {
         margin-top: 16px; font-size: 8px; letter-spacing: 2.5px; font-weight: 600;
-        color: rgba(255,255,255,0.18); text-transform: uppercase;
+        color: rgba(255,255,255,0.2); text-transform: uppercase;
         opacity: 0; animation: fadeUp 0.7s 1.15s var(--ease-luxury) forwards;
     }
 
     @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(16px); }
+        from { opacity: 0; transform: translateY(14px); }
         to   { opacity: 1; transform: translateY(0); }
     }
 
