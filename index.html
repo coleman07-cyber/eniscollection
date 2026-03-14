@@ -4,7 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ENIS COLLECTION</title>
+    <title>Enis Collection</title>
+    <meta name="description" content="Enis Collection — Women's fashion. Thrift, store & handmade pieces.">
+    <meta name="theme-color" content="#C5A028">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Enis">
+    <link rel="manifest" href="manifest.json">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 
@@ -430,13 +436,6 @@
     }
     #splash-screen.hidden { opacity: 0; transform: scale(1.06); pointer-events: none; }
 
-    /* TOP — location pill */
-    .splash-top {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        padding-top: 16px;
-    }
     .splash-badge {
         font-size: 9px; font-weight: 800; letter-spacing: 4px; text-transform: uppercase;
         color: #E6A817;
@@ -671,6 +670,49 @@
     .no-results { grid-column: 1/-1; text-align: center; padding: 40px 20px; color: var(--text-soft); }
     .no-results i { font-size: 40px; opacity: 0.2; color: var(--accent-gold); display: block; margin-bottom: 12px; }
     .no-results p { font-size: 13px; line-height: 1.8; }
+
+
+    /* ── Scroll-to-top button (appears after scrolling) ── */
+    #scroll-top-btn {
+        position: fixed; left: 14px; bottom: 44px; z-index: 9000;
+        width: 44px; height: 44px; border-radius: 14px; border: none;
+        background: var(--card-bg);
+        color: var(--text-soft);
+        font-size: 16px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        border: 1px solid var(--border);
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; transform: translateY(12px);
+        transition: opacity 0.3s, transform 0.3s var(--ease-luxury);
+        pointer-events: none;
+    }
+    #scroll-top-btn.show {
+        opacity: 1; transform: translateY(0); pointer-events: auto;
+    }
+    #scroll-top-btn:active { transform: scale(0.88); }
+
+    /* ── Product card hover lift (desktop) ── */
+    @media (hover: hover) {
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+            transition: transform 0.3s var(--ease-luxury), box-shadow 0.3s var(--ease-luxury);
+        }
+    }
+
+    /* ── Smooth image load fade-in ── */
+    .p-image-wrap img { opacity: 0; transition: opacity 0.4s ease, transform 0.5s var(--ease-luxury); }
+    .p-image-wrap img.loaded { opacity: 1; }
+
+    /* ── Pull-to-refresh visual indicator ── */
+    .ptr-indicator {
+        text-align: center; padding: 8px; font-size: 10px;
+        letter-spacing: 2px; text-transform: uppercase;
+        color: var(--accent-gold); font-weight: 700;
+        opacity: 0; transition: opacity 0.3s;
+        height: 0; overflow: hidden;
+    }
 </style>
 
 </head>
@@ -683,11 +725,6 @@
 <div id="splash-screen">
 
 ```
-<!-- Top: location pill -->
-<div class="splash-top">
-    <div class="splash-badge">Cape Coast &nbsp;·&nbsp; Ghana</div>
-</div>
-
 <!-- Middle: title + tagline + button all together -->
 <div class="splash-middle">
     <h1 class="splash-title">Enis Collection</h1>
@@ -914,6 +951,9 @@
 </div>
 
 <div id="toast"></div>
+<button id="scroll-top-btn" onclick="scrollToTop()" title="Back to top">
+    <i class="fas fa-chevron-up"></i>
+</button>
 
 <script>
     const myProducts = [
@@ -1069,17 +1109,25 @@
                 </div>
             </div>`;
         }).join('');
-        requestAnimationFrame(() => document.querySelectorAll('.product-card').forEach(c => c.classList.add('visible')));
+        requestAnimationFrame(() => { document.querySelectorAll('.product-card').forEach(c => c.classList.add('visible')); initImageFade(); });
     }
 
     function handleScroll() {
-        document.querySelectorAll('.product-card').forEach(card => {
-            if (card.getBoundingClientRect().top < window.innerHeight * 0.95) card.classList.add('visible');
+        var feed = document.getElementById('mainFeed');
+        // Reveal cards as they scroll into view
+        document.querySelectorAll('.product-card').forEach(function(card) {
+            if (card.getBoundingClientRect().top < window.innerHeight * 0.95) {
+                card.classList.add('visible');
+            }
         });
-        const fab = document.getElementById('fab-group');
+        // Hide FABs while scrolling, show again after stop
+        var fab = document.getElementById('fab-group');
         fab.classList.add('hidden-scroll');
         clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(() => fab.classList.remove('hidden-scroll'), 800);
+        scrollTimer = setTimeout(function() { fab.classList.remove('hidden-scroll'); }, 800);
+        // Show scroll-to-top button after 300px
+        var topBtn = document.getElementById('scroll-top-btn');
+        if (topBtn) { topBtn.classList.toggle('show', feed.scrollTop > 300); }
     }
 
     function openPreview(id) {
@@ -1258,6 +1306,19 @@
         t.classList.add('show');
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    // ── Image fade-in on load ──
+    function initImageFade() {
+        document.querySelectorAll('.p-image-wrap img').forEach(img => {
+            if (img.complete) { img.classList.add('loaded'); }
+            else { img.onload = function() { this.classList.add('loaded'); }; }
+        });
+    }
+
+    // ── Scroll-to-top button ──
+    function scrollToTop() {
+        document.getElementById('mainFeed').scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>
 
