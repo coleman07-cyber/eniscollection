@@ -66,9 +66,15 @@
 
     /* HEADER */
     .app-header {
-        padding: calc(env(safe-area-inset-top) + 8px) 14px 0;
+        padding: calc(env(safe-area-inset-top) + 12px) 14px 0;
         flex-shrink: 0;
         background: var(--bg);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        /* Frosted glass effect so content slides under cleanly */
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
     }
 
     .search-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
@@ -537,10 +543,10 @@
        Light: soft pink background with red icon
        Dark:  deep dark-rose background with pink icon    */
     .fab-wish {
-        background: var(--card-bg);
+        background: #fff;
         color: #E53E3E;
-        box-shadow: 0 4px 16px rgba(229, 62, 62, 0.2), 0 2px 6px rgba(0,0,0,0.08);
-        border: 1.5px solid rgba(229, 62, 62, 0.25);
+        box-shadow: 0 6px 20px rgba(229, 62, 62, 0.25), 0 2px 8px rgba(0,0,0,0.12);
+        border: 1.5px solid rgba(229, 62, 62, 0.3);
     }
     @media (prefers-color-scheme: dark) {
         .fab-wish {
@@ -555,10 +561,10 @@
        Light: soft warm white with gold icon
        Dark:  deep dark-gold background with yellow icon  */
     .fab-cart {
-        background: var(--card-bg);
-        color: var(--accent-gold);
-        box-shadow: 0 4px 16px rgba(197, 160, 40, 0.2), 0 2px 6px rgba(0,0,0,0.08);
-        border: 1.5px solid rgba(197, 160, 40, 0.25);
+        background: #fff;
+        color: #C5A028;
+        box-shadow: 0 6px 20px rgba(197, 160, 40, 0.25), 0 2px 8px rgba(0,0,0,0.12);
+        border: 1.5px solid rgba(197, 160, 40, 0.3);
     }
     @media (prefers-color-scheme: dark) {
         .fab-cart {
@@ -702,17 +708,9 @@
     }
 
     /* ── Smooth image load fade-in ── */
-    .p-image-wrap img { opacity: 0; transition: opacity 0.4s ease, transform 0.5s var(--ease-luxury); }
-    .p-image-wrap img.loaded { opacity: 1; }
+    .p-image-wrap img { opacity: 1; transition: opacity 0.4s ease, transform 0.5s var(--ease-luxury); }
 
-    /* ── Pull-to-refresh visual indicator ── */
-    .ptr-indicator {
-        text-align: center; padding: 8px; font-size: 10px;
-        letter-spacing: 2px; text-transform: uppercase;
-        color: var(--accent-gold); font-weight: 700;
-        opacity: 0; transition: opacity 0.3s;
-        height: 0; overflow: hidden;
-    }
+
 </style>
 
 </head>
@@ -1308,13 +1306,8 @@
         toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
     }
 
-    // ── Image fade-in on load ──
-    function initImageFade() {
-        document.querySelectorAll('.p-image-wrap img').forEach(img => {
-            if (img.complete) { img.classList.add('loaded'); }
-            else { img.onload = function() { this.classList.add('loaded'); }; }
-        });
-    }
+    // ── Image fade-in on load (safe no-op now, images always visible) ──
+    function initImageFade() { /* images are always visible, no fade needed */ }
 
     // ── Scroll-to-top button ──
     function scrollToTop() {
