@@ -49,7 +49,7 @@
     }
     *::-webkit-scrollbar { display: none; }
 
-    body { background: var(--bg); height: 100vh; overflow: hidden; width: 100%; }
+    body { background: var(--bg); height: 100vh; overflow: hidden; }
     .app-shell { width: 100%; max-width: 420px; height: 100vh; margin: 0 auto; background: var(--bg); position: relative; overflow: hidden; }
 
     #shop-content { 
@@ -281,15 +281,15 @@
     .about-stamp { text-align: center; padding: 40px 22px 0; font-size: 8px; letter-spacing: 4px; font-weight: 700; color: var(--text-soft); opacity: 0.35; text-transform: uppercase; }
 
     /* ══════════════════════════════════════════════════════
-       PREVIEW MODAL BACKDROP
-       position:fixed, sized by JS in openPreview() to exactly
-       match the app-shell column — so it centres correctly on
-       any screen width including desktop browsers.
-       DO NOT move #item-preview back inside .app-shell.
-       DO NOT set top/left/width/height here — JS owns those.
+       PREVIEW MODAL
+       position:fixed + inset:0 covers the full viewport.
+       Flexbox centres the card both horizontally + vertically.
+       This works because the modal is OUTSIDE .app-shell,
+       so overflow:hidden on the shell cannot clip it.
     ══════════════════════════════════════════════════════ */
     #item-preview {
         position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
         z-index: 10000;
         display: none;
         align-items: center;
@@ -306,12 +306,10 @@
         -webkit-backdrop-filter: blur(24px);
     }
 
-    /* ── The card inside the modal ──
-       width / height are % of the app column set by JS.
-       To make bigger: raise 80% below in openPreview()
-       To make taller: raise 72vh                            */
+    /* ── Card ──
+       80vw wide, capped at 300px, 72vh tall             */
     .preview-box {
-        width: 80%;
+        width: 80vw;
         max-width: 300px;
         height: 72vh;
         border-radius: 44px;
@@ -406,53 +404,99 @@
 
     /* ══════════════════════════════════════════════════════
        SPLASH SCREEN
-       To swap background: change url() in #splash-screen
-       To adjust darkness: edit the rgba values in the gradient
+       Layout: 3 zones stacked with space-between
+         TOP    — location pill
+         MIDDLE — title + tagline (centred over the neon sign)
+         BOTTOM — divider + est. line + SHOP NOW button
+       To swap background image: edit url() below
+       To adjust overlay darkness: edit the rgba gradient values
     ══════════════════════════════════════════════════════ */
     #splash-screen {
         position: absolute; inset: 0; z-index: 9999;
         background:
-            linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.88) 72%, rgba(0,0,0,0.97) 100%),
-            url('images/Splash-Dress.PNG') top/cover no-repeat;
-        display: flex; flex-direction: column;
-        justify-content: flex-end; align-items: center; text-align: center;
-        padding: 0 32px 120px;
+            linear-gradient(to bottom,
+                rgba(0,0,0,0.55) 0%,
+                rgba(0,0,0,0.05) 25%,
+                rgba(0,0,0,0.05) 62%,
+                rgba(0,0,0,0.82) 78%,
+                rgba(0,0,0,0.96) 100%),
+            url('images/Splash-Dress.PNG') center/cover no-repeat;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: env(safe-area-inset-top, 20px) 32px env(safe-area-inset-bottom, 40px);
         transition: opacity 1s ease, transform 1.2s var(--ease-luxury);
     }
     #splash-screen.hidden { opacity: 0; transform: scale(1.06); pointer-events: none; }
 
+    /* TOP — location pill */
+    .splash-top {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding-top: 16px;
+    }
     .splash-badge {
-        font-size: 9px; font-weight: 800; letter-spacing: 5px; text-transform: uppercase;
+        font-size: 9px; font-weight: 800; letter-spacing: 4px; text-transform: uppercase;
         color: #E6A817;
-        background: rgba(230,168,23,0.12); border: 1px solid rgba(230,168,23,0.35);
-        padding: 6px 18px; border-radius: 50px; margin-bottom: 22px;
+        background: rgba(230,168,23,0.15);
+        border: 1px solid rgba(230,168,23,0.4);
+        padding: 7px 20px; border-radius: 50px;
+    }
+
+    /* MIDDLE — grows to fill space, centres title over the sign */
+    .splash-middle {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
     .splash-title {
-        font-family: 'Great Vibes', cursive; color: #ffffff; font-size: 58px; line-height: 1; white-space: nowrap;
-        text-shadow: 0 0 40px rgba(230,168,23,0.55), 0 2px 20px rgba(0,0,0,0.8);
+        font-family: 'Great Vibes', cursive;
+        color: #ffffff;
+        font-size: 62px;
+        line-height: 1;
+        white-space: nowrap;
+        text-shadow: 0 0 50px rgba(230,168,23,0.7), 0 2px 24px rgba(0,0,0,0.9);
         margin-bottom: 10px;
     }
     .splash-slogan {
-        font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
-        font-weight: 700; color: rgba(255,255,255,0.65);
+        font-size: 10px; letter-spacing: 6px; text-transform: uppercase;
+        font-weight: 700; color: rgba(255,255,255,0.6);
+    }
+
+    /* BOTTOM — fixed bottom area with button */
+    .splash-bottom {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        padding-bottom: 16px;
     }
     .splash-divider {
-        width: 40px; height: 1px; margin: 20px auto;
+        width: 36px; height: 1px; margin: 18px auto 22px;
         background: linear-gradient(to right, transparent, #E6A817, transparent);
     }
     .splash-location {
         font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
-        font-weight: 600; color: rgba(255,255,255,0.4); margin-bottom: 48px;
+        font-weight: 600; color: rgba(255,255,255,0.35);
+        margin-bottom: 28px;
     }
     .btn-discover {
-        padding: 18px 64px; border-radius: 50px; border: none;
+        width: 100%;
+        max-width: 280px;
+        padding: 18px 0;
+        border-radius: 50px; border: none;
         font-weight: 800; background: #E6A817; color: #000;
         letter-spacing: 3px; cursor: pointer;
         font-family: 'Montserrat', sans-serif; font-size: 11px;
-        box-shadow: 0 8px 32px rgba(230,168,23,0.45);
+        box-shadow: 0 8px 32px rgba(230,168,23,0.5);
         transition: transform 0.2s, box-shadow 0.2s;
     }
-    .btn-discover:active { transform: scale(0.95); box-shadow: 0 4px 16px rgba(230,168,23,0.3); }
+    .btn-discover:active { transform: scale(0.96); box-shadow: 0 4px 16px rgba(230,168,23,0.3); }
 
     /* ══════════════════════════════════════════════════════
        FABs — theme-aware (auto light / dark)
@@ -637,11 +681,27 @@
 <!-- SPLASH -->
 
 <div id="splash-screen">
+
+```
+<!-- Top: location pill -->
+<div class="splash-top">
+    <div class="splash-badge">Cape Coast &nbsp;·&nbsp; Ghana</div>
+</div>
+
+<!-- Middle: title + tagline + button all together -->
+<div class="splash-middle">
     <h1 class="splash-title">Enis Collection</h1>
     <p class="splash-slogan">Pamper Your Body</p>
     <div class="splash-divider"></div>
-    <p class="splash-location">Cape Coast &nbsp;·&nbsp; Est. 2022</p>
     <button class="btn-discover" onclick="launchApp()">SHOP NOW</button>
+</div>
+
+<!-- Bottom: est. line -->
+<div class="splash-bottom">
+    <p class="splash-location">Est. 2022 &nbsp;·&nbsp; Women's Fashion</p>
+</div>
+```
+
 </div>
 
 <!-- SHOP CONTENT -->
@@ -1033,15 +1093,7 @@
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
         syncPreviewState();
 
-        // Size the modal backdrop to exactly match the app-shell column.
-        // This ensures the card centres over the app on any screen width.
         const modal = document.getElementById('item-preview');
-        const r = document.querySelector('.app-shell').getBoundingClientRect();
-        modal.style.top    = r.top  + 'px';
-        modal.style.left   = r.left + 'px';
-        modal.style.width  = r.width  + 'px';
-        modal.style.height = r.height + 'px';
-
         modal.style.display = 'flex';
         requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add('active')));
     }
