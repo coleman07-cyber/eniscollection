@@ -4,13 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Enis Collection</title>
-    <meta name="description" content="Enis Collection — Women's fashion. Thrift, store & handmade pieces.">
-    <meta name="theme-color" content="#C5A028">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Enis">
-    <link rel="manifest" href="manifest.json">
+    <title>ENIS COLLECTION</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 
@@ -55,7 +49,7 @@
     }
     *::-webkit-scrollbar { display: none; }
 
-    body { background: var(--bg); height: 100vh; overflow: hidden; }
+    body { background: var(--bg); height: 100vh; overflow: hidden; position: fixed; width: 100%; }
     .app-shell { width: 100%; max-width: 420px; height: 100vh; margin: 0 auto; background: var(--bg); position: relative; overflow: hidden; }
 
     #shop-content { 
@@ -66,15 +60,9 @@
 
     /* HEADER */
     .app-header {
-        padding: calc(env(safe-area-inset-top) + 12px) 14px 0;
+        padding: calc(env(safe-area-inset-top) + 8px) 14px 0;
         flex-shrink: 0;
         background: var(--bg);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        /* Frosted glass effect so content slides under cleanly */
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
     }
 
     .search-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
@@ -133,6 +121,9 @@
     }
     .filter-apply:active { opacity: 0.8; }
 
+    /* ══════════════════════════════
+       CATEGORY SECTION — NEW CHIP STYLE
+    ══════════════════════════════ */
     .cat-section { margin-bottom: 2px; }
     .cat-header {
         display: flex; justify-content: space-between; align-items: center;
@@ -146,6 +137,7 @@
     }
     .see-all-btn:active { opacity: 0.6; }
 
+    /* Horizontal pill chip row */
     .cat-chip-scroll {
         display: flex; gap: 8px; overflow-x: auto;
         padding-bottom: 10px;
@@ -201,6 +193,7 @@
     }
     .cat-chip.active .cat-chip-label { color: #fff; }
 
+    /* Search results */
     .search-results-bar {
         display: none; padding: 8px 18px 0;
         font-size: 11px; color: var(--text-soft); font-weight: 600; letter-spacing: 0.5px;
@@ -292,301 +285,107 @@
     .contact-card-text p  { font-size: 9px; color: var(--text-soft); margin-top: 2px; font-weight: 500; }
     .about-stamp { text-align: center; padding: 40px 22px 0; font-size: 8px; letter-spacing: 4px; font-weight: 700; color: var(--text-soft); opacity: 0.35; text-transform: uppercase; }
 
-    /* ══════════════════════════════════════════════════════
-       PREVIEW MODAL
-       position:fixed + inset:0 covers the full viewport.
-       Flexbox centres the card both horizontally + vertically.
-       This works because the modal is OUTSIDE .app-shell,
-       so overflow:hidden on the shell cannot clip it.
-    ══════════════════════════════════════════════════════ */
+    /* PREVIEW MODAL */
     #item-preview {
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        z-index: 10000;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        background: rgba(0, 0, 0, 0);
-        backdrop-filter: blur(0px);
-        -webkit-backdrop-filter: blur(0px);
+        position: fixed; inset: 0; z-index: 10000;
+        display: none; align-items: center; justify-content: center;
+        padding: 24px 20px;
+        background: rgba(0,0,0,0);
+        backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
         transition: background 0.4s ease, backdrop-filter 0.4s ease;
     }
-    #item-preview.active {
-        display: flex;
-        background: rgba(0, 0, 0, 0.65);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
-    }
-
-    /* ── Card ──
-       80vw wide, capped at 300px, 72vh tall             */
+    #item-preview.active { display: flex; background: rgba(0,0,0,0.65); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
     .preview-box {
-        width: 80vw;
-        max-width: 300px;
-        height: 72vh;
-        border-radius: 44px;
-        overflow: hidden;
-        position: relative;
-        transform: scale(0.88) translateY(30px);
-        opacity: 0;
+        width: 90%; max-width: 350px; height: 78vh; border-radius: 50px; overflow: hidden; position: relative;
+        transform: scale(0.88) translateY(30px); opacity: 0;
         transition: transform 0.55s var(--ease-spring), opacity 0.4s ease;
-        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-        outline: 5px solid rgba(255, 255, 255, 0.82);
-        outline-offset: 0px;
+        box-shadow: 0 40px 100px rgba(0,0,0,0.6);
     }
-    #item-preview.active .preview-box {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-    }
-
-    /* Full-bleed image */
+    #item-preview.active .preview-box { transform: scale(1) translateY(0); opacity: 1; }
     .preview-img-fill { position: absolute; inset: 0; }
-    .preview-img-fill img { width: 100%; height: 100%; object-fit: cover; }
+    .preview-img-fill img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease-luxury); }
     .preview-img-fill::before {
         content: ''; position: absolute; inset: 0; z-index: 1;
-        background: linear-gradient(180deg, rgba(0,0,0,0.28) 0%, transparent 32%, transparent 48%, rgba(0,0,0,0.72) 78%, rgba(0,0,0,0.92) 100%);
+        background: linear-gradient(180deg, rgba(0,0,0,0.30) 0%, transparent 35%, transparent 50%, rgba(0,0,0,0.75) 80%, rgba(0,0,0,0.92) 100%);
     }
-
-    /* Wishlist + Cart stacked column — top right */
-    .preview-action-stack {
-        position: absolute; top: 14px; right: 14px; z-index: 10;
-        display: flex; flex-direction: column; gap: 8px; align-items: center;
-    }
-
     .preview-wish-circle {
-        width: 40px; height: 40px; border-radius: 50%;
+        position: absolute; top: 18px; right: 18px; z-index: 10;
+        width: 46px; height: 46px; border-radius: 50%;
         background: rgba(255,255,255,0.18); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255,255,255,0.25);
         display: flex; align-items: center; justify-content: center;
         cursor: pointer; transition: transform 0.3s var(--ease-spring), background 0.25s;
     }
-    .preview-wish-circle i { font-size: 16px; color: #fff; transition: transform 0.3s var(--ease-spring); }
+    .preview-wish-circle i { font-size: 18px; color: #fff; transition: transform 0.3s var(--ease-spring); }
     .preview-wish-circle.wishlisted { background: rgba(229,62,62,0.35); border-color: rgba(229,62,62,0.5); }
     .preview-wish-circle.wishlisted i { color: #ff6b6b; transform: scale(1.2); }
     .preview-wish-circle:active { transform: scale(0.88); }
-
-    /* Text + buttons at bottom, inside the image */
-    .preview-text-overlay {
-        position: absolute; bottom: 0; left: 0; right: 0; z-index: 5;
-        padding: 18px 16px 16px;
-    }
-    .preview-overlay-name {
-        font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 900;
-        color: #fff; line-height: 1.15; margin-bottom: 4px;
-        text-shadow: 0 2px 12px rgba(0,0,0,0.4);
-    }
-    .preview-overlay-sub {
-        font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.72);
-        margin-bottom: 10px; letter-spacing: 0.2px;
-    }
-    .preview-overlay-meta {
-        display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
-    }
-    .preview-meta-chip {
-        display: flex; align-items: center; gap: 5px;
-        font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.9);
-    }
-    .preview-meta-chip i { font-size: 11px; color: rgba(255,255,255,0.65); }
-
-    /* WhatsApp order button */
+    .preview-text-overlay { position: absolute; bottom: 0; left: 0; right: 0; z-index: 5; padding: 24px 22px 20px; }
+    .preview-overlay-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: #fff; line-height: 1.15; margin-bottom: 6px; text-shadow: 0 2px 12px rgba(0,0,0,0.4); }
+    .preview-overlay-sub { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.75); margin-bottom: 14px; letter-spacing: 0.2px; }
+    .preview-overlay-meta { display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
+    .preview-meta-chip { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.9); }
+    .preview-meta-chip i { font-size: 14px; color: rgba(255,255,255,0.7); }
     .preview-order-btn {
         display: flex; align-items: center; justify-content: center; gap: 8px;
-        width: 100%; padding: 12px; background: transparent; color: #fff;
-        border-radius: 50px; border: 0.5px solid rgba(255,255,255,0.55);
-        font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+        width: 100%; padding: 14px; background: #fff; color: #0A0A0A;
+        border-radius: 50px; border: none; font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
         font-family: 'Montserrat', sans-serif; text-decoration: none; cursor: pointer;
         transition: transform 0.2s var(--ease-spring), box-shadow 0.2s;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
-    .preview-order-btn:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
-    .preview-order-btn i { color: #25D366; font-size: 16px; }
-
-    /* Add to Bag */
+    .preview-order-btn:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+    .preview-order-btn i { color: #25D366; font-size: 18px; }
     .preview-bag-btn {
-        width: 40px; height: 40px; border-radius: 50%;
-        background: rgba(255,255,255,0.18); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255,255,255,0.25);
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer; transition: transform 0.3s var(--ease-spring), background 0.25s;
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        width: 100%; padding: 14px;
+        background: rgba(255,255,255,0.12); backdrop-filter: blur(8px);
+        color: #fff; border-radius: 50px; border: 1px solid rgba(255,255,255,0.25);
+        font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+        font-family: 'Montserrat', sans-serif; cursor: pointer; margin-top: 8px;
+        transition: background 0.25s, transform 0.2s var(--ease-spring);
     }
-    .preview-bag-btn i { font-size: 15px; color: #fff; transition: color 0.25s, transform 0.3s var(--ease-spring); }
-    .preview-bag-btn:active { transform: scale(0.88); }
-    .preview-bag-btn.added { background: rgba(124,58,237,0.45); border-color: rgba(124,58,237,0.6); }
-    .preview-bag-btn.added i { color: #fff; transform: scale(1.2); }
+    .preview-bag-btn:active { transform: scale(0.97); }
+    .preview-bag-btn.added { background: rgba(124,58,237,0.35); border-color: rgba(124,58,237,0.5); }
 
-    /* ══════════════════════════════════════════════════════
-       SPLASH SCREEN
-       Layout: 3 zones stacked with space-between
-         TOP    — location pill
-         MIDDLE — title + tagline (centred over the neon sign)
-         BOTTOM — divider + est. line + SHOP NOW button
-       To swap background image: edit url() below
-       To adjust overlay darkness: edit the rgba gradient values
-    ══════════════════════════════════════════════════════ */
-    #splash-screen {
-        position: absolute; inset: 0; z-index: 9999;
-        background:
-            linear-gradient(to bottom,
-                rgba(0,0,0,0.55) 0%,
-                rgba(0,0,0,0.05) 25%,
-                rgba(0,0,0,0.05) 62%,
-                rgba(0,0,0,0.82) 78%,
-                rgba(0,0,0,0.96) 100%),
-            url('images/Splash-Dress.PNG') center/cover no-repeat;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: env(safe-area-inset-top, 20px) 32px env(safe-area-inset-bottom, 40px);
-        transition: opacity 1s ease, transform 1.2s var(--ease-luxury);
+    /* SPLASH */
+    #splash-screen { 
+        position: absolute; inset: 0; z-index: 9999; 
+        background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('images/Splash-Dress.PNG') center/cover; 
+        display: flex; flex-direction: column; justify-content: center; align-items: center; 
+        transition: transform 1.2s var(--ease-luxury), opacity 0.8s ease; 
     }
-    #splash-screen.hidden { opacity: 0; transform: scale(1.06); pointer-events: none; }
+    #splash-screen.hidden { opacity: 0; transform: scale(1.1); pointer-events: none; }
+    .splash-title { font-family: 'Great Vibes', cursive; color: white; font-size: 64px; }
+    .splash-slogan { font-size: 10px; letter-spacing: 6px; text-transform: uppercase; font-weight: 700; color: var(--accent-gold); margin-top: -10px; }
+    .btn-discover { margin-top: 50px; padding: 20px 75px; border-radius: 50px; border: none; font-weight: 800; background: #FFF; color: #000; letter-spacing: 3px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 13px; }
 
-    .splash-badge {
-        font-size: 9px; font-weight: 800; letter-spacing: 4px; text-transform: uppercase;
-        color: #E6A817;
-        background: rgba(230,168,23,0.15);
-        border: 1px solid rgba(230,168,23,0.4);
-        padding: 7px 20px; border-radius: 50px;
-    }
-
-    /* MIDDLE — grows to fill space, centres title over the sign */
-    .splash-middle {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-    .splash-title {
-        font-family: 'Great Vibes', cursive;
-        color: #ffffff;
-        font-size: 62px;
-        line-height: 1;
-        white-space: nowrap;
-        text-shadow: 0 0 50px rgba(230,168,23,0.7), 0 2px 24px rgba(0,0,0,0.9);
-        margin-bottom: 10px;
-    }
-    .splash-slogan {
-        font-size: 10px; letter-spacing: 6px; text-transform: uppercase;
-        font-weight: 700; color: rgba(255,255,255,0.6);
-    }
-
-    /* BOTTOM — fixed bottom area with button */
-    .splash-bottom {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0;
-        padding-bottom: 16px;
-    }
-    .splash-divider {
-        width: 36px; height: 1px; margin: 18px auto 22px;
-        background: linear-gradient(to right, transparent, #E6A817, transparent);
-    }
-    .splash-location {
-        font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
-        font-weight: 600; color: rgba(255,255,255,0.35);
-        margin-bottom: 28px;
-    }
-    .btn-discover {
-        width: 100%;
-        max-width: 280px;
-        padding: 18px 0;
-        border-radius: 50px; border: none;
-        font-weight: 800; background: #E6A817; color: #000;
-        letter-spacing: 3px; cursor: pointer;
-        font-family: 'Montserrat', sans-serif; font-size: 11px;
-        box-shadow: 0 8px 32px rgba(230,168,23,0.5);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-discover:active { transform: scale(0.96); box-shadow: 0 4px 16px rgba(230,168,23,0.3); }
-
-    /* ══════════════════════════════════════════════════════
-       FABs — theme-aware (auto light / dark)
-       The colours below use CSS variables so they flip
-       automatically when the phone switches mode.
-       To reposition: edit right + bottom values.
-       To resize: edit width + height + font-size.
-    ══════════════════════════════════════════════════════ */
+    /* FABs */
     .fab-group {
-        position: fixed;
-        right: 14px;
-        bottom: 44px;
-        z-index: 9000;
-        display: none;
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
+        position: fixed; right: 14px; bottom: 40px; z-index: 9000;
+        display: none; flex-direction: column; gap: 4px; align-items: center;
         transition: opacity 0.3s var(--ease-luxury), transform 0.3s var(--ease-luxury);
     }
-    .fab-group.visible  { display: flex; opacity: 1; transform: translateY(0); }
+    .fab-group.visible { display: flex; opacity: 1; transform: translateY(0); }
     .fab-group.hidden-scroll { opacity: 0; transform: translateY(20px); pointer-events: none; }
-
     .fab {
-        width: 52px;
-        height: 52px;
-        border-radius: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        position: relative;
-        font-size: 20px;
-        border: none;
-        transition: transform 0.25s var(--ease-spring), box-shadow 0.25s;
+        width: 40px; height: 40px; border-radius: 40px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; position: relative; font-size: 18px;
+        border: none; transition: transform 0.2s var(--ease-luxury);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     }
     .fab:active { transform: scale(0.88); }
-
-    /* ── Wishlist FAB ──
-       Light: soft pink background with red icon
-       Dark:  deep dark-rose background with pink icon    */
-    .fab-wish {
-        background: #fff;
-        color: #E53E3E;
-        box-shadow: 0 6px 20px rgba(229, 62, 62, 0.25), 0 2px 8px rgba(0,0,0,0.12);
-        border: 1.5px solid rgba(229, 62, 62, 0.3);
-    }
-    @media (prefers-color-scheme: dark) {
-        .fab-wish {
-            background: #2d1a22;
-            color: #ff6b8a;
-            box-shadow: 0 8px 24px rgba(229,62,62,0.28), 0 2px 8px rgba(0,0,0,0.4);
-            border: 1px solid rgba(229,62,62,0.2);
-        }
-    }
-
-    /* ── Cart FAB ──
-       Light: soft warm white with gold icon
-       Dark:  deep dark-gold background with yellow icon  */
-    .fab-cart {
-        background: #fff;
-        color: #C5A028;
-        box-shadow: 0 6px 20px rgba(197, 160, 40, 0.25), 0 2px 8px rgba(0,0,0,0.12);
-        border: 1.5px solid rgba(197, 160, 40, 0.3);
-    }
-    @media (prefers-color-scheme: dark) {
-        .fab-cart {
-            background: #261f0d;
-            color: #e6bb4a;
-            box-shadow: 0 8px 24px rgba(197,160,40,0.28), 0 2px 8px rgba(0,0,0,0.4);
-            border: 1px solid rgba(197,160,40,0.2);
-        }
-    }
-
-    /* ── Badge on FAB ── */
+    .fab-wish { background: #fff; color: #E53E3E; }
+    .fab-cart { background: #fff; color: var(--accent-gold); }
+    @media (prefers-color-scheme: dark) { .fab-wish { background: #1a1a1a; } .fab-cart { background: #1a1a1a; } }
     .fab-badge {
-        position: absolute;
-        top: -7px; right: -7px;
-        min-width: 20px; height: 20px;
-        border-radius: 10px; padding: 0 5px;
-        font-size: 9px; font-weight: 900;
+        position: absolute; top: -6px; right: -6px;
+        min-width: 18px; height: 18px; border-radius: 9px; padding: 0 4px;
+        font-size: 9px; font-weight: 800;
         display: flex; align-items: center; justify-content: center;
-        border: 2px solid var(--bg);      /* ← matches page bg in both modes */
-        transform: scale(0);
-        transition: transform 0.3s var(--ease-spring);
-        font-family: 'Montserrat', sans-serif;
+        border: 2px solid var(--bg);
+        transform: scale(0); transition: transform 0.3s var(--ease-luxury);
     }
     .fab-wish .fab-badge { background: #E53E3E; color: #fff; }
     .fab-cart .fab-badge { background: var(--accent-gold); color: #000; }
@@ -676,41 +475,6 @@
     .no-results { grid-column: 1/-1; text-align: center; padding: 40px 20px; color: var(--text-soft); }
     .no-results i { font-size: 40px; opacity: 0.2; color: var(--accent-gold); display: block; margin-bottom: 12px; }
     .no-results p { font-size: 13px; line-height: 1.8; }
-
-
-    /* ── Scroll-to-top button (appears after scrolling) ── */
-    #scroll-top-btn {
-        position: fixed; left: 14px; bottom: 44px; z-index: 9000;
-        width: 44px; height: 44px; border-radius: 14px; border: none;
-        background: var(--card-bg);
-        color: var(--text-soft);
-        font-size: 16px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-        border: 1px solid var(--border);
-        cursor: pointer;
-        display: flex; align-items: center; justify-content: center;
-        opacity: 0; transform: translateY(12px);
-        transition: opacity 0.3s, transform 0.3s var(--ease-luxury);
-        pointer-events: none;
-    }
-    #scroll-top-btn.show {
-        opacity: 1; transform: translateY(0); pointer-events: auto;
-    }
-    #scroll-top-btn:active { transform: scale(0.88); }
-
-    /* ── Product card hover lift (desktop) ── */
-    @media (hover: hover) {
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
-            transition: transform 0.3s var(--ease-luxury), box-shadow 0.3s var(--ease-luxury);
-        }
-    }
-
-    /* ── Smooth image load fade-in ── */
-    .p-image-wrap img { opacity: 1; transition: opacity 0.4s ease, transform 0.5s var(--ease-luxury); }
-
-
 </style>
 
 </head>
@@ -718,196 +482,161 @@
 
 <div class="app-shell">
 
-<!-- SPLASH -->
-
-<div id="splash-screen">
-
 ```
-<!-- Middle: title + tagline + button all together -->
-<div class="splash-middle">
+<!-- SPLASH -->
+<div id="splash-screen">
     <h1 class="splash-title">Enis Collection</h1>
     <p class="splash-slogan">Pamper Your Body</p>
-    <div class="splash-divider"></div>
     <button class="btn-discover" onclick="launchApp()">SHOP NOW</button>
 </div>
 
-<!-- Bottom: est. line -->
-<div class="splash-bottom">
-    <p class="splash-location">Est. 2022 &nbsp;·&nbsp; Women's Fashion</p>
-</div>
-```
-
-</div>
-
 <!-- SHOP CONTENT -->
-
 <div id="shop-content">
 
-```
-<div class="app-header">
+    <div class="app-header">
 
-    <div class="search-row">
-        <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Search..."
-                   oninput="handleSearch(this.value)"
-                   onfocus="this.parentElement.style.boxShadow='0 0 0 2px var(--accent-gold)'"
-                   onblur="this.parentElement.style.boxShadow='none'">
+        <div class="search-row">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search..."
+                       oninput="handleSearch(this.value)"
+                       onfocus="this.parentElement.style.boxShadow='0 0 0 2px var(--accent-gold)'"
+                       onblur="this.parentElement.style.boxShadow='none'">
+            </div>
+            <button class="filter-btn" onclick="toggleFilter()" id="filterBtn" title="Filter">
+                <svg viewBox="0 0 24 24">
+                    <line x1="4" y1="6" x2="20" y2="6"/>
+                    <line x1="4" y1="12" x2="20" y2="12"/>
+                    <line x1="4" y1="18" x2="20" y2="18"/>
+                    <circle cx="9" cy="6" r="2" style="fill:var(--bg);stroke:var(--text-main);stroke-width:1.8"/>
+                    <circle cx="15" cy="12" r="2" style="fill:var(--bg);stroke:var(--text-main);stroke-width:1.8"/>
+                    <circle cx="9" cy="18" r="2" style="fill:var(--bg);stroke:var(--text-main);stroke-width:1.8"/>
+                </svg>
+            </button>
         </div>
-        <button class="filter-btn" onclick="toggleFilter()" id="filterBtn" title="Filter">
-            <svg viewBox="0 0 24 24">
-                <line x1="4" y1="6" x2="20" y2="6"/>
-                <line x1="4" y1="12" x2="20" y2="12"/>
-                <line x1="4" y1="18" x2="20" y2="18"/>
-                <circle cx="9" cy="6" r="2" style="fill:var(--bg);stroke:var(--text-main);stroke-width:1.8"/>
-                <circle cx="15" cy="12" r="2" style="fill:var(--bg);stroke:var(--text-main);stroke-width:1.8"/>
-                <circle cx="9" cy="18" r="2" style="fill:var(--bg);stroke:var(--text-main);stroke-width:1.8"/>
-            </svg>
-        </button>
-    </div>
 
-    <div class="filter-dropdown" id="filterDropdown">
-        <div>
-            <h4>Category</h4>
-            <div class="filter-pills" id="filterCategoryPills">
-                <div class="filter-pill active" onclick="selectFilterPill(this,'category','All')">All</div>
-                <div class="filter-pill" onclick="selectFilterPill(this,'category','Thrift')">Thrift</div>
-                <div class="filter-pill" onclick="selectFilterPill(this,'category','Store')">Store</div>
-                <div class="filter-pill" onclick="selectFilterPill(this,'category','Handmade')">Handmade</div>
+        <div class="filter-dropdown" id="filterDropdown">
+            <div>
+                <h4>Category</h4>
+                <div class="filter-pills" id="filterCategoryPills">
+                    <div class="filter-pill active" onclick="selectFilterPill(this,'category','All')">All</div>
+                    <div class="filter-pill" onclick="selectFilterPill(this,'category','Thrift')">Thrift</div>
+                    <div class="filter-pill" onclick="selectFilterPill(this,'category','Store')">Store</div>
+                    <div class="filter-pill" onclick="selectFilterPill(this,'category','Handmade')">Handmade</div>
+                </div>
+            </div>
+            <div>
+                <h4>Sort By</h4>
+                <div class="filter-pills" id="filterSortPills">
+                    <div class="filter-pill active" onclick="selectFilterPill(this,'sort','default')">Default</div>
+                    <div class="filter-pill" onclick="selectFilterPill(this,'sort','price-asc')">Price: Low → High</div>
+                    <div class="filter-pill" onclick="selectFilterPill(this,'sort','price-desc')">Price: High → Low</div>
+                </div>
+            </div>
+            <button class="filter-apply" onclick="applyFilter()">APPLY FILTERS</button>
+        </div>
+
+        <div class="cat-section">
+            <div class="cat-header">
+                <h2>Category</h2>
+                <button class="see-all-btn" onclick="showAllCategories()">See All &rarr;</button>
+            </div>
+            <div class="cat-chip-scroll" id="catIconScroll">
+                <!-- rendered by JS -->
             </div>
         </div>
-        <div>
-            <h4>Sort By</h4>
-            <div class="filter-pills" id="filterSortPills">
-                <div class="filter-pill active" onclick="selectFilterPill(this,'sort','default')">Default</div>
-                <div class="filter-pill" onclick="selectFilterPill(this,'sort','price-asc')">Price: Low → High</div>
-                <div class="filter-pill" onclick="selectFilterPill(this,'sort','price-desc')">Price: High → Low</div>
-            </div>
-        </div>
-        <button class="filter-apply" onclick="applyFilter()">APPLY FILTERS</button>
     </div>
 
-    <div class="cat-section">
-        <div class="cat-header">
-            <h2>Category</h2>
-            <button class="see-all-btn" onclick="showAllCategories()">See All &rarr;</button>
-        </div>
-        <div class="cat-chip-scroll" id="catIconScroll">
-            <!-- rendered by JS -->
+    <div class="search-results-bar" id="searchResultsBar">
+        Showing <span id="searchResultCount">0</span> results for "<span id="searchQuery"></span>"
+    </div>
+
+    <div class="feed" id="mainFeed" onscroll="handleScroll()">
+        <div class="grid" id="productGrid"></div>
+
+        <div class="about-modern">
+            <div class="about-divider"></div>
+            <div class="about-est">
+                <span>Cape Coast, Ghana &nbsp;·&nbsp; <em>Est. 2022</em></span>
+            </div>
+            <div class="about-story">
+                <div class="about-story-label">Our Story</div>
+                <h2 class="about-story-headline">ENIS<br><em>Collection.</em></h2>
+                <p class="about-story-body">Enis Collection was born in Cape Coast with one purpose — to help women feel powerful in what they wear. From carefully curated thrift finds to handcrafted originals, every piece is chosen for the woman who moves through the world with style and confidence.</p>
+            </div>
+            <div class="about-stats">
+                <div class="about-stat">
+                    <span class="about-stat-num">3<span>+</span></span>
+                    <span class="about-stat-label">Years</span>
+                </div>
+                <div class="about-stat">
+                    <span class="about-stat-num">10<span>+</span></span>
+                    <span class="about-stat-label">Styles</span>
+                </div>
+                <div class="about-stat">
+                    <span class="about-stat-num">∞</span>
+                    <span class="about-stat-label">Confidence</span>
+                </div>
+            </div>
+            <div class="about-contact">
+                <div class="about-contact-label">Get in Touch</div>
+                <div class="about-contact-grid">
+                    <a href="https://wa.me/233546527892" class="contact-card">
+                        <div class="contact-card-icon wa"><i class="fab fa-whatsapp"></i></div>
+                        <div class="contact-card-text"><h4>WhatsApp</h4><p>Chat with us</p></div>
+                    </a>
+                    <a href="https://www.tiktok.com/@eniscollection1" class="contact-card">
+                        <div class="contact-card-icon tt"><i class="fab fa-tiktok"></i></div>
+                        <div class="contact-card-text"><h4>TikTok</h4><p>Watch us style</p></div>
+                    </a>
+                    <a href="tel:+233546527892" class="contact-card">
+                        <div class="contact-card-icon ph"><i class="fas fa-phone-alt"></i></div>
+                        <div class="contact-card-text"><h4>Call Us</h4><p>+233 546 527 892</p></div>
+                    </a>
+                    <a href="mailto:sheilaenima@gmail.com" class="contact-card">
+                        <div class="contact-card-icon em"><i class="fas fa-envelope"></i></div>
+                        <div class="contact-card-text"><h4>Email</h4><p>Send a message</p></div>
+                    </a>
+                </div>
+            </div>
+            <div class="about-stamp">Made with Grace &nbsp;·&nbsp; Enis Collection</div>
         </div>
     </div>
 </div>
-
-<div class="search-results-bar" id="searchResultsBar">
-    Showing <span id="searchResultCount">0</span> results for "<span id="searchQuery"></span>"
-</div>
-
-<div class="feed" id="mainFeed" onscroll="handleScroll()">
-    <div class="grid" id="productGrid"></div>
-
-    <div class="about-modern">
-        <div class="about-divider"></div>
-        <div class="about-est">
-            <span>Cape Coast, Ghana &nbsp;·&nbsp; <em>Est. 2022</em></span>
-        </div>
-        <div class="about-story">
-            <div class="about-story-label">Our Story</div>
-            <h2 class="about-story-headline">ENIS<br><em>Collection.</em></h2>
-            <p class="about-story-body">Enis Collection was born in Cape Coast with one purpose — to help women feel powerful in what they wear. From carefully curated thrift finds to handcrafted originals, every piece is chosen for the woman who moves through the world with style and confidence.</p>
-        </div>
-        <div class="about-stats">
-            <div class="about-stat">
-                <span class="about-stat-num">3<span>+</span></span>
-                <span class="about-stat-label">Years</span>
-            </div>
-            <div class="about-stat">
-                <span class="about-stat-num">10<span>+</span></span>
-                <span class="about-stat-label">Styles</span>
-            </div>
-            <div class="about-stat">
-                <span class="about-stat-num">∞</span>
-                <span class="about-stat-label">Confidence</span>
-            </div>
-        </div>
-        <div class="about-contact">
-            <div class="about-contact-label">Get in Touch</div>
-            <div class="about-contact-grid">
-                <a href="https://wa.me/233546527892" class="contact-card">
-                    <div class="contact-card-icon wa"><i class="fab fa-whatsapp"></i></div>
-                    <div class="contact-card-text"><h4>WhatsApp</h4><p>Chat with us</p></div>
-                </a>
-                <a href="https://www.tiktok.com/@eniscollection1" class="contact-card">
-                    <div class="contact-card-icon tt"><i class="fab fa-tiktok"></i></div>
-                    <div class="contact-card-text"><h4>TikTok</h4><p>Watch us style</p></div>
-                </a>
-                <a href="tel:+233546527892" class="contact-card">
-                    <div class="contact-card-icon ph"><i class="fas fa-phone-alt"></i></div>
-                    <div class="contact-card-text"><h4>Call Us</h4><p>+233 546 527 892</p></div>
-                </a>
-                <a href="mailto:sheilaenima@gmail.com" class="contact-card">
-                    <div class="contact-card-icon em"><i class="fas fa-envelope"></i></div>
-                    <div class="contact-card-text"><h4>Email</h4><p>Send a message</p></div>
-                </a>
-            </div>
-        </div>
-        <div class="about-stamp">Made with Grace &nbsp;·&nbsp; Enis Collection</div>
-    </div>
-</div>
-```
-
-</div>
-
-</div><!-- end app-shell -->
-
-<!-- ═══════════════════════════════════════════════════════
-     EVERYTHING BELOW IS OUTSIDE .app-shell ON PURPOSE.
-     The modal, FABs, panels and toast use position:fixed
-     so they must NOT be inside overflow:hidden containers.
-     DO NOT move these back inside .app-shell.
-═══════════════════════════════════════════════════════ -->
 
 <!-- PREVIEW MODAL -->
-
 <div id="item-preview" onclick="closePreview()">
     <div class="preview-box" onclick="event.stopPropagation()">
         <div class="preview-img-fill">
             <img id="preview-img" src="">
         </div>
-
-```
-    <div class="preview-action-stack">
         <button class="preview-wish-circle" id="preview-wish-btn" onclick="toggleWishFromPreview()">
             <i class="fas fa-heart"></i>
         </button>
-        <button id="preview-cart-btn" class="preview-bag-btn" onclick="addToCartFromPreview()">
-            <i class="fas fa-shopping-bag"></i>
-        </button>
-    </div>
-
-    <div class="preview-text-overlay">
-        <div class="preview-overlay-name" id="preview-name"></div>
-        <div class="preview-overlay-sub" id="preview-sub">Enis Collection</div>
-        <div class="preview-overlay-meta">
-            <div class="preview-meta-chip">
-                <i class="fas fa-tag"></i>
-                <span id="preview-price-badge"></span>
+        <div class="preview-text-overlay">
+            <div class="preview-overlay-name" id="preview-name"></div>
+            <div class="preview-overlay-sub" id="preview-price"></div>
+            <div class="preview-overlay-meta">
+                <div class="preview-meta-chip">
+                    <i class="fas fa-tag"></i>
+                    <span id="preview-price-badge"></span>
+                </div>
+                <div class="preview-meta-chip">
+                    <i class="fas fa-ruler-horizontal"></i>
+                    <span id="preview-size-chip"></span>
+                </div>
             </div>
-            <div class="preview-meta-chip">
-                <i class="fas fa-ruler-horizontal"></i>
-                <span id="preview-size-chip"></span>
-            </div>
+            <a id="wa-btn" href="#" class="preview-order-btn">
+                <i class="fab fa-whatsapp"></i> Order via WhatsApp
+            </a>
+            <button id="preview-cart-btn" class="preview-bag-btn" onclick="addToCartFromPreview()">
+                <i class="fas fa-shopping-bag"></i> Add to Bag
+            </button>
         </div>
-        <a id="wa-btn" href="#" class="preview-order-btn">
-            <i class="fab fa-whatsapp"></i> Order via WhatsApp
-        </a>
     </div>
-</div>
-```
-
 </div>
 
 <!-- FABs -->
-
 <div class="fab-group" id="fab-group">
     <button class="fab fab-wish" onclick="openPanel('wishlist')">
         <i class="fas fa-heart"></i>
@@ -920,7 +649,6 @@
 </div>
 
 <!-- CART PANEL -->
-
 <div class="side-panel" id="cart-panel">
     <div class="panel-header">
         <h2>My Bag</h2>
@@ -939,7 +667,6 @@
 </div>
 
 <!-- WISHLIST PANEL -->
-
 <div class="side-panel" id="wishlist-panel">
     <div class="panel-header">
         <h2>Wishlist</h2>
@@ -947,11 +674,11 @@
     </div>
     <div class="panel-body" id="wishlist-body"></div>
 </div>
+```
+
+</div>
 
 <div id="toast"></div>
-<button id="scroll-top-btn" onclick="scrollToTop()" title="Back to top">
-    <i class="fas fa-chevron-up"></i>
-</button>
 
 <script>
     const myProducts = [
@@ -967,6 +694,7 @@
         { id:10, name: "Refined Church Wear",     price: 50, size: "10",      category: "Store",    image: "images/item10.jpg" }
     ];
 
+    /* Categories with Font Awesome icons — chosen to match each label */
     const categories = [
         { key: 'All',      label: 'All Items', icon: 'fas fa-border-all' },
         { key: 'Thrift',   label: 'Thrift',    icon: 'fas fa-recycle' },
@@ -1107,38 +835,30 @@
                 </div>
             </div>`;
         }).join('');
-        requestAnimationFrame(() => { document.querySelectorAll('.product-card').forEach(c => c.classList.add('visible')); initImageFade(); });
+        requestAnimationFrame(() => document.querySelectorAll('.product-card').forEach(c => c.classList.add('visible')));
     }
 
     function handleScroll() {
-        var feed = document.getElementById('mainFeed');
-        // Reveal cards as they scroll into view
-        document.querySelectorAll('.product-card').forEach(function(card) {
-            if (card.getBoundingClientRect().top < window.innerHeight * 0.95) {
-                card.classList.add('visible');
-            }
+        document.querySelectorAll('.product-card').forEach(card => {
+            if (card.getBoundingClientRect().top < window.innerHeight * 0.95) card.classList.add('visible');
         });
-        // Hide FABs while scrolling, show again after stop
-        var fab = document.getElementById('fab-group');
+        const fab = document.getElementById('fab-group');
         fab.classList.add('hidden-scroll');
         clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(function() { fab.classList.remove('hidden-scroll'); }, 800);
-        // Show scroll-to-top button after 300px
-        var topBtn = document.getElementById('scroll-top-btn');
-        if (topBtn) { topBtn.classList.toggle('show', feed.scrollTop > 300); }
+        scrollTimer = setTimeout(() => fab.classList.remove('hidden-scroll'), 800);
     }
 
     function openPreview(id) {
         previewProduct = myProducts.find(p => p.id === id);
         document.getElementById('preview-img').src = previewProduct.image;
         document.getElementById('preview-name').innerText = previewProduct.name;
+        document.getElementById('preview-price').innerText = 'Enis Collection';
         document.getElementById('preview-price-badge').innerText = `price ₵${previewProduct.price}`;
         document.getElementById('preview-size-chip').innerText = `size ${previewProduct.size}`;
         const imageUrl = `https://eniscollection.vercel.app/${previewProduct.image}`;
         const msg = encodeURIComponent(`Hi Enis! ✨ I'd like to order:\n\n• ${previewProduct.name}\n  Size: ${previewProduct.size}\n  Price: ₵${previewProduct.price}\n  🖼 ${imageUrl}`);
         document.getElementById('wa-btn').href = `https://wa.me/233546527892?text=${msg}`;
         syncPreviewState();
-
         const modal = document.getElementById('item-preview');
         modal.style.display = 'flex';
         requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add('active')));
@@ -1159,14 +879,14 @@
         if (wb) wb.classList.toggle('wishlisted', liked);
         if (cb) {
             cb.className = 'preview-bag-btn' + (inCart ? ' added' : '');
-            cb.innerHTML = `<i class="fas ${inCart ? 'fa-check' : 'fa-shopping-bag'}"></i>`;
+            cb.innerHTML = `<i class="fas ${inCart?'fa-check':'fa-shopping-bag'}"></i> ${inCart?'In Bag ✓':'Add to Bag'}`;
         }
     }
 
     function toggleWish(id) {
         const product = myProducts.find(p => p.id === id);
         const idx = wishlist.findIndex(w => w.id === id);
-        if (idx === -1) { wishlist.push(product); showToast('💕 Saved to Wishlist'); }
+        if (idx === -1) { wishlist.push(product); showToast('💕Saved to Wishlist'); }
         else { wishlist.splice(idx, 1); showToast('Removed from Wishlist'); }
         updateBadges();
         const btn = document.getElementById('wish-' + id);
@@ -1179,7 +899,7 @@
     function toggleCart(id) {
         const product = myProducts.find(p => p.id === id);
         const idx = cart.findIndex(c => c.product.id === id);
-        if (idx === -1) { cart.push({ product, qty: 1 }); showToast('🛍️ Added to Bag'); }
+        if (idx === -1) { cart.push({ product, qty: 1 }); showToast('🛍️Added to Bag'); }
         else { cart.splice(idx, 1); showToast('Removed from Bag'); }
         updateBadges();
         const btn = document.getElementById('cartbtn-' + id);
@@ -1220,7 +940,7 @@
         const product = myProducts.find(p => p.id === id);
         cart.push({ product, qty: 1 });
         updateBadges(); renderWishlistPanel();
-        showToast('🛍️ Added to Bag');
+        showToast('🛍️Added to Bag');
     }
 
     function updateBadges() {
@@ -1305,15 +1025,7 @@
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
     }
-
-    // ── Image fade-in on load (safe no-op now, images always visible) ──
-    function initImageFade() { /* images are always visible, no fade needed */ }
-
-    // ── Scroll-to-top button ──
-    function scrollToTop() {
-        document.getElementById('mainFeed').scrollTo({ top: 0, behavior: 'smooth' });
-    }
 </script>
 
-</body>
+</body>y
 </html>
