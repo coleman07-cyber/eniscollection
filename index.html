@@ -299,7 +299,7 @@
         width: 75%; max-width: 300px; height: 62vh; border-radius: 40px; overflow: hidden; position: relative;
         transform: scale(0.88) translateY(30px); opacity: 0;
         transition: transform 0.55s var(--ease-spring), opacity 0.4s ease;
-        box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+        box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 10px #fff, 0 0 0 11px rgba(255,255,255,0.15);
     }
     #item-preview.active .preview-box { transform: scale(1) translateY(0); opacity: 1; }
     .preview-img-fill { position: absolute; inset: 0; }
@@ -336,17 +336,18 @@
     }
     .preview-order-btn:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
     .preview-order-btn i { color: #25D366; font-size: 16px; }
-    .preview-bag-btn {
-        display: flex; align-items: center; justify-content: center; gap: 8px;
-        width: 100%; padding: 12px;
-        background: rgba(255,255,255,0.12); backdrop-filter: blur(8px);
-        color: #fff; border-radius: 50px; border: 1px solid rgba(255,255,255,0.25);
-        font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
-        font-family: 'Montserrat', sans-serif; cursor: pointer; margin-top: 6px;
-        transition: background 0.25s, transform 0.2s var(--ease-spring);
+    .preview-bag-circle {
+        position: absolute; top: 60px; right: 14px; z-index: 10;
+        width: 38px; height: 38px; border-radius: 50%;
+        background: rgba(255,255,255,0.18); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.25);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: transform 0.3s var(--ease-spring), background 0.25s;
     }
-    .preview-bag-btn:active { transform: scale(0.97); }
-    .preview-bag-btn.added { background: rgba(124,58,237,0.35); border-color: rgba(124,58,237,0.5); }
+    .preview-bag-circle i { font-size: 15px; color: #fff; transition: transform 0.3s var(--ease-spring); }
+    .preview-bag-circle.added { background: rgba(229,62,62,0.35); border-color: rgba(229,62,62,0.5); }
+    .preview-bag-circle.added i { color: #ff6b6b; transform: scale(1.2); }
+    .preview-bag-circle:active { transform: scale(0.88); }
 
     /* SPLASH */
     #splash-screen { 
@@ -377,8 +378,8 @@
     }
     .fab:active { transform: scale(0.88); }
     .fab-wish { background: #fff; color: #E53E3E; }
-    .fab-cart { background: #fff; color: var(--accent-gold); }
-    @media (prefers-color-scheme: dark) { .fab-wish { background: #1a1a1a; } .fab-cart { background: #1a1a1a; } }
+    .fab-cart { background: #fff; color: #E53E3E; }
+    @media (prefers-color-scheme: dark) { .fab-wish { background: #1a1a1a; } .fab-cart { background: #1a1a1a; color: #E53E3E; } }
     .fab-badge {
         position: absolute; top: -6px; right: -6px;
         min-width: 18px; height: 18px; border-radius: 9px; padding: 0 4px;
@@ -388,7 +389,7 @@
         transform: scale(0); transition: transform 0.3s var(--ease-luxury);
     }
     .fab-wish .fab-badge { background: #E53E3E; color: #fff; }
-    .fab-cart .fab-badge { background: var(--accent-gold); color: #000; }
+    .fab-cart .fab-badge { background: #E53E3E; color: #fff; }
     .fab-badge.show { transform: scale(1); }
 
     /* SIDE PANELS */
@@ -618,6 +619,9 @@
         <button class="preview-wish-circle" id="preview-wish-btn" onclick="toggleWishFromPreview()">
             <i class="fas fa-heart"></i>
         </button>
+        <button class="preview-bag-circle" id="preview-cart-btn" onclick="addToCartFromPreview()">
+            <i class="fas fa-shopping-bag"></i>
+        </button>
         <div class="preview-text-overlay">
             <div class="preview-overlay-name" id="preview-name"></div>
             <div class="preview-overlay-sub" id="preview-price"></div>
@@ -634,9 +638,6 @@
             <a id="wa-btn" href="#" class="preview-order-btn">
                 <i class="fab fa-whatsapp"></i> Order via WhatsApp
             </a>
-            <button id="preview-cart-btn" class="preview-bag-btn" onclick="addToCartFromPreview()">
-                <i class="fas fa-shopping-bag"></i> Add to Bag
-            </button>
         </div>
     </div>
 </div>
@@ -884,8 +885,8 @@
         const cb = document.getElementById('preview-cart-btn');
         if (wb) wb.classList.toggle('wishlisted', liked);
         if (cb) {
-            cb.className = 'preview-bag-btn' + (inCart ? ' added' : '');
-            cb.innerHTML = `<i class="fas ${inCart?'fa-check':'fa-shopping-bag'}"></i> ${inCart?'In Bag ✓':'Add to Bag'}`;
+            cb.className = 'preview-bag-circle' + (inCart ? ' added' : '');
+            cb.innerHTML = `<i class="fas ${inCart?'fa-check':'fa-shopping-bag'}"></i>`;
         }
     }
 
